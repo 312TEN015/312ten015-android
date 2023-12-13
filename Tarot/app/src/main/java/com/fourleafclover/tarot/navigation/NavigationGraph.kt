@@ -12,6 +12,7 @@ import com.fourleafclover.tarot.screen.HomeScreen
 import com.fourleafclover.tarot.screen.InputScreen
 import com.fourleafclover.tarot.screen.MyTarotScreen
 import com.fourleafclover.tarot.screen.PickTarotScreen
+import com.fourleafclover.tarot.screen.ResultScreen
 
 @Composable
 fun NavigationHost() {
@@ -36,6 +37,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.PickTarotScreen.name) {
                 PickTarotScreen(navController)
+            }
+            composable(ScreenEnum.ResultScreen.name) {
+                ResultScreen()
             }
         }
 

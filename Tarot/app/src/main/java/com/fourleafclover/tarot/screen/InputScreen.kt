@@ -58,7 +58,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
 
     Column(modifier = Modifier
         .background(color = gray_8)
-        .padding(horizontal = 24.dp, vertical = 24.dp)
+        .padding(horizontal = 20.dp, vertical = 20.dp)
         .fillMaxSize()
         .verticalScroll(rememberScrollState())) {
         Box(modifier = Modifier

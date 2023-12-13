@@ -24,7 +24,7 @@ import com.fourleafclover.tarot.ui.theme.white
 @Composable
 fun HomeScreen(navController: NavHostController) {
 
-    Column(modifier = Modifier.background(color = gray_8).padding(horizontal = 24.dp, vertical = 24.dp).fillMaxSize()) {
+    Column(modifier = Modifier.background(color = gray_8).padding(horizontal = 20.dp, vertical = 20.dp).fillMaxSize()) {
         Text(
             text = "타로 카드를 뽑고\n운세를 확인해보세요!",
             style = getTextStyle(26, FontWeight.Medium, white),

@@ -9,7 +9,8 @@ enum class ScreenEnum {
     InputScreen,
     TodayTarotScreen,    // 오늘의 운세
 
-    PickTarotScreen     // 타로 카드 뽑기 화면
+    PickTarotScreen,     // 타로 카드 뽑기 화면
+    ResultScreen     // 타로 결과 화면
 
 
 

@@ -10,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,8 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
+import com.fourleafclover.tarot.ui.theme.gray_1
+import com.fourleafclover.tarot.ui.theme.gray_5
+import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
 
 @Preview
@@ -34,7 +43,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
     Column(modifier = Modifier
         .background(color = gray_8)
-        .padding(horizontal = 24.dp, vertical = 24.dp)
+        .padding(horizontal = 20.dp, vertical = 20.dp)
         .fillMaxSize()) {
 
         Box(modifier = Modifier
@@ -66,6 +75,31 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
         Box {
 
+        }
+
+        Button(
+            onClick = {
+                navController.navigate(ScreenEnum.ResultScreen.name) {
+                    navController.graph.startDestinationRoute?.let {
+                        popUpTo(it) { saveState = true }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(bottom = 49.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = highligtPurple,
+                contentColor = gray_1,
+                disabledContainerColor = gray_5,
+                disabledContentColor = gray_6
+            )
+        ) {
+            Text(text = "다음", modifier = Modifier.padding(vertical = 8.dp))
         }
 
     }

@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.5.1")
     implementation("androidx.compose.foundation:foundation-android:1.5.1")
     implementation ("androidx.compose.material:material:1.4.2")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")
