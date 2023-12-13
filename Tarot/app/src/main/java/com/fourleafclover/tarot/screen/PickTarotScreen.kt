@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,9 +27,46 @@ import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.white
 
-
 @Preview
 @Composable
-fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
+fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
+    val localContext = LocalContext.current
 
+    Column(modifier = Modifier
+        .background(color = gray_8)
+        .padding(horizontal = 24.dp, vertical = 24.dp)
+        .fillMaxSize()) {
+
+        Box(modifier = Modifier
+            .height(48.dp)
+            .fillMaxWidth(), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "연애운",
+                style = getTextStyle(16, FontWeight.Medium, white),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                textAlign = TextAlign.Center
+            )
+
+            Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
+                modifier = Modifier.fillMaxWidth(), alignment = Alignment.CenterEnd)
+        }
+
+        Text(
+            text = "첫 번째 카드를 골라주세요.",
+            style = getTextStyle(22, FontWeight.Medium, white),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row {
+
+        }
+
+        Box {
+
+        }
+
+    }
 }

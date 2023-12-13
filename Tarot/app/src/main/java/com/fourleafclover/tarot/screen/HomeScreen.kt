@@ -43,7 +43,7 @@ fun HomeScreen(navController: NavHostController) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            navController.navigate(ScreenEnum.LoveTarotScreen.name) {
+                            navController.navigate(ScreenEnum.InputScreen.name) {
                                 navController.graph.startDestinationRoute?.let {
                                     popUpTo(it) { saveState = true }
                                 }

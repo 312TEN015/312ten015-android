@@ -1,7 +1,6 @@
 
 package com.fourleafclover.tarot.screen
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -54,7 +53,7 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Preview
 @Composable
-fun LoveTarotScreen(navController: NavHostController = rememberNavController()) {
+fun InputScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
 
     Column(modifier = Modifier
@@ -256,7 +255,7 @@ fun LoveTarotScreen(navController: NavHostController = rememberNavController()) 
 
         Button(
             onClick = {
-                navController.navigate(ScreenEnum.LoveTarotScreen.name) {
+                navController.navigate(ScreenEnum.PickTarotScreen.name) {
                     navController.graph.startDestinationRoute?.let {
                         popUpTo(it) { saveState = true }
                     }

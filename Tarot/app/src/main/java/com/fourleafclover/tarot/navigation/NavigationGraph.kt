@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.navigation
 
-import android.content.Context
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,8 +9,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.BottomNavigationBar
 import com.fourleafclover.tarot.screen.HomeScreen
-import com.fourleafclover.tarot.screen.LoveTarotScreen
+import com.fourleafclover.tarot.screen.InputScreen
 import com.fourleafclover.tarot.screen.MyTarotScreen
+import com.fourleafclover.tarot.screen.PickTarotScreen
 
 @Composable
 fun NavigationHost() {
@@ -31,9 +31,11 @@ fun NavigationHost() {
             composable(ScreenEnum.MyTarotScreen.name) {
                 MyTarotScreen(navController)
             }
-            composable(ScreenEnum.LoveTarotScreen.name) {
-//                LoveTarotScreen(context, navController)
-                LoveTarotScreen()
+            composable(ScreenEnum.InputScreen.name) {
+                InputScreen(navController)
+            }
+            composable(ScreenEnum.PickTarotScreen.name) {
+                PickTarotScreen(navController)
             }
         }
 
