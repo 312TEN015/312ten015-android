@@ -15,15 +15,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -37,14 +42,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -57,7 +65,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Scale
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -79,7 +90,9 @@ import kotlin.math.absoluteValue
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState()).background(color = gray_8)) {
+    Column(modifier = Modifier
+        .verticalScroll(rememberScrollState())
+        .background(color = gray_8)) {
 
         Column(
             modifier = Modifier
@@ -118,9 +131,12 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
         }
 
-        CardPagerLayout()
+        CustomSlider()
 
-        Column(modifier = Modifier.background(color = gray_9).fillMaxWidth().padding(horizontal = 20.dp)) {
+        Column(modifier = Modifier
+            .background(color = gray_9)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)) {
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center) {
 
@@ -169,7 +185,10 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                 modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
         }
 
-        Column(modifier = Modifier.background(color = gray_8).fillMaxWidth().padding(horizontal = 20.dp)) {
+        Column(modifier = Modifier
+            .background(color = gray_8)
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)) {
 
             Text(text = "타로 카드 종합 리딩",
                 style = getTextStyle(
@@ -198,7 +217,9 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     color = gray_3
                 ),
                 lineHeight = 28.sp,
-                modifier = Modifier.padding(top = 12.dp, bottom = 64.dp).wrapContentHeight())
+                modifier = Modifier
+                    .padding(top = 12.dp, bottom = 64.dp)
+                    .wrapContentHeight())
 
             var saveState by rememberSaveable { mutableStateOf(false) }
 
@@ -264,40 +285,84 @@ fun Modifier.pagerFadeTransition(page: Int, pagerState: PagerState) =
         alpha = 1- pageOffset.absoluteValue
     }
 
+@Preview
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardPagerLayout() {
-    val cardDrawableList = arrayListOf(R.drawable.card_1, R.drawable.card_2, R.drawable.card_3)
+fun CustomSlider(
+    modifier: Modifier = Modifier,
+    sliderList: MutableList<Int> = mutableListOf(R.drawable.card_1, R.drawable.card_2, R.drawable.card_3),
+    dotsActiveColor: Color = Color.DarkGray,
+    dotsInActiveColor: Color = Color.LightGray,
+    dotsSize: Dp = 10.dp,
+    pagerPaddingValues: PaddingValues = PaddingValues(horizontal = 65.dp),
+    imageCornerRadius: Dp = 16.dp,
+    imageHeight: Dp = 250.dp,
+) {
 
-    val pagerState = rememberPagerState(pageCount = { Int.MAX_VALUE })
-    val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        3
+    }
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .background(color = gray_9)
-            .padding(0.dp, 48.dp, 0.dp, 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.background(color = gray_9).padding(top = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
 
-        HorizontalPager(
-            modifier = Modifier,
-            state = pagerState
-        ) { page ->
-            Image(
-                painter = painterResource(id = cardDrawableList[page % (cardDrawableList.size)]),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth()
+            //                            .alpha(if (pagerState.currentPage == page) 1f else 0.5f)
+            HorizontalPager(
+                modifier = modifier.weight(1f),
+                state = pagerState,
+                pageSpacing = 0.dp,
+                userScrollEnabled = true,
+                reverseLayout = false,
+                contentPadding = PaddingValues(horizontal = 100.dp),
+                beyondBoundsPageCount = 0,
+                pageSize = PageSize.Fill,
+                key = null,
+                pageContent = { page ->
+                    val pageOffset =
+                        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+
+                    val scaleFactor = 0.75f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
+
+                    Box(modifier = modifier
+                        .graphicsLayer {
+                            scaleX = scaleFactor
+                            scaleY = scaleFactor
+                        }
+                        .alpha(
+                            scaleFactor.coerceIn(0f, 1f)
+                        )) {
+
+                        val painter = painterResource(id = sliderList[page])
+                        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(140.dp)
+                                .aspectRatio(imageRatio)
+                        )
+                    }
+
+                }
             )
+
         }
 
         DotsIndicator(
-            totalDots = cardDrawableList.size,
-            selectedIndex = if (isDragged) pagerState.currentPage % (cardDrawableList.size) else pagerState.targetPage % (cardDrawableList.size),
+            totalDots = sliderList.size,
+            selectedIndex = pagerState.currentPage
         )
-
     }
-
 }
 
 @Composable
@@ -313,7 +378,7 @@ fun DotsIndicator(
         modifier = modifier
             .wrapContentWidth()
             .wrapContentHeight()
-            .padding(0.dp, 32.dp, 0.dp, 0.dp)
+            .padding(vertical = 32.dp)
     ) {
         items(totalDots) { index ->
             Box(
@@ -324,7 +389,7 @@ fun DotsIndicator(
             )
 
             if (index != totalDots - 1) {
-                Spacer(modifier = Modifier.padding(horizontal = 2.dp))
+                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
             }
         }
     }
