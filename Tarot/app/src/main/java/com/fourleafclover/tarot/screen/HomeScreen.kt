@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +26,10 @@ import com.fourleafclover.tarot.ui.theme.white
 @Composable
 fun HomeScreen(navController: NavHostController) {
 
-    Column(modifier = Modifier.background(color = gray_8).padding(horizontal = 20.dp, vertical = 20.dp).fillMaxSize()) {
+    Column(modifier = Modifier
+        .background(color = gray_8)
+        .padding(horizontal = 20.dp, vertical = 20.dp)
+        .verticalScroll(rememberScrollState())) {
         Text(
             text = "타로 카드를 뽑고\n운세를 확인해보세요!",
             style = getTextStyle(26, FontWeight.Medium, white),
@@ -60,7 +65,7 @@ fun HomeScreen(navController: NavHostController) {
                 }
             }
 
-            Column {
+            Column(modifier = Modifier.padding(bottom = 48.dp)) {
                 Text(
                     text = "오늘의 운세",
                     style = getTextStyle(16, FontWeight.Medium, white),

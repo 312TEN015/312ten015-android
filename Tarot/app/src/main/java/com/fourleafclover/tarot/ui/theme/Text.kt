@@ -30,7 +30,7 @@ fun getTextStyle(fontSize: Int, fontWeight: FontWeight, color: Color): TextStyle
         color = color,
         fontWeight = fontWeight,
         platformStyle = PlatformTextStyle(
-            includeFontPadding = false
+            includeFontPadding = true
         )
     )
 }

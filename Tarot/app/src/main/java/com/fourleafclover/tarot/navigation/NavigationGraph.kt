@@ -39,7 +39,7 @@ fun NavigationHost() {
                 PickTarotScreen(navController)
             }
             composable(ScreenEnum.ResultScreen.name) {
-                ResultScreen()
+                ResultScreen(navController)
             }
         }
 

@@ -1,11 +1,14 @@
 package com.fourleafclover.tarot
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,13 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.gray_6
+import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.toSp
+import com.fourleafclover.tarot.ui.theme.transparent
+import com.fourleafclover.tarot.ui.theme.white
 
 /* AppBar ---------------------------------------------------------------------------------- */
 
@@ -55,45 +63,53 @@ fun AppBar(
 /* BottomMenu ---------------------------------------------------------------------------------- */
 
 
+@Preview
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
     val items = listOf<BottomNavItem>(
         BottomNavItem.Home,
         BottomNavItem.MyTarot
     )
+    Column {
+        Divider(
+            color = gray_6,
+            thickness = 1.dp,
+            modifier = Modifier
+        )
 
-    BottomNavigation(
-        backgroundColor = Color.White
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
+        BottomNavigation(
+            backgroundColor = gray_8
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
 
-        items.forEach { item ->
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = item.icon),
-                        contentDescription = item.title,
-                        modifier = Modifier
-                            .width(26.dp)
-                            .height(26.dp)
-                    )
-                },
-                label = { Text(item.title, fontSize = toSp(dp = 12.dp)) },
-                selectedContentColor = highligtPurple,
-                unselectedContentColor = gray_6,
-                selected = currentRoute == item.screenName,
-                alwaysShowLabel = true,
-                onClick = {
-                    navController.navigate(item.screenName) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
+            items.forEach { item ->
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = item.icon),
+                            contentDescription = item.title,
+                            modifier = Modifier
+                                .width(26.dp)
+                                .height(26.dp)
+                        )
+                    },
+                    label = { Text(item.title, fontSize = toSp(dp = 12.dp)) },
+                    selectedContentColor = highligtPurple,
+                    unselectedContentColor = gray_6,
+                    selected = currentRoute == item.screenName,
+                    alwaysShowLabel = true,
+                    onClick = {
+                        navController.navigate(item.screenName) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) { saveState = true }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
