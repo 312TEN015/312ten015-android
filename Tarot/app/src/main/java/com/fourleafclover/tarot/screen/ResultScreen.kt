@@ -320,6 +320,15 @@ fun CustomSlider(
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center) {
 
+                Text(text = "첫번째 카드",
+                    style = getTextStyle(
+                        fontSize = 16,
+                        fontWeight = FontWeight.Medium,
+                        color = highligtPurple
+                    ),
+                    lineHeight = 28.sp,
+                    modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
+
                 Text(text = "# Keyword",
                     style = getTextStyle(
                         fontSize = 12,
@@ -360,7 +369,6 @@ fun CustomSlider(
                     fontWeight = FontWeight.Medium,
                     color = gray_3
                 ),
-                textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
         }

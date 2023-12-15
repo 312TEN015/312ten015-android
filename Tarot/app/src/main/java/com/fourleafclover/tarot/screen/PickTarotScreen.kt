@@ -28,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -60,18 +61,20 @@ import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.roundToInt
 
 
+@Preview
 @Composable
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
 
     Column(modifier = Modifier
         .background(color = gray_8)
-        .padding(horizontal = 20.dp, vertical = 20.dp)
         .fillMaxSize()) {
 
         Box(modifier = Modifier
             .height(48.dp)
-            .fillMaxWidth(), contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "연애운",
@@ -104,10 +107,16 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         
         val pxToMove = with(LocalDensity.current) { -46.dp.toPx().roundToInt() }
 
+        val cards = remember { mutableStateListOf(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21) }
+        val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
+
+
         Text(
             text = if (cardNumber == 1) "첫 번째 카드를 골라주세요." else if(cardNumber == 2) "두 번째 카드를 골라주세요." else "세 번째 카드를 골라주세요.",
             style = getTextStyle(22, FontWeight.Medium, white),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 32.dp)
         )
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -182,29 +191,27 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     }
                 }
 
+
                 LazyRow(
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .wrapContentWidth()
                         .fillMaxHeight(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy((-46).dp)
                 ) {
 
-                    items(22) { index ->
+                    items(cards.size) { index ->
 
-                        var moved by remember { mutableStateOf(false) }
                         val offset by animateIntOffsetAsState(
                             targetValue = if (nowSelected == index) {
-                                if (moved) {
-                                    IntOffset(0, pxToMove)
-                                } else {
-                                    IntOffset.Zero
-                                }
+                                IntOffset(0, pxToMove)
                             }  else {
                                 IntOffset.Zero
                             },
                             label = "offset"
                         )
+
 
                         Image(painter = painterResource(id = R.drawable.card_1),
                             contentDescription = "$index",
@@ -219,10 +226,10 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                 ) {
                                     Log.d("", "nowSelected: $index")
                                     cardSelected = true
-                                    moved = !moved
                                     nowSelected = index
                                 })
                     }
+
                 }
 
             }
@@ -232,20 +239,20 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     if (cardNumber == 1){
                         firstCardPicked = true
                         cardSelected = false
-                        firstCardIndex = nowSelected
-                        nowSelected = -1
+                        firstCardIndex = cards[nowSelected]
+                        cards.remove(firstCardIndex)
                         cardNumber = 2
 
                     }else if (cardNumber == 2){
                         secondCardPicked = true
                         cardSelected = false
-                        secondCardIndex = nowSelected
-                        nowSelected = -1
+                        secondCardIndex = cards[nowSelected]
+                        cards.remove(secondCardIndex)
                         cardNumber = 3
 
                     }else if (cardNumber == 3) {
-
-                        thirdCardIndex = nowSelected
+                        thirdCardIndex = cards[nowSelected]
+                        cards.remove(thirdCardIndex)
                         thirdCardPicked = true
 
                         navController.navigate(ScreenEnum.ResultScreen.name) {
@@ -257,14 +264,17 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                         }
                     }
 
-                    Log.d("", "cardNum: $cardNumber, 1: $firstCardIndex, 2: $secondCardIndex, 3: $thirdCardIndex")
+                    Log.d("", "${cards.size}, {${cards.joinToString (",")}}")
+//                    Log.d("", "cardNum: $cardNumber, cardVal: ${entireCards[cards[nowSelected]]}, 1: $firstCardIndex, 2: $secondCardIndex, 3: $thirdCardIndex")
+                    nowSelected = -1
 
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(bottom = 49.dp),
+                    .padding(bottom = 49.dp)
+                    .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = highligtPurple,
                     contentColor = gray_1,
