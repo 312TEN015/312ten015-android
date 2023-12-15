@@ -21,7 +21,8 @@ fun NavigationHost() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(bottomBar = {
-        BottomNavigationBar(navController = navController)
+        if (currentRoute == ScreenEnum.HomeScreen.name || currentRoute == ScreenEnum.MyTarotScreen.name)
+            BottomNavigationBar(navController = navController)
     }
     ) { innerPadding -> innerPadding
 
