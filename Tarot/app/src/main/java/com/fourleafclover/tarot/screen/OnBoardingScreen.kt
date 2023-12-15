@@ -39,7 +39,7 @@ import com.fourleafclover.tarot.ui.theme.highligtPurple
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-@Preview
+
 fun PagerOnBoarding(navController: NavHostController = rememberNavController()) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -78,7 +78,7 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
             onClick = {
                 navController.navigate(ScreenEnum.HomeScreen.name) {
                     navController.graph.startDestinationRoute?.let {
-                        popUpTo(it) { saveState = true }
+                        popUpTo(it) {  inclusive = true }
                     }
                     launchSingleTop = true
                     restoreState = true

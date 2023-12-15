@@ -31,9 +31,6 @@ fun NavigationHost() {
             composable(ScreenEnum.HomeScreen.name) {
                 HomeScreen(navController)
             }
-            composable(ScreenEnum.HomeScreen.name) {
-                HomeScreen(navController)
-            }
             composable(ScreenEnum.MyTarotScreen.name) {
                 MyTarotScreen(navController)
             }

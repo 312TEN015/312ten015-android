@@ -59,7 +59,7 @@ import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.roundToInt
 
-@Preview
+
 @Composable
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current

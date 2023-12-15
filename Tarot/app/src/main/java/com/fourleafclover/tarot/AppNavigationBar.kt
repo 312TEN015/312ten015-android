@@ -61,7 +61,7 @@ fun AppBar(
 /* BottomMenu ---------------------------------------------------------------------------------- */
 
 
-@Preview
+
 @Composable
 fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
     val items = listOf<BottomNavItem>(

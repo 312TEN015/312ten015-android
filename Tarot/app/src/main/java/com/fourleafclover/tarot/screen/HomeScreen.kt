@@ -29,7 +29,7 @@ fun HomeScreen(navController: NavHostController) {
 
     Column(modifier = Modifier
         .background(color = gray_9)
-        .padding(horizontal = 20.dp, vertical = 20.dp)
+        .padding(horizontal = 20.dp, vertical = 20.dp).padding(top = 16.dp)
         .verticalScroll(rememberScrollState())) {
         Text(
             text = "타로 카드를 뽑고\n운세를 확인해보세요!",

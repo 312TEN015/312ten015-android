@@ -85,7 +85,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.absoluteValue
 
-@Preview
+
 @Composable
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
@@ -235,7 +235,7 @@ fun Modifier.pagerFadeTransition(page: Int, pagerState: PagerState) =
         alpha = 1- pageOffset.absoluteValue
     }
 
-@Preview
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CustomSlider(
