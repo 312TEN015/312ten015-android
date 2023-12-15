@@ -11,6 +11,7 @@ import com.fourleafclover.tarot.BottomNavigationBar
 import com.fourleafclover.tarot.screen.HomeScreen
 import com.fourleafclover.tarot.screen.InputScreen
 import com.fourleafclover.tarot.screen.MyTarotScreen
+import com.fourleafclover.tarot.screen.PagerOnBoarding
 import com.fourleafclover.tarot.screen.PickTarotScreen
 import com.fourleafclover.tarot.screen.ResultScreen
 
@@ -26,7 +27,10 @@ fun NavigationHost() {
     }
     ) { innerPadding -> innerPadding
 
-        NavHost(navController = navController, startDestination = ScreenEnum.HomeScreen.name) {
+        NavHost(navController = navController, startDestination = ScreenEnum.OnBoardingScreen.name) {
+            composable(ScreenEnum.HomeScreen.name) {
+                HomeScreen(navController)
+            }
             composable(ScreenEnum.HomeScreen.name) {
                 HomeScreen(navController)
             }
@@ -41,6 +45,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.ResultScreen.name) {
                 ResultScreen(navController)
+            }
+            composable(ScreenEnum.OnBoardingScreen.name) {
+                PagerOnBoarding(navController)
             }
         }
 

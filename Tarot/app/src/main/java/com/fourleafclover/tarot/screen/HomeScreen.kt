@@ -20,6 +20,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
 
 
@@ -27,7 +28,7 @@ import com.fourleafclover.tarot.ui.theme.white
 fun HomeScreen(navController: NavHostController) {
 
     Column(modifier = Modifier
-        .background(color = gray_8)
+        .background(color = gray_9)
         .padding(horizontal = 20.dp, vertical = 20.dp)
         .verticalScroll(rememberScrollState())) {
         Text(

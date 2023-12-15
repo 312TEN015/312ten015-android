@@ -133,57 +133,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
         CustomSlider()
 
-        Column(modifier = Modifier
-            .background(color = gray_9)
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center) {
 
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
-
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
-
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
-            }
-
-            Text(text = "어려움이나 역경 등 힘든 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 필요합니다.",
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = gray_3
-                ),
-                textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
-        }
 
         Column(modifier = Modifier
             .background(color = gray_8)
@@ -316,7 +266,6 @@ fun CustomSlider(
             horizontalArrangement = Arrangement.Center,
         ) {
 
-            //                            .alpha(if (pagerState.currentPage == page) 1f else 0.5f)
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
@@ -362,6 +311,59 @@ fun CustomSlider(
             totalDots = sliderList.size,
             selectedIndex = pagerState.currentPage
         )
+
+        Column(modifier = Modifier
+            .background(color = gray_9)
+            .fillMaxSize()
+            .padding(horizontal = 20.dp))
+        {
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center) {
+
+                Text(text = "# Keyword",
+                    style = getTextStyle(
+                        fontSize = 12,
+                        fontWeight = FontWeight.Medium,
+                        color = gray_2
+                    ),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp))
+
+                Text(text = "# Keyword",
+                    style = getTextStyle(
+                        fontSize = 12,
+                        fontWeight = FontWeight.Medium,
+                        color = gray_2
+                    ),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp))
+
+                Text(text = "# Keyword",
+                    style = getTextStyle(
+                        fontSize = 12,
+                        fontWeight = FontWeight.Medium,
+                        color = gray_2
+                    ),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp))
+            }
+
+            Text(text = "어려움이나 역경 등 힘든 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 필요합니다.",
+                style = getTextStyle(
+                    fontSize = 16,
+                    fontWeight = FontWeight.Medium,
+                    color = gray_3
+                ),
+                textAlign = TextAlign.Center,
+                lineHeight = 28.sp,
+                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
+        }
     }
 }
 

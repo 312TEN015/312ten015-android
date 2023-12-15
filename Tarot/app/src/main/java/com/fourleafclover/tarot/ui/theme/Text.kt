@@ -23,7 +23,7 @@ val Pretendard = FontFamily(
 fun toSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }
 
 @Composable
-fun getTextStyle(fontSize: Int, fontWeight: FontWeight, color: Color): TextStyle {
+fun getTextStyle(fontSize: Int, fontWeight: FontWeight, color: Color = white): TextStyle {
     return TextStyle(
         fontFamily = Pretendard,
         fontSize = toSp(fontSize.dp),

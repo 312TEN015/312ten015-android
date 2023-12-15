@@ -57,8 +57,8 @@ fun TarotTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = gray_8.toArgb()
-            window.navigationBarColor = gray_8.toArgb()
+            window.statusBarColor = gray_9.toArgb()
+            window.navigationBarColor = gray_9.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
