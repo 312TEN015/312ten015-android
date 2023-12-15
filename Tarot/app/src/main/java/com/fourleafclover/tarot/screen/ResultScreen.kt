@@ -86,6 +86,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.absoluteValue
 
 
+@Preview
 @Composable
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
@@ -317,17 +318,18 @@ fun CustomSlider(
             .fillMaxSize()
             .padding(horizontal = 20.dp))
         {
+            Text(text = "첫번째 카드",
+                style = getTextStyle(
+                    fontSize = 16,
+                    fontWeight = FontWeight.Medium,
+                    color = highligtPurple
+                ),
+                lineHeight = 28.sp,
+                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
+
+
             Row(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center) {
-
-                Text(text = "첫번째 카드",
-                    style = getTextStyle(
-                        fontSize = 16,
-                        fontWeight = FontWeight.Medium,
-                        color = highligtPurple
-                    ),
-                    lineHeight = 28.sp,
-                    modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
 
                 Text(text = "# Keyword",
                     style = getTextStyle(
@@ -393,9 +395,11 @@ fun DotsIndicator(
         items(totalDots) { index ->
             Box(
                 modifier = modifier
-                    .size(dotSize)
-                    .clip(CircleShape)
-                    .background(if (index == selectedIndex) selectedColor else unSelectedColor)
+                    .width(if (index == selectedIndex) 18.dp else dotSize)
+                    .height(6.dp)
+                    .background(color = if (index == selectedIndex) selectedColor else unSelectedColor,
+                        shape = RoundedCornerShape(4.dp)
+                    )
             )
 
             if (index != totalDots - 1) {
