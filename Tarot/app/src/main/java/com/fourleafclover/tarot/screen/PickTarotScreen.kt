@@ -49,9 +49,12 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.AppBarClose
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.pickedTopicNumber
 import com.fourleafclover.tarot.data.tarotInputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -60,6 +63,7 @@ import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.roundToInt
@@ -70,29 +74,12 @@ import kotlin.math.roundToInt
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
 
-    Column(modifier = Modifier
-        .background(color = gray_8)
-        .fillMaxSize()) {
+    Column(modifier = backgroundModifier)
+    {
 
-        Box(modifier = Modifier
-            .height(48.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = getPickedTopic().majorTopic,
-                style = getTextStyle(16, FontWeight.Medium, white),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
-
-            Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
-                modifier = Modifier.fillMaxWidth(), alignment = Alignment.CenterEnd)
-        }
-
+        AppBarClose(navController = navController,
+            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
+            gray_8)
 
 
         val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
@@ -111,6 +98,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         
         val pxToMove = with(LocalDensity.current) { -46.dp.toPx().roundToInt() }
 
+        val randomCards = (0..21).toMutableList().shuffled()
         val cards = remember { mutableStateListOf(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21) }
         val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
 
@@ -141,7 +129,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                             drawRoundRect(
                                 color = gray_4,
                                 style = dash,
-                                alpha = if (firstCardPicked) 0f else 1f)
+                                alpha = if (firstCardPicked) 0f else 1f
+                            )
                         }) {
 
                         Image(painter = painterResource(
@@ -167,7 +156,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                             drawRoundRect(
                                 color = gray_4,
                                 style = dash,
-                                alpha = if (secondCardPicked) 0f else 1f)
+                                alpha = if (secondCardPicked) 0f else 1f
+                            )
                         }) {
 
                         Image(painter = painterResource(
@@ -192,7 +182,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                             drawRoundRect(
                                 color = gray_4,
                                 style = dash,
-                                alpha = if (thirdCardPicked) 0f else 1f)
+                                alpha = if (thirdCardPicked) 0f else 1f
+                            )
                         }) {
 
                         Image(painter = painterResource(
@@ -308,7 +299,11 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 ),
                 enabled = cardSelected
             ) {
-                Text(text = "선택완료", modifier = Modifier.padding(vertical = 8.dp))
+                Text(text = "선택완료", modifier = Modifier.padding(vertical = 8.dp),
+                    style = getTextStyle(
+                        fontSize = 16,
+                        fontWeight = FontWeight.Medium
+                    ))
             }
         }
     }

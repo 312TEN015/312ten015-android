@@ -98,7 +98,12 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
             ),
             enabled = pagerState.currentPage == onboardPagesList.size-1
         ) {
-            Text(text = "시작하기", modifier = Modifier.padding(vertical = 8.dp))
+            Text(text = "시작하기",
+                modifier = Modifier.padding(vertical = 8.dp),
+                style = getTextStyle(
+                    fontSize = 16,
+                    fontWeight = FontWeight.Medium
+                ))
         }
 
 

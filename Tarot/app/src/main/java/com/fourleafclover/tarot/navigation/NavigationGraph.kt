@@ -11,6 +11,7 @@ import com.fourleafclover.tarot.BottomNavigationBar
 import com.fourleafclover.tarot.screen.HomeScreen
 import com.fourleafclover.tarot.screen.InputScreen
 import com.fourleafclover.tarot.screen.LoadingScreen
+import com.fourleafclover.tarot.screen.MyTarotDetailScreen
 import com.fourleafclover.tarot.screen.MyTarotScreen
 import com.fourleafclover.tarot.screen.PagerOnBoarding
 import com.fourleafclover.tarot.screen.PickTarotScreen
@@ -49,6 +50,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.LoadingScreen.name) {
                 LoadingScreen(navController)
+            }
+            composable(ScreenEnum.MyTarotDetailScreen.name) {
+                MyTarotDetailScreen(navController)
             }
         }
 

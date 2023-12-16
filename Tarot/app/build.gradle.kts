@@ -11,7 +11,7 @@ android {
         applicationId = "com.fourleafclover.tarot"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
+        versionCode = 5
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation-android:1.5.1")
     implementation ("androidx.compose.material:material:1.4.2")
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("androidx.test:monitor:1.6.1")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")

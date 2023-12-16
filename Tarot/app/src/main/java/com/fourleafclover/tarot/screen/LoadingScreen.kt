@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -63,10 +64,12 @@ fun LoadingScreen(navController: NavController = rememberNavController()){
             contentDescription ="",
             modifier = Modifier.wrapContentSize()
         )
-        Text(text = "선택하신 카드의 의미\n열심히 해석하고 있어요!", style = getTextStyle(
+        Text(text = "선택하신 카드의 의미\n열심히 해석하고 있어요!",
+            style = getTextStyle(
             fontSize = 22,
             fontWeight = FontWeight.Medium
         ),
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp, top = 40.dp))
         Text(text = "잠시만 기다려주세요",
             style = getTextStyle(
@@ -94,6 +97,9 @@ fun sendRequest(localContext: Context, navController: NavController) {
 
                 tarotOutputDto.cardResults = response.body()!!.cardResults
                 tarotOutputDto.overallResult = response.body()!!.overallResult
+                tarotOutputDto.tarotId = response.body()!!.tarotId
+                tarotOutputDto.tarotType = response.body()!!.tarotType
+                tarotOutputDto.cards = response.body()!!.cards
 
                 Log.d("", "${tarotOutputDto.cardResults}--------")
                 Log.d("", "${tarotOutputDto.overallResult}--------")

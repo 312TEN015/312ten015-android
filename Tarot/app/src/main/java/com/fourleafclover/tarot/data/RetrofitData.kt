@@ -11,7 +11,10 @@ data class TarotInputDto(
 
 // 타로 고민 결과 response
 data class TarotOutputDto(
-    var id: String,
+    var tarotId: String,
+    var tarotType: Int, // 분류
+    var cards: ArrayList<Int>,
+    var createdAt: String, // 날짜
     var cardResults: ArrayList<CardResultData>?,    // 카드설명
     var overallResult: OverallResultData?   // 총평
 )
@@ -24,6 +27,14 @@ data class CardResultData(
 
 // 뽑은 타로 결과에 대한 요약문, 전문
 data class OverallResultData(
-    val summery: String,
+    val summary: String,
     val full: String
+)
+
+data class TarotIdsInputDto(
+    val tarotIds : ArrayList<String> = arrayListOf<String>()
+)
+
+data class TarotIdsOutputDto(
+    val tarotIds : ArrayList<TarotOutputDto> = arrayListOf<TarotOutputDto>()
 )

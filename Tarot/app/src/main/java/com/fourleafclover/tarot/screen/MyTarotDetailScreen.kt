@@ -1,12 +1,9 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.fourleafclover.tarot.screen
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,20 +21,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,65 +40,86 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.AppBarClose
-import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.backgroundModifier
-import com.fourleafclover.tarot.data.PreferenceUtil
 import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
-import com.fourleafclover.tarot.data.pickedTopicNumber
+import com.fourleafclover.tarot.data.getSubjectImoji
 import com.fourleafclover.tarot.data.selectedTarotResult
 import com.fourleafclover.tarot.data.tarotOutputDto
-import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
-import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
-import com.fourleafclover.tarot.ui.theme.gray_5
+import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
+import java.text.SimpleDateFormat
+import java.util.Date
 import kotlin.math.absoluteValue
 
-
-@Preview
 @Composable
-fun ResultScreen(navController: NavHostController = rememberNavController()){
+@Preview
+fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
+    Log.d("", "${selectedTarotResult.overallResult?.full }")
+    val tarotSubjectData = getPickedTopic(selectedTarotResult.tarotType)
 
     Column(modifier = backgroundModifier)
     {
 
-        AppBarClose(navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
-            gray_8)
+        AppBarClose(
+            navController = navController,
+            pickedTopicTemplate = tarotSubjectData,
+            gray_9
+        )
 
         Column(modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .background(color = gray_8)) {
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()))
+        {
 
+
+            val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
             Text(
-                text = "선택하신 카드는\n이런 의미를 담고 있어요.",
-                style = getTextStyle(22, FontWeight.Medium, white),
+                text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
+                style = getTextStyle(22, FontWeight.Bold, gray_2),
                 modifier = Modifier
-                    .background(color = gray_8)
-                    .padding(horizontal = 20.dp, vertical = 32.dp)
                     .fillMaxWidth()
+                    .background(color = gray_9)
+                    .padding(top = 16.dp, bottom = 16.dp),
+                textAlign = TextAlign.Center
             )
 
-            Log.d("", tarotOutputDto.toString())
+
+//        val date = Date(selectedTarotResult.createdAt)
+//        val simpleDateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
+//        val simpleDate: String = simpleDateFormat.format(date)
+//        val simpleDateParse: Date = simpleDateFormat.parse(simpleDate)
+
+            Text(
+                text = selectedTarotResult.createdAt,
+                style = getTextStyle(14, FontWeight.Medium, gray_4),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = gray_9)
+                    .padding(bottom = 32.dp),
+                textAlign = TextAlign.Center
+            )
+
+            //////
             val tmpList = arrayListOf<Int>()
-            for (i in tarotOutputDto.cards) {
+            for (i in selectedTarotResult.cards) {
                 tmpList.add(getCardImageId(localContext, i.toString()))
             }
 
-            CustomSlider(sliderList = tmpList)
+            CustomMySlider(sliderList = tmpList)
 
             Column(
                 modifier = Modifier
@@ -129,7 +139,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                 )
 
                 Text(
-                    text = tarotOutputDto.overallResult?.summary.toString(),
+                    text = selectedTarotResult.overallResult?.summary.toString(),
                     style = getTextStyle(
                         fontSize = 18,
                         fontWeight = FontWeight.Medium,
@@ -140,7 +150,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                 )
 
                 Text(
-                    text = tarotOutputDto.overallResult?.full.toString(),
+                    text = selectedTarotResult.overallResult?.full.toString(),
                     style = getTextStyle(
                         fontSize = 16,
                         fontWeight = FontWeight.Medium,
@@ -151,72 +161,16 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         .padding(top = 12.dp, bottom = 64.dp)
                         .wrapContentHeight()
                 )
-
-                var saveState by rememberSaveable { mutableStateOf(false) }
-
-                Button(
-                    onClick = {
-                        // 타로 결과 id 저장
-                        val tmpArray = MyApplication.prefs.getTarotResultArray()
-                        tmpArray.add(tarotOutputDto.tarotId)
-                        MyApplication.prefs.saveTarotResult(tmpArray)
-                        saveState = true
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    enabled = !saveState,
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = highligtPurple,
-                        contentColor = gray_1,
-                        disabledContainerColor = gray_5,
-                        disabledContentColor = gray_6
-                    )
-                ) {
-                    Text(
-                        text = if (saveState) "저장 완료" else "타로 저장하기",
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-
-                Button(
-                    onClick = {
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .fillMaxWidth()
-                        .padding(bottom = 76.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_9,
-                        contentColor = gray_1,
-                        disabledContainerColor = gray_5,
-                        disabledContentColor = gray_6
-                    )
-                ) {
-                    Text(text = "홈으로 돌아가기", modifier = Modifier.padding(vertical = 8.dp))
-                }
             }
-
         }
-
     }
-
 
 }
 
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CustomSlider(
+fun CustomMySlider(
     modifier: Modifier = Modifier,
     sliderList: MutableList<Int> = mutableListOf(R.drawable.card_1, R.drawable.card_2, R.drawable.card_3)
 ) {
@@ -309,7 +263,7 @@ fun CustomSlider(
                 items(3) {
 
                     Text(
-                        text = "# ${tarotOutputDto.cardResults?.get(pagerState.currentPage)?.keywords?.get(it)}",
+                        text = "# ${selectedTarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(it)}",
                         style = getTextStyle(
                             fontSize = 12,
                             fontWeight = FontWeight.Medium,
@@ -324,7 +278,7 @@ fun CustomSlider(
                 }
             }
 
-            Text(text = "${tarotOutputDto.cardResults?.get(pagerState.currentPage)?.description }",
+            Text(text = "${selectedTarotResult.cardResults?.get(pagerState.currentPage)?.description }",
                 style = getTextStyle(
                     fontSize = 16,
                     fontWeight = FontWeight.Medium,
@@ -333,39 +287,6 @@ fun CustomSlider(
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
-        }
-    }
-}
-
-@Composable
-fun DotsIndicator(
-    modifier: Modifier = Modifier,
-    totalDots: Int,
-    selectedIndex: Int,
-    selectedColor: Color = white,
-    unSelectedColor: Color = gray_6,
-    dotSize: Dp = 6.dp
-) {
-    LazyRow(
-        modifier = modifier
-            .wrapContentWidth()
-            .wrapContentHeight()
-            .padding(vertical = 32.dp)
-    ) {
-        items(totalDots) { index ->
-            Box(
-                modifier = modifier
-                    .width(if (index == selectedIndex) 18.dp else dotSize)
-                    .height(6.dp)
-                    .background(
-                        color = if (index == selectedIndex) selectedColor else unSelectedColor,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-            )
-
-            if (index != totalDots - 1) {
-                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
-            }
         }
     }
 }

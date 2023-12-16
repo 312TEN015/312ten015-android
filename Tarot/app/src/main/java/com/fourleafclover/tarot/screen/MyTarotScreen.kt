@@ -9,23 +9,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,13 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.myTarotResults
+import com.fourleafclover.tarot.data.selectedTarotResult
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
-import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
@@ -52,7 +48,8 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 
     Column(modifier = Modifier
         .background(color = gray_9)
-        .padding(horizontal = 20.dp)) {
+        .padding(horizontal = 20.dp)
+        .fillMaxSize()) {
 
         Box(modifier = Modifier
             .padding(top = 10.dp)
@@ -71,7 +68,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
             Text(
-                text = "8", style = getTextStyle(
+                text = "${myTarotResults.size}", style = getTextStyle(
                     fontSize = 14,
                     fontWeight = FontWeight.Medium,
                     color = highligtPurple,
@@ -92,17 +89,18 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
         LazyColumn(
             contentPadding = PaddingValues(vertical = 10.dp),
             content = {
-            items(8) {
+            items(myTarotResults.size) {
                 Box(modifier = Modifier
                     .padding(bottom = 16.dp)
                     .clickable {
-                    navController.navigate(ScreenEnum.ResultScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
+                        selectedTarotResult = myTarotResults[it]
+                        navController.navigate(ScreenEnum.MyTarotDetailScreen.name) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) { saveState = true }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
                 }) {
 
                     Row(
@@ -118,7 +116,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                                 .weight(1f)
                         ) {
                             Text(
-                                text = "나의 하루가 궁금해!", style = getTextStyle(
+                                text = getPickedTopic(myTarotResults[it].tarotType).majorQuestion, style = getTextStyle(
                                     fontSize = 12,
                                     fontWeight = FontWeight.Medium,
                                     color = gray_2,
@@ -126,7 +124,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                             )
 
                             Text(
-                                text = "오늘의 운세", style = getTextStyle(
+                                text = getPickedTopic(myTarotResults[it].tarotType).majorTopic, style = getTextStyle(
                                     fontSize = 18,
                                     fontWeight = FontWeight.Bold,
                                     color = white
@@ -146,7 +144,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                             )
 
                             Text(
-                                text = "2023년 10월 15일", style = getTextStyle(
+                                text = myTarotResults[it].createdAt, style = getTextStyle(
                                     fontSize = 12,
                                     fontWeight = FontWeight.Medium,
                                     color = gray_5
