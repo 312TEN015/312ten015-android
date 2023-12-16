@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -63,6 +65,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -90,6 +93,16 @@ import kotlin.math.absoluteValue
 @Composable
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
+
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openDialog){
+        Dialog(onDismissRequest = { openDialog = false }) {
+            CloseWithoutSaveDialog()
+        }
+    }
 
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
@@ -119,7 +132,8 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
                 Image(
                     painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
-                    modifier = Modifier.fillMaxWidth(), alignment = Alignment.CenterEnd
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable { openDialog = true }, alignment = Alignment.CenterEnd
                 )
             }
 
@@ -155,7 +169,6 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     fontWeight = FontWeight.Medium,
                     color = white
                 ),
-                textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(top = 24.dp))
 
@@ -241,13 +254,7 @@ fun Modifier.pagerFadeTransition(page: Int, pagerState: PagerState) =
 @Composable
 fun CustomSlider(
     modifier: Modifier = Modifier,
-    sliderList: MutableList<Int> = mutableListOf(R.drawable.card_1, R.drawable.card_2, R.drawable.card_3),
-    dotsActiveColor: Color = Color.DarkGray,
-    dotsInActiveColor: Color = Color.LightGray,
-    dotsSize: Dp = 10.dp,
-    pagerPaddingValues: PaddingValues = PaddingValues(horizontal = 65.dp),
-    imageCornerRadius: Dp = 16.dp,
-    imageHeight: Dp = 250.dp,
+    sliderList: MutableList<Int> = mutableListOf(R.drawable.card_1, R.drawable.card_2, R.drawable.card_3)
 ) {
 
     val pagerState = rememberPagerState(
@@ -316,7 +323,8 @@ fun CustomSlider(
         Column(modifier = Modifier
             .background(color = gray_9)
             .fillMaxSize()
-            .padding(horizontal = 20.dp))
+            .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally)
         {
             Text(text = "첫번째 카드",
                 style = getTextStyle(
@@ -328,41 +336,26 @@ fun CustomSlider(
                 modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
 
 
-            Row(modifier = Modifier.fillMaxWidth(),
+            LazyRow(modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center) {
 
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
+                items(3) {
 
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
 
-                Text(text = "# Keyword",
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_2
-                    ),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp))
+                    Text(
+                        text = "# Keyword",
+                        style = getTextStyle(
+                            fontSize = 12,
+                            fontWeight = FontWeight.Medium,
+                            color = gray_2
+                        ),
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .background(color = gray_8, shape = RoundedCornerShape(6.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+
+                }
             }
 
             Text(text = "어려움이나 역경 등 힘든 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 필요합니다.",
@@ -371,6 +364,7 @@ fun CustomSlider(
                     fontWeight = FontWeight.Medium,
                     color = gray_3
                 ),
+                textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
         }

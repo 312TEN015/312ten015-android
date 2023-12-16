@@ -4,6 +4,7 @@ package com.fourleafclover.tarot.screen
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
@@ -56,6 +59,26 @@ import com.fourleafclover.tarot.ui.theme.white
 fun InputScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
 
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openDialog){
+        Dialog(onDismissRequest = { openDialog = false }) {
+            CloseDialog(onClickNo = { openDialog = false },
+                onClickOk = {
+                // go to home with clear back stack
+                navController.navigate(ScreenEnum.HomeScreen.name) {
+                    navController.graph.startDestinationRoute?.let {
+                        popUpTo(it) {  inclusive = true }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            })
+        }
+    }
+
     Column(modifier = Modifier
         .background(color = gray_8)
         .padding(horizontal = 20.dp, vertical = 20.dp)
@@ -75,7 +98,9 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
             )
 
             Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
-                modifier = Modifier.fillMaxWidth(), alignment = Alignment.CenterEnd)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { openDialog = true }, alignment = Alignment.CenterEnd)
         }
 
         Text(
