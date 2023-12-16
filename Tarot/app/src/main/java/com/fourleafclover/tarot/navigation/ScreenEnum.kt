@@ -12,7 +12,8 @@ enum class ScreenEnum {
     PickTarotScreen,     // 타로 카드 뽑기 화면
     ResultScreen,     // 타로 결과 화면
 
-    OnBoardingScreen     // 온보딩 화면
+    OnBoardingScreen,     // 온보딩 화면
+    LoadingScreen,     // 로딩 화면
 
 
 

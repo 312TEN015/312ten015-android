@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -49,6 +50,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.tarotInputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -77,7 +80,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "연애운",
+                text = getPickedTopic().majorTopic,
                 style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -99,9 +102,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         var secondCardPicked by remember { mutableStateOf(false) }
         var thirdCardPicked by remember { mutableStateOf(false) }
 
-        var firstCardIndex = -1
-        var secondCardIndex = -1
-        var thirdCardIndex = -1
+        var firstCardIndex by remember { mutableIntStateOf(-1) }
+        var secondCardIndex by remember { mutableIntStateOf(-1) }
+        var thirdCardIndex by remember { mutableIntStateOf(-1) }
 
         var nowSelected by remember { mutableIntStateOf(-1) }
         
@@ -213,10 +216,10 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                         )
 
 
-                        Image(painter = painterResource(id = R.drawable.card_1),
+                        Image(painter = painterResource(id = R.drawable.tarot_front),
                             contentDescription = "$index",
                             modifier = Modifier
-                                .wrapContentSize()
+                                .width(88.dp)
                                 .offset {
                                     offset
                                 }
@@ -233,6 +236,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 }
 
             }
+
 
             Button(
                 onClick = {
@@ -255,7 +259,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                         cards.remove(thirdCardIndex)
                         thirdCardPicked = true
 
-                        navController.navigate(ScreenEnum.ResultScreen.name) {
+                        tarotInputDto.cards = arrayListOf(firstCardIndex, secondCardIndex, thirdCardIndex)
+
+                        navController.navigate(ScreenEnum.LoadingScreen.name) {
                             navController.graph.startDestinationRoute?.let {
                                 popUpTo(it) { saveState = true }
                             }

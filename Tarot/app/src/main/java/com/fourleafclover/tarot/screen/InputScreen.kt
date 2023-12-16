@@ -19,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -41,6 +40,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.tarotInputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -58,6 +59,13 @@ import com.fourleafclover.tarot.ui.theme.white
 @Composable
 fun InputScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
+
+    val pickedTopicTemplate = getPickedTopic()
+
+    var text1 by remember { mutableStateOf(TextFieldValue("")) }
+    var text2 by remember { mutableStateOf(TextFieldValue("")) }
+    var text3 by remember { mutableStateOf(TextFieldValue("")) }
+
 
     var openDialog by remember {
         mutableStateOf(false)
@@ -89,7 +97,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
             .fillMaxWidth(), contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "연애운",
+                text = pickedTopicTemplate.majorTopic,
                 style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -104,7 +112,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
         }
 
         Text(
-            text = "그 사람의 마음은?",
+            text = pickedTopicTemplate.majorQuestion,
             style = getTextStyle(16, FontWeight.Medium, white),
             modifier = Modifier.padding(bottom = 16.dp)
         )
@@ -147,12 +155,11 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                 )
                 Text(
-                    text = "그 사람과의 첫만남은 어땠나요?",
+                    text = pickedTopicTemplate.subQuestions[0],
                     style = getTextStyle(16, FontWeight.Medium, gray_3)
                 )
             }
 
-            var text1 by remember { mutableStateOf(TextFieldValue("")) }
 
             TextField(
                 modifier = Modifier
@@ -194,12 +201,11 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                 )
                 Text(
-                    text = "그 사람에 대한 현재 나의 감정은?",
+                    text = pickedTopicTemplate.subQuestions[1],
                     style = getTextStyle(16, FontWeight.Medium, gray_3)
                 )
             }
 
-            var text2 by remember { mutableStateOf(TextFieldValue("")) }
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -240,12 +246,11 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                 )
                 Text(
-                    text = "그 사람과 어떤 관계가 되고 싶나요?",
+                    text = pickedTopicTemplate.subQuestions[2],
                     style = getTextStyle(16, FontWeight.Medium, gray_3)
                 )
             }
 
-            var text3 by remember { mutableStateOf(TextFieldValue("")) }
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -280,6 +285,10 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
 
         Button(
             onClick = {
+                tarotInputDto.firstAnswer = text1.text
+                tarotInputDto.secondAnswer = text2.text
+                tarotInputDto.thirdAnswer = text3.text
+
                 navController.navigate(ScreenEnum.PickTarotScreen.name) {
                     navController.graph.startDestinationRoute?.let {
                         popUpTo(it) { saveState = true }

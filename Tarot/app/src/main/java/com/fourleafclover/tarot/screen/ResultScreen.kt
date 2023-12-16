@@ -2,14 +2,10 @@
 
 package com.fourleafclover.tarot.screen
 
-import android.graphics.drawable.GradientDrawable
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapFlingBehavior
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,42 +17,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -68,11 +53,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
-import coil.size.Scale
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.tarotOutputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -84,8 +67,6 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlin.math.absoluteValue
 
 
@@ -94,9 +75,7 @@ import kotlin.math.absoluteValue
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
 
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
+    var openDialog by remember { mutableStateOf(false) }
 
     if (openDialog){
         Dialog(onDismissRequest = { openDialog = false }) {
@@ -121,7 +100,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     .padding(bottom = 32.dp), contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "연애운",
+                    text = getPickedTopic().majorTopic,
                     style = getTextStyle(16, FontWeight.Medium, white),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -163,7 +142,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                 ),
                 modifier = Modifier.padding(top = 48.dp))
 
-            Text(text = "당신에게는 어려운 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 있습니다.",
+            Text(text = tarotOutputDto.overallResult?.summery.toString(),
                 style = getTextStyle(
                     fontSize = 18,
                     fontWeight = FontWeight.Medium,
@@ -172,9 +151,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(top = 24.dp))
 
-            Text(text = "당신에게는 어려운 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 있습니다. 포기하지 않고 매달 100만원씩 적금을 들고 있는 것이 그 예시겠네요. 하지만, 때로는 지나친 의욕 때문에 무리한 목표를 세우다가 실패로 이어지는 경우도 있지요. " +
-                    " 따라서, 지금까지의 생활 패턴을 유지하면서 안정감을 추구하려는 마음가짐이 중요합니다. 그리고, 다른 사람들을 위해 헌신하거나 배려하는 자세 역시 꼭 필요해요. 자신의 목표만 바라보기보다, 다른 사람에게 양보하는 마음가짐을 가지고 인생의 균형을 지켜가는 것이 중요합니다. " +
-                    " 이러한 부분들이 잘 지켜진다면, 조만간 경제적으로 여유로워질 기회가 찾아올 것입니다. 30살이 되기 전에 1억을 모으는 것도 가능할지도 몰라요!",
+            Text(text = tarotOutputDto.overallResult?.full.toString(),
                 style = getTextStyle(
                     fontSize = 16,
                     fontWeight = FontWeight.Medium,

@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.pickedTopicNumber
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -49,6 +50,7 @@ fun HomeScreen(navController: NavHostController) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
+                            pickedTopicNumber = 0
                             navController.navigate(ScreenEnum.InputScreen.name) {
                                 navController.graph.startDestinationRoute?.let {
                                     popUpTo(it) { saveState = true }
@@ -57,12 +59,48 @@ fun HomeScreen(navController: NavHostController) {
                                 restoreState = true
                             }
                         }, painter = painterResource(id = R.drawable.category_love), contentDescription = "연애운")
-                    Image(painter = painterResource(id = R.drawable.category_dream), contentDescription = "소망운")
+                    Image(painter = painterResource(id = R.drawable.category_dream),
+                        contentDescription = "소망운",
+                        modifier = Modifier.clickable {
+                        pickedTopicNumber = 2
+                        navController.navigate(ScreenEnum.InputScreen.name) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) { saveState = true }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        }
+                    )
                 }
 
                 Column {
-                    Image(modifier = Modifier.padding(bottom = 8.dp), painter = painterResource(id = R.drawable.category_study), contentDescription = "학업운")
-                    Image(painter = painterResource(id = R.drawable.category_job), contentDescription = "취업운")
+                    Image(modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .clickable {
+                            pickedTopicNumber = 1
+                            navController.navigate(ScreenEnum.InputScreen.name) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                        } },
+                        painter = painterResource(id = R.drawable.category_study),
+                        contentDescription = "학업운")
+                    Image(painter = painterResource(id = R.drawable.category_job),
+                        contentDescription = "취업운",
+                        modifier = Modifier.clickable {
+                            pickedTopicNumber = 3
+                            navController.navigate(ScreenEnum.InputScreen.name) {
+                                navController.graph.startDestinationRoute?.let {
+                                    popUpTo(it) { saveState = true }
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
                 }
             }
 
