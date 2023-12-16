@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
 import com.fourleafclover.tarot.data.tarotInputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
@@ -102,9 +103,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         var secondCardPicked by remember { mutableStateOf(false) }
         var thirdCardPicked by remember { mutableStateOf(false) }
 
-        var firstCardIndex by remember { mutableIntStateOf(-1) }
-        var secondCardIndex by remember { mutableIntStateOf(-1) }
-        var thirdCardIndex by remember { mutableIntStateOf(-1) }
+        var firstCardNumber by remember { mutableIntStateOf(-1) }
+        var secondCardNumber by remember { mutableIntStateOf(-1) }
+        var thirdCardNumber by remember { mutableIntStateOf(-1) }
 
         var nowSelected by remember { mutableIntStateOf(-1) }
         
@@ -115,7 +116,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
 
         Text(
-            text = if (cardNumber == 1) "첫 번째 카드를 골라주세요." else if(cardNumber == 2) "두 번째 카드를 골라주세요." else "세 번째 카드를 골라주세요.",
+            text = if (cardNumber == 1) "첫 번째 카드를 골라주세요."
+            else if(cardNumber == 2) "두 번째 카드를 골라주세요."
+            else "세 번째 카드를 골라주세요.",
             style = getTextStyle(22, FontWeight.Medium, white),
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,14 +136,19 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 {
 
                     Box(modifier = Modifier
-                        .wrapContentSize()
+                        .width(54.dp)
                         .drawBehind {
-                            drawRoundRect(color = gray_4, style = dash)
+                            drawRoundRect(
+                                color = gray_4,
+                                style = dash,
+                                alpha = if (firstCardPicked) 0f else 1f)
                         }) {
 
-                        Image(painter = painterResource(id = R.drawable.card_1),
+                        Image(painter = painterResource(
+                            id = if (firstCardPicked) getCardImageId(localContext, firstCardNumber.toString())
+                            else R.drawable.tarot_front),
                             contentDescription = null,
-                            modifier = Modifier.wrapContentSize(),
+                            modifier = Modifier,
                             alpha = if(firstCardPicked) 1f else 0f)
                         Text(text = "첫번째\n 카드",
                             style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
@@ -153,15 +161,20 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     }
 
                     Box(modifier = Modifier
-                        .wrapContentSize()
                         .padding(horizontal = 24.dp)
+                        .width(54.dp)
                         .drawBehind {
-                            drawRoundRect(color = gray_4, style = dash)
+                            drawRoundRect(
+                                color = gray_4,
+                                style = dash,
+                                alpha = if (secondCardPicked) 0f else 1f)
                         }) {
 
-                        Image(painter = painterResource(id = R.drawable.card_1),
+                        Image(painter = painterResource(
+                            id = if (secondCardPicked) getCardImageId(localContext, secondCardNumber.toString())
+                            else R.drawable.tarot_front),
                             contentDescription = null,
-                            modifier = Modifier.wrapContentSize(),
+                            modifier = Modifier,
                             alpha = if(secondCardPicked) 1f else 0f)
                         Text(text = "두번째\n 카드",
                             style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
@@ -174,14 +187,19 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     }
 
                     Box(modifier = Modifier
-                        .wrapContentSize()
+                        .width(54.dp)
                         .drawBehind {
-                            drawRoundRect(color = gray_4, style = dash)
+                            drawRoundRect(
+                                color = gray_4,
+                                style = dash,
+                                alpha = if (thirdCardPicked) 0f else 1f)
                         }) {
 
-                        Image(painter = painterResource(id = R.drawable.card_1),
+                        Image(painter = painterResource(
+                            id = if (thirdCardPicked) getCardImageId(localContext, thirdCardNumber.toString())
+                            else R.drawable.tarot_front),
                             contentDescription = null,
-                            modifier = Modifier.wrapContentSize(),
+                            modifier = Modifier,
                             alpha = if(thirdCardPicked) 1f else 0f)
                         Text(text = "세번째\n 카드",
                             style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
@@ -243,23 +261,24 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     if (cardNumber == 1){
                         firstCardPicked = true
                         cardSelected = false
-                        firstCardIndex = cards[nowSelected]
-                        cards.remove(firstCardIndex)
+                        firstCardNumber = cards[nowSelected]
+                        cards.remove(firstCardNumber)
                         cardNumber = 2
-
-                    }else if (cardNumber == 2){
+                    }
+                    else if (cardNumber == 2){
                         secondCardPicked = true
                         cardSelected = false
-                        secondCardIndex = cards[nowSelected]
-                        cards.remove(secondCardIndex)
+                        secondCardNumber = cards[nowSelected]
+                        cards.remove(secondCardNumber)
                         cardNumber = 3
 
-                    }else if (cardNumber == 3) {
-                        thirdCardIndex = cards[nowSelected]
-                        cards.remove(thirdCardIndex)
+                    }
+                    else if (cardNumber == 3) {
+                        thirdCardNumber = cards[nowSelected]
+                        cards.remove(thirdCardNumber)
                         thirdCardPicked = true
 
-                        tarotInputDto.cards = arrayListOf(firstCardIndex, secondCardIndex, thirdCardIndex)
+                        tarotInputDto.cards = arrayListOf(firstCardNumber, secondCardNumber, thirdCardNumber)
 
                         navController.navigate(ScreenEnum.LoadingScreen.name) {
                             navController.graph.startDestinationRoute?.let {

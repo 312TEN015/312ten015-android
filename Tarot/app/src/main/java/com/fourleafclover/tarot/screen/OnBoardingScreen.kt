@@ -144,7 +144,7 @@ val onboardPagesList = listOf(
     OnboardPage(
         imageRes = R.drawable.illust_onboarding_tarot,
         title = "타로 카드로\n운세를 확인해보세요!",
-        description = "오늘의 운세부터 주제별 운세까\n다양한 운세를 점쳐볼 수 있어요."
+        description = "오늘의 운세부터 주제별 운세까지\n다양한 운세를 점쳐볼 수 있어요."
     ), OnboardPage(
         imageRes = R.drawable.illust_onboarding_compass,
         title = "마음 속 고민거리를\n해결해 드려요.",
