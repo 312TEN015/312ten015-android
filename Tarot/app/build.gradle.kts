@@ -76,10 +76,14 @@ dependencies {
     implementation ("androidx.compose.material:material:1.4.2")
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("androidx.test:monitor:1.6.1")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
 
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //splashscreen api
+    implementation ("androidx.core:core-splashscreen:1.0.0-rc01")
 }

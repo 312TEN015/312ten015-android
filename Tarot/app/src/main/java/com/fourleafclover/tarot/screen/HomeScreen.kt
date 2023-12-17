@@ -50,7 +50,12 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     val localContext = LocalContext.current
 
-    val tarotResultArray = MyApplication.prefs.getTarotResultArray()
+//    val tarotResultArray = MyApplication.prefs.getTarotResultArray()
+    // 영상 촬영용
+    val tmpArray = MyApplication.prefs.getTarotResultArray()
+    val tarotResultArray = arrayListOf<String>()
+    tarotResultArray.add(tmpArray[(tmpArray.size-1)])
+
     var send by remember { mutableStateOf(false) }
 
     // 요청을 한번만 보내도록 함
@@ -175,10 +180,14 @@ fun getTarotRequest(
                 }
 
                 myTarotResults = arrayListOf()
+
                 for (item in response.body()!!){
                     myTarotResults.add(item)
                     Log.d("", "${item.toString()}--------")
                 }
+                myTarotResults.add(TarotOutputDto("0", 2, arrayListOf(), "2023년 12월 16일", arrayListOf(), null))
+                myTarotResults.add(TarotOutputDto("0", 3, arrayListOf(), "2023년 12월 15일", arrayListOf(), null))
+
 
 
 
