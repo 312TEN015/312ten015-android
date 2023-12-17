@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.screen.CloseDialog
+import com.fourleafclover.tarot.screen.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -56,6 +57,60 @@ val backgroundModifier = Modifier
     .fillMaxSize()
 
 /* AppBar ---------------------------------------------------------------------------------- */
+
+@Composable
+fun AppBarCloseWithoutSave(navController: NavHostController,
+                pickedTopicTemplate: TarotSubjectData,
+                backgroundColor: Color
+) {
+
+    var openDialog by remember {
+        mutableStateOf(false)
+    }
+
+    if (openDialog){
+        Dialog(onDismissRequest = { openDialog = false }) {
+            CloseWithoutSaveDialog(onClickNo = { openDialog = false },
+                onClickOk = {
+                    // go to home with clear back stack
+                    navController.navigate(ScreenEnum.HomeScreen.name) {
+                        navController.graph.startDestinationRoute?.let {
+                            popUpTo(it) {  inclusive = true }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                })
+        }
+    }
+
+    Box(modifier = Modifier.background(color = backgroundColor)) {
+
+        Box(
+            modifier = Modifier
+                .padding(top = 28.dp, bottom = 10.dp)
+                .wrapContentHeight()
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = pickedTopicTemplate.majorTopic,
+                style = getTextStyle(16, FontWeight.Medium, white),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                textAlign = TextAlign.Center
+            )
+
+            Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 20.dp)
+                    .clickable { openDialog = true }, alignment = Alignment.CenterEnd
+            )
+        }
+    }
+}
 
 @Composable
 fun AppBarClose(navController: NavHostController,

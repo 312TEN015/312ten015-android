@@ -102,7 +102,7 @@ fun CloseDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
 
 
 @Composable
-fun CloseWithoutSaveDialog() {
+fun CloseWithoutSaveDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
 
     Surface(modifier = Modifier,
         shape = RoundedCornerShape(size = 10.dp),
@@ -121,7 +121,7 @@ fun CloseWithoutSaveDialog() {
                     .padding(bottom = 24.dp))
 
             Row {
-                Button(onClick = { /*TODO*/ },
+                Button(onClick = onClickNo,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .weight(1f)
@@ -138,7 +138,7 @@ fun CloseWithoutSaveDialog() {
                     )
                 }
 
-                Button(onClick = { /*TODO*/ },
+                Button(onClick = onClickOk,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .weight(1f)
@@ -165,7 +165,7 @@ fun CloseWithoutSaveDialog() {
 
 @Preview
 @Composable
-fun SaveCompletedDialog() {
+fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
 
     Surface(modifier = Modifier,
         shape = RoundedCornerShape(size = 10.dp),
@@ -195,7 +195,7 @@ fun SaveCompletedDialog() {
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 24.dp))
 
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = onClickOk,
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()

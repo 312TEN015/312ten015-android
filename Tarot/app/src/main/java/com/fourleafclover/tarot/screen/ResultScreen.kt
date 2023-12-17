@@ -55,6 +55,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.AppBarClose
+import com.fourleafclover.tarot.AppBarCloseWithoutSave
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.backgroundModifier
@@ -86,9 +87,67 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
     Column(modifier = backgroundModifier)
     {
 
-        AppBarClose(navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
-            gray_8)
+        var openDialog by remember { mutableStateOf(false) }
+
+        var saveState by rememberSaveable { mutableStateOf(false) }
+
+
+        if (openDialog && !saveState){
+            Dialog(onDismissRequest = { openDialog = false }) {
+                CloseWithoutSaveDialog(onClickNo = { openDialog = false },
+                    onClickOk = {
+                        // go to home with clear back stack
+                        navController.navigate(ScreenEnum.HomeScreen.name) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {  inclusive = true }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    })
+            }
+        }else if(openDialog && saveState){
+            Dialog(onDismissRequest = { openDialog = false }) {
+                CloseDialog(onClickNo = { openDialog = false },
+                    onClickOk = {
+                        // go to home with clear back stack
+                        navController.navigate(ScreenEnum.HomeScreen.name) {
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {  inclusive = true }
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    })
+            }
+        }
+
+        Box(modifier = Modifier.background(color = gray_8)) {
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 28.dp, bottom = 10.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = getPickedTopic(pickedTopicNumber).majorTopic,
+                    style = getTextStyle(16, FontWeight.Medium, white),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+
+                Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = 20.dp)
+                        .clickable { openDialog = true }, alignment = Alignment.CenterEnd
+                )
+            }
+        }
 
         Column(modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -152,10 +211,20 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         .wrapContentHeight()
                 )
 
-                var saveState by rememberSaveable { mutableStateOf(false) }
+                var openCompleteDialog by remember {
+                    mutableStateOf(false)
+                }
+
+                if (openCompleteDialog){
+                    Dialog(onDismissRequest = { openCompleteDialog = false }) {
+                        SaveCompletedDialog(onClickOk = { openCompleteDialog = false })
+                    }
+                }
 
                 Button(
                     onClick = {
+                        openCompleteDialog = true
+
                         // 타로 결과 id 저장
                         val tmpArray = MyApplication.prefs.getTarotResultArray()
                         tmpArray.add(tarotOutputDto.tarotId)
@@ -183,13 +252,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
                 Button(
                     onClick = {
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        openDialog = true
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier

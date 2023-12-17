@@ -87,6 +87,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 
 
         LazyColumn(
+            Modifier.padding(bottom = 50.dp),
             contentPadding = PaddingValues(vertical = 10.dp),
             content = {
             items(myTarotResults.size) {

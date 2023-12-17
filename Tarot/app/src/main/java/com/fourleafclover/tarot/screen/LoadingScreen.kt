@@ -64,7 +64,7 @@ fun LoadingScreen(navController: NavController = rememberNavController()){
             contentDescription ="",
             modifier = Modifier.wrapContentSize()
         )
-        Text(text = "선택하신 카드의 의미\n열심히 해석하고 있어요!",
+        Text(text = "선택하신 카드의 의미를\n열심히 해석하고 있어요!",
             style = getTextStyle(
             fontSize = 22,
             fontWeight = FontWeight.Medium

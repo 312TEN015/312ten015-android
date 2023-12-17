@@ -73,8 +73,12 @@ import kotlin.math.roundToInt
 @Composable
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
+    var showIndicator by remember { mutableStateOf(true) }
 
-    Column(modifier = backgroundModifier)
+
+    Column(modifier = backgroundModifier.clickable {
+        showIndicator = false
+    })
     {
 
         AppBarClose(navController = navController,
@@ -103,6 +107,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
 
 
+
+
         Text(
             text = if (cardNumber == 1) "첫 번째 카드를 골라주세요."
             else if(cardNumber == 2) "두 번째 카드를 골라주세요."
@@ -118,8 +124,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
             Column(modifier = Modifier.weight(1f)) {
 
                 Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 32.dp),
+                    .fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center)
                 {
 
@@ -204,43 +209,54 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 }
 
 
-                LazyRow(
-                    modifier = Modifier
-                        .weight(1f)
-                        .wrapContentWidth()
-                        .fillMaxHeight(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy((-46).dp)
-                ) {
+                Column(modifier = Modifier.weight(1f)) {
 
-                    items(cards.size) { index ->
+                    LazyRow(
+                        modifier = Modifier
+                            .wrapContentWidth().weight(1f),
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.spacedBy((-46).dp)
+                    ) {
 
-                        val offset by animateIntOffsetAsState(
-                            targetValue = if (nowSelected == index) {
-                                IntOffset(0, pxToMove)
-                            }  else {
-                                IntOffset.Zero
-                            },
-                            label = "offset"
-                        )
+                        items(cards.size) { index ->
+
+                            val offset by animateIntOffsetAsState(
+                                targetValue = if (nowSelected == index) {
+                                    IntOffset(0, pxToMove)
+                                } else {
+                                    IntOffset.Zero
+                                },
+                                label = "offset"
+                            )
 
 
-                        Image(painter = painterResource(id = R.drawable.tarot_front),
-                            contentDescription = "$index",
-                            modifier = Modifier
-                                .width(88.dp)
-                                .offset {
-                                    offset
-                                }
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-                                    Log.d("", "nowSelected: $index")
-                                    cardSelected = true
-                                    nowSelected = index
-                                })
+                            Image(painter = painterResource(id = R.drawable.tarot_front),
+                                contentDescription = "$index",
+                                modifier = Modifier
+                                    .width(80.dp)
+                                    .offset {
+                                        offset
+                                    }
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null
+                                    ) {
+                                        Log.d("", "nowSelected: $index")
+                                        cardSelected = true
+                                        nowSelected = index
+                                    })
+                        }
+
                     }
+
+                    Image(painter = painterResource(id = R.drawable.tarot_pick_indicator),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 24.dp, bottom = 36.dp),
+                        alpha = if(showIndicator) 1f else 0f
+                    )
 
                 }
 
@@ -289,7 +305,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 modifier = Modifier
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(bottom = 49.dp)
+                    .padding(bottom = 34.dp)
                     .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = highligtPurple,
