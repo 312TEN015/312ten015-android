@@ -3,6 +3,7 @@
 package com.fourleafclover.tarot.screen
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -227,6 +228,9 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
                         // 타로 결과 id 저장
                         val tmpArray = MyApplication.prefs.getTarotResultArray()
+                        if (tmpArray.size >= 10){
+                            tmpArray.removeFirst()
+                        }
                         tmpArray.add(tarotOutputDto.tarotId)
                         MyApplication.prefs.saveTarotResult(tmpArray)
                         saveState = true
@@ -245,7 +249,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     )
                 ) {
                     Text(
-                        text = if (saveState) "저장 완료" else "타로 저장하기",
+                        text = if (saveState) "저장 완료!" else "타로 저장하기",
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
@@ -413,7 +417,7 @@ fun DotsIndicator(
         modifier = modifier
             .wrapContentWidth()
             .wrapContentHeight()
-            .padding(vertical = 32.dp)
+            .padding(top = 32.dp, bottom = 40.dp)
     ) {
         items(totalDots) { index ->
             Box(

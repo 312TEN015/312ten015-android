@@ -20,11 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
@@ -85,82 +87,107 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 
         }
 
+        Box {
 
-        LazyColumn(
-            Modifier.padding(bottom = 50.dp),
-            contentPadding = PaddingValues(vertical = 10.dp),
-            content = {
-            items(myTarotResults.size) {
-                Box(modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .clickable {
-                        selectedTarotResult = myTarotResults[it]
-                        navController.navigate(ScreenEnum.MyTarotDetailScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                }) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = gray_7, shape = RoundedCornerShape(8.dp))
-                            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
-                    ) {
-
-                        Column(
-                            modifier = Modifier
-                                .padding(top = 24.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = getPickedTopic(myTarotResults[it].tarotType).majorQuestion, style = getTextStyle(
-                                    fontSize = 12,
-                                    fontWeight = FontWeight.Medium,
-                                    color = gray_2,
-                                ), modifier = Modifier.padding(bottom = 4.dp)
-                            )
-
-                            Text(
-                                text = getPickedTopic(myTarotResults[it].tarotType).majorTopic, style = getTextStyle(
-                                    fontSize = 18,
-                                    fontWeight = FontWeight.Bold,
-                                    color = white
-                                )
-                            )
-                        }
-
-                        Column(modifier = Modifier,
-                            verticalArrangement = Arrangement.Bottom) {
-                            Image(
-                                painter = painterResource(id = R.drawable.dots_2),
-                                modifier = Modifier
-                                    .padding(top = 12.dp, bottom = 16.dp)
-                                    .size(24.dp)
-                                    .align(Alignment.End),
-                                contentDescription = ""
-                            )
-
-                            Text(
-                                text = myTarotResults[it].createdAt, style = getTextStyle(
-                                    fontSize = 12,
-                                    fontWeight = FontWeight.Medium,
-                                    color = gray_5
-                                ),
-                                modifier = Modifier,
-                                textAlign = TextAlign.End
-                            )
-
-
-
-                        }
-                    }
-                }
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = 60.dp)
+                    .alpha(if (myTarotResults.size == 0) 1f else 0f)) {
+                Image(painter = painterResource(id = R.drawable.illust_crystalball),
+                    contentDescription = "아직 저장된 타로 기록이 없어요!",
+                    modifier = Modifier.padding(bottom = 24.dp))
+                Text(text = "아직 저장된\n타로 기록이 없어요!",
+                    style = getTextStyle(
+                    fontSize = 14,
+                    fontWeight = FontWeight.Medium,
+                    color = gray_5),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp)
             }
 
-        })
+
+            LazyColumn(
+                Modifier.padding(bottom = 50.dp),
+                contentPadding = PaddingValues(vertical = 10.dp),
+                content = {
+                    items(myTarotResults.size) {
+                        Box(modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .clickable {
+                                selectedTarotResult = myTarotResults[it]
+                                navController.navigate(ScreenEnum.MyTarotDetailScreen.name) {
+                                    navController.graph.startDestinationRoute?.let {
+                                        popUpTo(it) { saveState = true }
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            }) {
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(color = gray_7, shape = RoundedCornerShape(8.dp))
+                                    .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
+                            ) {
+
+                                Column(
+                                    modifier = Modifier
+                                        .padding(top = 24.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = getPickedTopic(myTarotResults[it].tarotType).majorQuestion,
+                                        style = getTextStyle(
+                                            fontSize = 12,
+                                            fontWeight = FontWeight.Medium,
+                                            color = gray_2,
+                                        ),
+                                        modifier = Modifier.padding(bottom = 4.dp)
+                                    )
+
+                                    Text(
+                                        text = getPickedTopic(myTarotResults[it].tarotType).majorTopic,
+                                        style = getTextStyle(
+                                            fontSize = 18,
+                                            fontWeight = FontWeight.Bold,
+                                            color = white
+                                        )
+                                    )
+                                }
+
+                                Column(
+                                    modifier = Modifier,
+                                    verticalArrangement = Arrangement.Bottom
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.dots_2),
+                                        modifier = Modifier
+                                            .padding(top = 12.dp, bottom = 16.dp)
+                                            .size(24.dp)
+                                            .align(Alignment.End),
+                                        contentDescription = ""
+                                    )
+
+                                    Text(
+                                        text = myTarotResults[it].createdAt, style = getTextStyle(
+                                            fontSize = 12,
+                                            fontWeight = FontWeight.Medium,
+                                            color = gray_5
+                                        ),
+                                        modifier = Modifier,
+                                        textAlign = TextAlign.End
+                                    )
+
+
+                                }
+                            }
+                        }
+                    }
+
+                })
+        }
     }
 }

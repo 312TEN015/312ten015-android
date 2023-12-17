@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -40,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -49,8 +55,10 @@ import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
 import com.fourleafclover.tarot.data.getSubjectImoji
+import com.fourleafclover.tarot.data.pickedTopicNumber
 import com.fourleafclover.tarot.data.selectedTarotResult
 import com.fourleafclover.tarot.data.tarotOutputDto
+import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -74,46 +82,79 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
     Column(modifier = backgroundModifier)
     {
 
-        AppBarClose(
-            navController = navController,
-            pickedTopicTemplate = tarotSubjectData,
-            gray_9
-        )
+        Box(modifier = Modifier.background(color = gray_8)) {
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 28.dp, bottom = 10.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "MY 타로",
+                    style = getTextStyle(16, FontWeight.Medium, white),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    textAlign = TextAlign.Center
+                )
+
+                Image(painter = painterResource(id = R.drawable.arrow_left),
+                    contentDescription = "닫기버튼",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp)
+                        .clickable {
+                            // 뒤로가기
+                            navController.popBackStack() },
+                    alignment = Alignment.CenterStart
+                )
+            }
+        }
 
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState()))
         {
-
-
-            val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
-            Text(
-                text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
-                style = getTextStyle(22, FontWeight.Bold, gray_2),
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = gray_9)
-                    .padding(top = 16.dp, bottom = 16.dp),
-                textAlign = TextAlign.Center
-            )
+                    .background(color = gray_8)
+                    .padding(top = 32.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = tarotSubjectData.majorTopic,
+                    style = getTextStyle(16, FontWeight.Medium, gray_2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    textAlign = TextAlign.Center
+                )
 
+                val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
+                Text(
+                    text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
+                    style = getTextStyle(22, FontWeight.Bold, gray_2),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    textAlign = TextAlign.Center
+                )
 
-//        val date = Date(selectedTarotResult.createdAt)
-//        val simpleDateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
-//        val simpleDate: String = simpleDateFormat.format(date)
-//        val simpleDateParse: Date = simpleDateFormat.parse(simpleDate)
+                Text(
+                    text = selectedTarotResult.createdAt,
+                    style = getTextStyle(14, FontWeight.Medium, gray_4),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 32.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
 
-            Text(
-                text = selectedTarotResult.createdAt,
-                style = getTextStyle(14, FontWeight.Medium, gray_4),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = gray_9)
-                    .padding(bottom = 32.dp),
-                textAlign = TextAlign.Center
-            )
-
-            //////
+            // 카드 이미지 설정
             val tmpList = arrayListOf<Int>()
             for (i in selectedTarotResult.cards) {
                 tmpList.add(getCardImageId(localContext, i.toString()))

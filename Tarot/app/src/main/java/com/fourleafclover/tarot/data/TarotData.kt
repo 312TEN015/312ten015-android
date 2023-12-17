@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.data
 
 import android.util.Log
+import androidx.compose.runtime.toMutableStateList
 
 
 val TAROT_1 = "THE MAGICIAN"
@@ -30,6 +31,7 @@ val TAROT_21 = "THE WORLD"
 // 1 -> 학업운
 // 2 -> 소망운
 // 3 -> 직업운
+// 4 -> 오늘의 운세
 var pickedTopicNumber = 0
 
 /* 선택한 대주제 저장 */
@@ -55,6 +57,11 @@ val SubjectJob = TarotSubjectData("취업운",
     majorQuestion = "취업할 수 있을까?",
     arrayListOf("어떤 직무 취업을 준비하고 있나요?", "취업을 위해 어떤 노력을 하고 있나요?", "취업 준비 중에 어떤 부분이 가장 어려운가요?"),
     arrayListOf("IT회사 개발 직무 취업을 준비하고 있습니다.", "분기별로 부트캠프에 참여하여 개발 역량을 키우고 있고, 주 1회 개발 스터디를 하고 있습니다.", "회사별 코딩테스트를 짧은 기간 안에 준비하는것이 가장 어렵습니다."))
+val SubjectToday = TarotSubjectData("오늘의 운세",
+    majorQuestion = "나의 하루가 궁금해!",
+    arrayListOf(),
+    arrayListOf()
+)
 
 fun getPickedTopic(topicNumber: Int): TarotSubjectData {
     return when (topicNumber){
@@ -62,6 +69,7 @@ fun getPickedTopic(topicNumber: Int): TarotSubjectData {
         1 -> SubjectStudy
         2 -> SubjectDream
         3 -> SubjectJob
+        4 -> SubjectToday
         else -> {
             Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $pickedTopicNumber selectedTarotResult: $pickedTopicNumber")
             TarotSubjectData()
@@ -76,3 +84,6 @@ val tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), nu
 var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
 
 var myTarotResults = arrayListOf<TarotOutputDto>()
+
+val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
+fun getRandomCards(): List<Int> { return entireCards.toMutableList().shuffled() }

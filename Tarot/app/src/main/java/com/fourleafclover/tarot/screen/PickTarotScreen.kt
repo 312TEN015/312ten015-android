@@ -33,6 +33,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -54,6 +55,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
+import com.fourleafclover.tarot.data.getRandomCards
 import com.fourleafclover.tarot.data.pickedTopicNumber
 import com.fourleafclover.tarot.data.tarotInputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
@@ -102,11 +104,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
         
         val pxToMove = with(LocalDensity.current) { -46.dp.toPx().roundToInt() }
 
-        val randomCards = (0..21).toMutableList().shuffled()
-        val cards = remember { mutableStateListOf(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21) }
-        val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
 
-
+        val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
 
 
         Text(

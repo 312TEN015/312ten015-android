@@ -26,6 +26,7 @@ fun getPath() : String {
         1 -> "study"
         2 -> "dream"
         3 -> "job"
+        4 -> "today"
         else -> {
             Log.e("tarotError", "error getPath(). pickedTopicNumber: $pickedTopicNumber")
             ""

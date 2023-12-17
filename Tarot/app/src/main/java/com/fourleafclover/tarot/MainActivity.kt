@@ -3,10 +3,12 @@ package com.fourleafclover.tarot
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.os.Bundle
+import android.os.ConditionVariable
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.animation.doOnEnd
@@ -14,15 +16,22 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.fourleafclover.tarot.navigation.NavigationHost
 import com.fourleafclover.tarot.ui.theme.TarotTheme
+import java.util.concurrent.locks.Condition
 
 class MainActivity : ComponentActivity() {
     private lateinit var splashScreen: SplashScreen
-
+    private val viewModel: SplashViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
+        splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        splashScreen.setKeepOnScreenCondition{
+            viewModel.isLoading.value
+        }
 
         setContent {
-            HomePreview()
+            TarotTheme {
+                NavigationHost()
+            }
         }
     }
 
@@ -31,23 +40,6 @@ class MainActivity : ComponentActivity() {
     fun HomePreview(){
         TarotTheme {
             NavigationHost()
-        }
-    }
-
-    // splash의 애니메이션 설정
-    private fun startSplash() {
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 1f, 1f)
-            val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 1f, 1f)
-
-            ObjectAnimator.ofPropertyValuesHolder(splashScreenView.iconView, scaleX, scaleY).run {
-                interpolator = AnticipateInterpolator()
-                duration = 1000L
-                doOnEnd {
-                    splashScreenView.remove()
-                }
-                start()
-            }
         }
     }
 

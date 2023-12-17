@@ -34,6 +34,7 @@ import com.fourleafclover.tarot.data.myTarotResults
 import com.fourleafclover.tarot.data.pickedTopicNumber
 import com.fourleafclover.tarot.data.tarotService
 import com.fourleafclover.tarot.navigation.ScreenEnum
+import com.fourleafclover.tarot.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_6
@@ -149,7 +150,12 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 
-                Image(painter = painterResource(id = R.drawable.category_today), contentDescription = "오늘의 운세")
+                Image(painter = painterResource(id = R.drawable.category_today),
+                    contentDescription = "오늘의 운세",
+                    Modifier.clickable {
+                        pickedTopicNumber = 4
+                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
+                    })
 
             }
 
