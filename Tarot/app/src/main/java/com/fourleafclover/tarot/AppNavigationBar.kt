@@ -14,14 +14,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,16 +25,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.room.SubTopicData
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.screen.CloseDialog
 import com.fourleafclover.tarot.screen.CloseWithoutSaveDialog
@@ -60,8 +52,8 @@ val backgroundModifier = Modifier
 
 @Composable
 fun AppBarCloseWithoutSave(navController: NavHostController,
-                pickedTopicTemplate: TarotSubjectData,
-                backgroundColor: Color
+                           pickedTopicTemplate: SubTopicData,
+                           backgroundColor: Color
 ) {
 
     var openDialog by remember {
@@ -114,7 +106,7 @@ fun AppBarCloseWithoutSave(navController: NavHostController,
 
 @Composable
 fun AppBarClose(navController: NavHostController,
-                pickedTopicTemplate: TarotSubjectData,
+                pickedTopicTemplate: SubTopicData,
                 backgroundColor: Color
 ) {
 
