@@ -7,8 +7,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
 
-val tarotResultListKey = "savedTarotList"
-val sharedPreferencesKey = "saved_tarots"
+const val tarotResultListKey = "savedTarotList"
+const val sharedPreferencesKey = "saved_tarots"
 class PreferenceUtil(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
