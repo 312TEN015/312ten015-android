@@ -46,15 +46,17 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.AppBarClose
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotInputDto
-import com.fourleafclover.tarot.ui.component.AppBarClose
-import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_4
@@ -65,6 +67,7 @@ import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.roundToInt
 
+val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
 
 @Preview
 @Composable
@@ -78,29 +81,24 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
     })
     {
 
-        AppBarClose(navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
-            gray_8)
+        AppBarClose(navController = navController, pickedTopicTemplate = getPickedTopic(pickedTopicNumber), gray_8)
 
+        var cardNumber by remember { mutableIntStateOf(1) }     // 현재 뽑고 있는 카드 번호 1 or 2 or 3
 
-        val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
-        var cardNumber by remember { mutableIntStateOf(1) }
-        var cardSelected by remember { mutableStateOf(false) }
+        var nowSelected by remember { mutableIntStateOf(-1) }   // 지금 들고 있는 카드의 인덱스 -> 진짜 카드 번호 = cards[nowSelected]
+        var cardSelected by remember { mutableStateOf(false) }  // 지금 카드를 들고 있는지 여부
 
-        var firstCardPicked by remember { mutableStateOf(false) }
-        var secondCardPicked by remember { mutableStateOf(false) }
-        var thirdCardPicked by remember { mutableStateOf(false) }
+        var firstCardPicked by remember { mutableStateOf(false) }   // 첫번째 카드 확정 여부
+        var secondCardPicked by remember { mutableStateOf(false) }  // 두번째 카드 확정 여부
+        var thirdCardPicked by remember { mutableStateOf(false) }   // 세번째 카드 확정 여부
 
-        var firstCardNumber by remember { mutableIntStateOf(-1) }
-        var secondCardNumber by remember { mutableIntStateOf(-1) }
-        var thirdCardNumber by remember { mutableIntStateOf(-1) }
+        var firstCardNumber by remember { mutableIntStateOf(-1) }   // 확정된 첫번째 카드 번호
+        var secondCardNumber by remember { mutableIntStateOf(-1) }  // 확정된 두번째 카드 번호
+        var thirdCardNumber by remember { mutableIntStateOf(-1) }   // 확정된 세번째 카드 번호
 
-        var nowSelected by remember { mutableIntStateOf(-1) }
-        
         val pxToMove = with(LocalDensity.current) { -46.dp.toPx().roundToInt() }
 
-
-        val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
+        val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }    // 무작위로 섞인 카드 덱
 
 
         Text(
@@ -281,17 +279,10 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                         tarotInputDto.cards = arrayListOf(firstCardNumber, secondCardNumber, thirdCardNumber)
 
-                        navController.navigate(ScreenEnum.LoadingScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navigateInclusive(navController, ScreenEnum.LoadingScreen.name)
                     }
 
                     Log.d("", "${cards.size}, {${cards.joinToString (",")}}")
-//                    Log.d("", "cardNum: $cardNumber, cardVal: ${entireCards[cards[nowSelected]]}, 1: $firstCardIndex, 2: $secondCardIndex, 3: $thirdCardIndex")
                     nowSelected = -1
 
                 },
