@@ -55,15 +55,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.CloseDialog
-import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
-import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -92,31 +92,19 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
         if (openDialog && !saveState){
             Dialog(onDismissRequest = { openDialog = false }) {
-                CloseWithoutSaveDialog(onClickNo = { openDialog = false },
-                    onClickOk = {
-                        // go to home with clear back stack
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {  inclusive = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    })
+                CloseDialog(
+                    localContext.getString(R.string.dialog_exit_without_save),
+                    onClickNo = { openDialog = false },
+                    onClickOk = { navigateInclusive(navController, ScreenEnum.HomeScreen.name) }
+                )
             }
         }else if(openDialog && saveState){
             Dialog(onDismissRequest = { openDialog = false }) {
-                CloseDialog(onClickNo = { openDialog = false },
-                    onClickOk = {
-                        // go to home with clear back stack
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {  inclusive = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    })
+                CloseDialog(
+                    localContext.getString(R.string.dialog_exit),
+                    onClickNo = { openDialog = false },
+                    onClickOk = { navigateInclusive(navController, ScreenEnum.HomeScreen.name) }
+                )
             }
         }
 

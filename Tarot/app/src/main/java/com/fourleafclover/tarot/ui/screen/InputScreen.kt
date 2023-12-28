@@ -1,6 +1,7 @@
 
 package com.fourleafclover.tarot.ui.screen
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -34,13 +35,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.AppBarClose
+import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.getSubjectImoji
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotInputDto
-import com.fourleafclover.tarot.ui.component.AppBarClose
-import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -63,6 +65,11 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
     var text1 by remember { mutableStateOf(TextFieldValue("")) }
     var text2 by remember { mutableStateOf(TextFieldValue("")) }
     var text3 by remember { mutableStateOf(TextFieldValue("")) }
+
+    val maxChar = 50
+
+    var allFilled by remember { mutableStateOf(false) }
+    allFilled = (text1.text.isNotBlank() && text2.text.isNotBlank() && text3.text.isNotBlank())
 
     Column(modifier = backgroundModifier)
     {
@@ -113,12 +120,6 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                 modifier = Modifier.padding(0.dp, 21.dp, 0.dp, 24.dp)
             )
 
-            val maxChar = 50
-
-            var allFilled by remember { mutableStateOf(false) }
-
-            allFilled = (text1.text.isNotBlank() && text2.text.isNotBlank() && text3.text.isNotBlank())
-
             Column(modifier = Modifier.padding(bottom = 32.dp)) {
                 Row(modifier = Modifier
                     .padding(bottom = 8.dp),
@@ -145,7 +146,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     onValueChange = { newText ->
                         text1 = newText
                         if (text1.text.length >= maxChar){
-                            Toast.makeText(localContext, "50자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                            showWarningToast(localContext)
                         } },
                     value = text1,
                     placeholder = {
@@ -192,7 +193,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     onValueChange = { newText ->
                         text2 = newText
                         if (text2.text.length >= maxChar){
-                            Toast.makeText(localContext, "50자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                            showWarningToast(localContext)
                         } },
                     value = text2,
                     placeholder = {
@@ -239,7 +240,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     onValueChange = { newText ->
                         text3 = newText
                         if (text3.text.length >= maxChar){
-                            Toast.makeText(localContext, "50자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                            showWarningToast(localContext)
                         } },
                     value = text3,
                     placeholder = {
@@ -269,13 +270,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     tarotInputDto.secondAnswer = text2.text
                     tarotInputDto.thirdAnswer = text3.text
 
-                    navController.navigate(ScreenEnum.PickTarotScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
                 },
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
@@ -300,4 +295,8 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
         }
     }
 
+}
+
+fun showWarningToast(localContext: Context){
+    Toast.makeText(localContext, "50자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
 }

@@ -32,4 +32,10 @@
     <string name="imoji_study">"📚"</string>
     <string name="imoji_dream">"✨"</string>
     <string name="imoji_job">"💼"</string>
+
+    <!--  다이얼로그  -->
+    <string name="dialog_exit">"운세 보기를 중단하고\n나가시겠습니까?"</string>
+    <string name="dialog_exit_without_save">"타로 결과를 저장하지 않고\n나가시겠습니까?"</string>
+
+
 </resources>

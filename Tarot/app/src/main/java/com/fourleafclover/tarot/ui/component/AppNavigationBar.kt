@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,10 +33,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.room.SubTopicData
 import com.fourleafclover.tarot.ui.component.CloseDialog
-import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -51,28 +54,21 @@ val backgroundModifier = Modifier
 /* AppBar ---------------------------------------------------------------------------------- */
 
 @Composable
-fun AppBarCloseWithoutSave(navController: NavHostController,
-                           pickedTopicTemplate: SubTopicData,
-                           backgroundColor: Color
+fun AppBarCloseWithoutSave(
+    navController: NavHostController,
+    pickedTopicTemplate: SubTopicData,
+    backgroundColor: Color
 ) {
 
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
+    var openDialog by remember { mutableStateOf(false) }
 
     if (openDialog){
         Dialog(onDismissRequest = { openDialog = false }) {
-            CloseWithoutSaveDialog(onClickNo = { openDialog = false },
-                onClickOk = {
-                    // go to home with clear back stack
-                    navController.navigate(ScreenEnum.HomeScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {  inclusive = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                })
+            CloseDialog(
+                LocalContext.current.getString(R.string.dialog_exit_without_save),
+                onClickNo = { openDialog = false },
+                onClickOk = { navigateInclusive(navController, ScreenEnum.HomeScreen.name) }
+            )
         }
     }
 
@@ -105,28 +101,21 @@ fun AppBarCloseWithoutSave(navController: NavHostController,
 }
 
 @Composable
-fun AppBarClose(navController: NavHostController,
-                pickedTopicTemplate: SubTopicData,
-                backgroundColor: Color
+fun AppBarClose(
+    navController: NavHostController,
+    pickedTopicTemplate: TarotSubjectData,
+    backgroundColor: Color
 ) {
 
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
+    var openDialog by remember { mutableStateOf(false) }
 
     if (openDialog){
         Dialog(onDismissRequest = { openDialog = false }) {
-            CloseDialog(onClickNo = { openDialog = false },
-                onClickOk = {
-                    // go to home with clear back stack
-                    navController.navigate(ScreenEnum.HomeScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {  inclusive = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                })
+            CloseDialog(
+                LocalContext.current.getString(R.string.dialog_exit),
+                onClickNo = { openDialog = false },
+                onClickOk = { navigateInclusive(navController, ScreenEnum.HomeScreen.name) }
+            )
         }
     }
 
@@ -157,6 +146,7 @@ fun AppBarClose(navController: NavHostController,
         }
     }
 }
+
 
 
 /* BottomMenu ---------------------------------------------------------------------------------- */
@@ -206,13 +196,7 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     selected = currentRoute == item.screenName,
                     alwaysShowLabel = true,
                     onClick = {
-                        navController.navigate(item.screenName) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navigateSaveState(navController, item.screenName)
                     }
                 )
             }

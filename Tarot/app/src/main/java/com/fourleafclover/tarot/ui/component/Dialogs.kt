@@ -15,8 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -31,7 +33,7 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Composable
 @Preview
-fun CloseDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+fun CloseDialog(content: String = "", onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
 
     Surface(modifier = Modifier,
         shape = RoundedCornerShape(size = 10.dp),
@@ -42,69 +44,7 @@ fun CloseDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
             .height(180.dp)
             .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
 
-            Text(text = "운세 보기를 중단하고\n나가시겠습니까?",
-                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
-
-            Row {
-                Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_2,
-                        contentColor = gray_8
-                    )
-                ) {
-                    Text(
-                        text = "아니요",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8)
-                    )
-                }
-
-                Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_8,
-                        contentColor = gray_2
-                    )
-                ) {
-                    Text(
-                        text = "네",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_2)
-                    )
-                }
-            }
-
-        }
-
-    }
-
-}
-
-
-@Composable
-fun CloseWithoutSaveDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
-
-    Surface(modifier = Modifier,
-        shape = RoundedCornerShape(size = 10.dp),
-        color = white){
-
-        Column(modifier = Modifier
-            .width(288.dp)
-            .height(180.dp)
-            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
-
-            Text(text = "타로 결과를 저장하지 않고\n나가시겠습니까?",
+            Text(text = content,
                 style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
