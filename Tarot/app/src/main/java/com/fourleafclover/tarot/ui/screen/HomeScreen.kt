@@ -45,20 +45,12 @@ import retrofit2.Response
 @Preview
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
-
     val localContext = LocalContext.current
-
-    val tarotResultArray = MyApplication.prefs.getTarotResultArray()
-    // 영상 촬영용
-//    val tmpArray = MyApplication.prefs.getTarotResultArray()
-//    val tarotResultArray = arrayListOf<String>()
-//    tarotResultArray.add(tmpArray[(tmpArray.size-1)])
-
     var send by remember { mutableStateOf(false) }
 
     // 요청을 한번만 보내도록 함
     if (!send){
-        getTarotRequest(localContext, tarotResultArray)
+        getTarotRequest(localContext, MyApplication.prefs.getTarotResultArray())
         send = true
     }
 
@@ -82,59 +74,44 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
             Row(Modifier.padding(bottom = 32.dp)) {
                 Column(modifier = Modifier.padding(end = 8.dp)) {
-                    Image(modifier = Modifier
+                    Image(
+                        modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
                             pickedTopicNumber = 0
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }, painter = painterResource(id = R.drawable.category_love), contentDescription = "연애운")
-                    Image(painter = painterResource(id = R.drawable.category_dream),
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
+                        },
+                        painter = painterResource(id = R.drawable.category_love),
+                        contentDescription = "연애운"
+                    )
+
+                    Image(
+                        painter = painterResource(id = R.drawable.category_dream),
                         contentDescription = "소망운",
                         modifier = Modifier.clickable {
-                        pickedTopicNumber = 2
-                        navController.navigate(ScreenEnum.InputScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                            pickedTopicNumber = 2
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
                 }
 
                 Column {
-                    Image(modifier = Modifier
+                    Image(
+                        modifier = Modifier
                         .padding(bottom = 6.dp)
                         .clickable {
                             pickedTopicNumber = 1
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         },
                         painter = painterResource(id = R.drawable.category_study),
-                        contentDescription = "학업운")
-                    Image(painter = painterResource(id = R.drawable.category_job),
+                        contentDescription = "학업운"
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.category_job),
                         contentDescription = "취업운",
                         modifier = Modifier.clickable {
                             pickedTopicNumber = 3
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
                 }
@@ -147,12 +124,14 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 
-                Image(painter = painterResource(id = R.drawable.category_today),
+                Image(
+                    painter = painterResource(id = R.drawable.category_today),
                     contentDescription = "오늘의 운세",
-                    Modifier.clickable {
+                    modifier = Modifier.clickable {
                         pickedTopicNumber = 4
                         navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
-                    })
+                    }
+                )
 
             }
 
@@ -188,11 +167,6 @@ fun getTarotRequest(
                     myTarotResults.add(item)
                     Log.d("", "${item.toString()}--------")
                 }
-//                myTarotResults.add(TarotOutputDto("0", 2, arrayListOf(), "2023년 12월 16일", arrayListOf(), null))
-//                myTarotResults.add(TarotOutputDto("0", 3, arrayListOf(), "2023년 12월 15일", arrayListOf(), null))
-
-
-
 
             }
 
