@@ -1,12 +1,8 @@
 
-package com.fourleafclover.tarot.screen
+package com.fourleafclover.tarot.ui.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,23 +27,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.AppBarClose
-import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.backgroundModifier
-import com.fourleafclover.tarot.data.getPickedTopic
-import com.fourleafclover.tarot.data.getSubjectImoji
-import com.fourleafclover.tarot.data.pickedTopicNumber
-import com.fourleafclover.tarot.data.tarotInputDto
-import com.fourleafclover.tarot.navigation.ScreenEnum
+import com.fourleafclover.tarot.utils.getPickedTopic
+import com.fourleafclover.tarot.utils.getSubjectImoji
+import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.tarotInputDto
+import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -55,7 +48,6 @@ import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
-import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highligtPurple
 import com.fourleafclover.tarot.ui.theme.transparent

@@ -1,6 +1,8 @@
-package com.fourleafclover.tarot.data
+package com.fourleafclover.tarot.utils
 
 import android.util.Log
+import com.fourleafclover.tarot.network.TarotService
+import com.fourleafclover.tarot.pickedTopicNumber
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

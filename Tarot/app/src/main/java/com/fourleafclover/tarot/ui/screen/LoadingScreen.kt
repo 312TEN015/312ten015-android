@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.screen
+package com.fourleafclover.tarot.ui.screen
 
 import android.content.Context
 import android.util.Log
@@ -28,11 +28,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.data.getPath
-import com.fourleafclover.tarot.data.tarotInputDto
-import com.fourleafclover.tarot.data.tarotOutputDto
-import com.fourleafclover.tarot.data.tarotService
-import com.fourleafclover.tarot.navigation.ScreenEnum
+import com.fourleafclover.tarot.utils.getPath
+import com.fourleafclover.tarot.tarotInputDto
+import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.utils.tarotService
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8

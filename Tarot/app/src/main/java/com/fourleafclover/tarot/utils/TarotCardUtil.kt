@@ -1,9 +1,16 @@
-package com.fourleafclover.tarot.data
+package com.fourleafclover.tarot.utils
 
 import android.content.Context
 import android.content.res.Resources
 import android.util.Log
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.SubjectDream
+import com.fourleafclover.tarot.SubjectJob
+import com.fourleafclover.tarot.SubjectLove
+import com.fourleafclover.tarot.SubjectStudy
+import com.fourleafclover.tarot.SubjectToday
+import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.pickedTopicNumber
 
 
 fun getCardImageId(localContext: Context, cardNumber: String): Int {
@@ -21,6 +28,20 @@ fun getSubjectImoji(localContext: Context, number: Int):String {
         else -> {
             Log.e("tarotError", "error getPath(). pickedTopicNumber: $pickedTopicNumber")
             ""
+        }
+    }
+}
+
+fun getPickedTopic(topicNumber: Int): TarotSubjectData {
+    return when (topicNumber){
+        0 -> SubjectLove
+        1 -> SubjectStudy
+        2 -> SubjectDream
+        3 -> SubjectJob
+        4 -> SubjectToday
+        else -> {
+            Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $pickedTopicNumber selectedTarotResult: $pickedTopicNumber")
+            TarotSubjectData()
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.screen
+package com.fourleafclover.tarot.ui.screen
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,15 +29,13 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.data.myTarotResults
-import com.fourleafclover.tarot.data.pickedTopicNumber
-import com.fourleafclover.tarot.data.tarotService
-import com.fourleafclover.tarot.navigation.ScreenEnum
-import com.fourleafclover.tarot.navigation.navigateSaveState
+import com.fourleafclover.tarot.myTarotResults
+import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.utils.tarotService
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
-import com.fourleafclover.tarot.ui.theme.gray_6
-import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.navigation
+package com.fourleafclover.tarot.ui.navigation
 
 enum class ScreenEnum {
     /* 하단 바 */

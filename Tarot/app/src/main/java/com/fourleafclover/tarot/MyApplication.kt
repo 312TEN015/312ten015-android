@@ -1,7 +1,7 @@
 package com.fourleafclover.tarot
 
 import android.app.Application
-import com.fourleafclover.tarot.data.PreferenceUtil
+import com.fourleafclover.tarot.utils.PreferenceUtil
 
 class MyApplication: Application() {
     companion object {

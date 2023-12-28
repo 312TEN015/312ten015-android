@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot
+package com.fourleafclover.tarot.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,14 +14,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Divider
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,19 +25,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.navigation.ScreenEnum
-import com.fourleafclover.tarot.screen.CloseDialog
-import com.fourleafclover.tarot.screen.CloseWithoutSaveDialog
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -174,8 +165,8 @@ fun AppBarClose(navController: NavHostController,
 @Composable
 fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
     val items = listOf<BottomNavItem>(
-        BottomNavItem.Home,
-        BottomNavItem.MyTarot
+            BottomNavItem.Home,
+            BottomNavItem.MyTarot
     )
     Column {
         Divider(

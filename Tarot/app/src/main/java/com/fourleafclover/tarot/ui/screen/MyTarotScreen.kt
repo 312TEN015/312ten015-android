@@ -1,5 +1,5 @@
 
-package com.fourleafclover.tarot.screen
+package com.fourleafclover.tarot.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.getPickedTopic
-import com.fourleafclover.tarot.data.myTarotResults
-import com.fourleafclover.tarot.data.selectedTarotResult
-import com.fourleafclover.tarot.navigation.ScreenEnum
+import com.fourleafclover.tarot.utils.getPickedTopic
+import com.fourleafclover.tarot.myTarotResults
+import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_5
