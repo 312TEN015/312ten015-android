@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.ui.component.BottomNavigationBar
+import com.fourleafclover.tarot.BottomNavigationBar
 import com.fourleafclover.tarot.ui.screen.HomeScreen
 import com.fourleafclover.tarot.ui.screen.InputScreen
 import com.fourleafclover.tarot.ui.screen.LoadingScreen

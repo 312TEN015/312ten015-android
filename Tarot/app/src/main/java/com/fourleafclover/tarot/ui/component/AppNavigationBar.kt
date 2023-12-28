@@ -33,9 +33,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.room.SubTopicData
-import com.fourleafclover.tarot.navigation.ScreenEnum
-import com.fourleafclover.tarot.screen.CloseDialog
-import com.fourleafclover.tarot.screen.CloseWithoutSaveDialog
+import com.fourleafclover.tarot.ui.component.CloseDialog
+import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -86,7 +86,7 @@ fun AppBarCloseWithoutSave(navController: NavHostController,
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = pickedTopicTemplate.majorTopic,
+                text = pickedTopicTemplate.majorQuestion,
                 style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -140,7 +140,7 @@ fun AppBarClose(navController: NavHostController,
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = pickedTopicTemplate.majorTopic,
+                text = pickedTopicTemplate.majorQuestion,
                 style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
                     .fillMaxWidth()

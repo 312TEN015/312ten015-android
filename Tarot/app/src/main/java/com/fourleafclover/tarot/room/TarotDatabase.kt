@@ -6,12 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [MajorTopicData::class, SubTopicData::class],
+    entities = [TopicData::class, SubTopicData::class],
     version = 1,
     exportSchema = false
 )
 abstract class TarotDatabase : RoomDatabase() {
     abstract fun topicDao(): TopicDao
+    abstract fun resultDao(): ResultDao
 
     companion object {
         @Volatile
