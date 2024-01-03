@@ -1,7 +1,9 @@
-package com.fourleafclover.tarot.data
+package com.fourleafclover.tarot
 
-import android.util.Log
 import com.fourleafclover.tarot.constant.*
+import com.fourleafclover.tarot.data.TarotInputDto
+import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.data.TarotSubjectData
 
 val SubjectLove = TarotSubjectData(
         loveFortune,
@@ -41,20 +43,6 @@ val SubjectToday = TarotSubjectData(
 // 3 -> 직업운
 // 4 -> 오늘의 운세
 var pickedTopicNumber = 0
-
-fun getPickedTopic(topicNumber: Int): TarotSubjectData {
-    return when (topicNumber){
-        0 -> SubjectLove
-        1 -> SubjectStudy
-        2 -> SubjectDream
-        3 -> SubjectJob
-        4 -> SubjectToday
-        else -> {
-            Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $pickedTopicNumber selectedTarotResult: $pickedTopicNumber")
-            TarotSubjectData()
-        }
-    }
-}
 
 val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))
 

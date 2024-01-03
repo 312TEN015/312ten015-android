@@ -1,9 +1,11 @@
-package com.fourleafclover.tarot.data
+package com.fourleafclover.tarot.network
 
 
+import com.fourleafclover.tarot.data.TarotIdsInputDto
+import com.fourleafclover.tarot.data.TarotInputDto
+import com.fourleafclover.tarot.data.TarotOutputDto
 import retrofit2.Call
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 

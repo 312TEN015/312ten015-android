@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.navigation
+package com.fourleafclover.tarot.ui.navigation
 
 import androidx.navigation.NavHostController
 

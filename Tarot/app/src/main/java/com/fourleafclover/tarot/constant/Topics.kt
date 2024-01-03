@@ -1,5 +1,6 @@
 package com.fourleafclover.tarot.constant
 
+// 임시로 상수 사용
 const val loveFortune = "연애운"
 const val studyFortune = "학업운"
 const val dreamFortune = "소망운"

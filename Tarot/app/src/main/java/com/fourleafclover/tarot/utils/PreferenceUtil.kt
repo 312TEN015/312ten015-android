@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.data
+package com.fourleafclover.tarot.utils
 
 import android.content.Context
 import android.content.SharedPreferences

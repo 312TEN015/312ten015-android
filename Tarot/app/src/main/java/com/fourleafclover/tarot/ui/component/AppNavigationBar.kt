@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot
+package com.fourleafclover.tarot.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,10 +32,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.navigation.ScreenEnum
-import com.fourleafclover.tarot.screen.CloseDialog
-import com.fourleafclover.tarot.screen.CloseWithoutSaveDialog
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
@@ -166,8 +165,8 @@ fun AppBarClose(navController: NavHostController,
 @Composable
 fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
     val items = listOf<BottomNavItem>(
-        BottomNavItem.Home,
-        BottomNavItem.MyTarot
+            BottomNavItem.Home,
+            BottomNavItem.MyTarot
     )
     Column {
         Divider(

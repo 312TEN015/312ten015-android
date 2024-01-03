@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.screen
+package com.fourleafclover.tarot.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

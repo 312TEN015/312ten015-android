@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.navigation
+package com.fourleafclover.tarot.ui.navigation
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -7,16 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.BottomNavigationBar
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.screen.HomeScreen
-import com.fourleafclover.tarot.screen.InputScreen
-import com.fourleafclover.tarot.screen.LoadingScreen
-import com.fourleafclover.tarot.screen.MyTarotDetailScreen
-import com.fourleafclover.tarot.screen.MyTarotScreen
-import com.fourleafclover.tarot.screen.PagerOnBoarding
-import com.fourleafclover.tarot.screen.PickTarotScreen
-import com.fourleafclover.tarot.screen.ResultScreen
+import com.fourleafclover.tarot.ui.component.BottomNavigationBar
+import com.fourleafclover.tarot.ui.screen.HomeScreen
+import com.fourleafclover.tarot.ui.screen.InputScreen
+import com.fourleafclover.tarot.ui.screen.LoadingScreen
+import com.fourleafclover.tarot.ui.screen.MyTarotDetailScreen
+import com.fourleafclover.tarot.ui.screen.MyTarotScreen
+import com.fourleafclover.tarot.ui.screen.PagerOnBoarding
+import com.fourleafclover.tarot.ui.screen.PickTarotScreen
+import com.fourleafclover.tarot.ui.screen.ResultScreen
 
 @Composable
 fun NavigationHost() {
