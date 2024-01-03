@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken
 
 const val tarotResultListKey = "savedTarotList"
 const val sharedPreferencesKey = "saved_tarots"
+const val onBoardingKey = "onBoardingCompleted"
+
 class PreferenceUtil(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
@@ -38,5 +40,13 @@ class PreferenceUtil(context: Context) {
 
     fun deleteAllTarotResults(){
         prefs.edit().remove(tarotResultListKey).commit()
+    }
+
+    fun isOnBoardingComplete(): Boolean{
+        return prefs.getBoolean(onBoardingKey, false)
+    }
+
+    fun setOnBoardingComplete() {
+        prefs.edit().putBoolean(onBoardingKey, true).apply()
     }
 }

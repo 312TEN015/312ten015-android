@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.BottomNavigationBar
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.screen.HomeScreen
 import com.fourleafclover.tarot.screen.InputScreen
 import com.fourleafclover.tarot.screen.LoadingScreen
@@ -46,7 +47,11 @@ fun NavigationHost() {
                 ResultScreen(navController)
             }
             composable(ScreenEnum.OnBoardingScreen.name) {
-                PagerOnBoarding(navController)
+                if (MyApplication.prefs.isOnBoardingComplete()){
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                }else{
+                    PagerOnBoarding(navController)
+                }
             }
             composable(ScreenEnum.LoadingScreen.name) {
                 LoadingScreen(navController)

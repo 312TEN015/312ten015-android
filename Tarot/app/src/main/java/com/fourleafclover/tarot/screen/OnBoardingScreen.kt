@@ -23,11 +23,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.navigation.ScreenEnum
+import com.fourleafclover.tarot.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -38,7 +41,7 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-
+@Preview
 fun PagerOnBoarding(navController: NavHostController = rememberNavController()) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -75,13 +78,8 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
 
         Button(
             onClick = {
-                navController.navigate(ScreenEnum.HomeScreen.name) {
-                    navController.graph.startDestinationRoute?.let {
-                        popUpTo(it) {  inclusive = true }
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                MyApplication.prefs.setOnBoardingComplete()
             },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
