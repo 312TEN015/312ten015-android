@@ -2,11 +2,7 @@
 package com.fourleafclover.tarot.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,17 +27,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.AppBarClose
-import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.backgroundModifier
 import com.fourleafclover.tarot.data.getPickedTopic
 import com.fourleafclover.tarot.data.getSubjectImoji
@@ -55,9 +48,8 @@ import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
-import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highligtPurple
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 
@@ -102,7 +94,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "TIP!",
-                    style = getTextStyle(12, FontWeight.Normal, highligtPurple),
+                    style = getTextStyle(12, FontWeight.Normal, highlightPurple),
                     modifier = Modifier
                         .background(color = gray_7, shape = RoundedCornerShape(2.dp))
                         .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -133,7 +125,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = "01",
-                        style = getTextStyle(18, FontWeight.Bold, highligtPurple),
+                        style = getTextStyle(18, FontWeight.Bold, highlightPurple),
                         modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                     )
                     Text(
@@ -165,7 +157,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                                 .padding(2.dp)) },
                     singleLine = false,
                     colors = TextFieldDefaults.colors(
-                        cursorColor = highligtPurple,
+                        cursorColor = highlightPurple,
                         focusedTextColor = gray_3,
                         focusedContainerColor = gray_9,
                         unfocusedContainerColor = gray_9,
@@ -181,7 +173,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                 Row(modifier = Modifier.padding(bottom = 10.dp)) {
                     Text(
                         text = "02",
-                        style = getTextStyle(18, FontWeight.Bold, highligtPurple),
+                        style = getTextStyle(18, FontWeight.Bold, highlightPurple),
                         modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                     )
                     Text(
@@ -212,7 +204,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                                 .padding(2.dp)) },
                     singleLine = false,
                     colors = TextFieldDefaults.colors(
-                        cursorColor = highligtPurple,
+                        cursorColor = highlightPurple,
                         focusedTextColor = gray_3,
                         focusedContainerColor = gray_9,
                         unfocusedContainerColor = gray_9,
@@ -228,7 +220,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                 Row(modifier = Modifier.padding(bottom = 10.dp)) {
                     Text(
                         text = "03",
-                        style = getTextStyle(18, FontWeight.Bold, highligtPurple),
+                        style = getTextStyle(18, FontWeight.Bold, highlightPurple),
                         modifier = Modifier.padding(start = 4.dp, end = 10.dp)
                     )
                     Text(
@@ -259,7 +251,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                                 .padding(2.dp)) },
                     singleLine = false,
                     colors = TextFieldDefaults.colors(
-                        cursorColor = highligtPurple,
+                        cursorColor = highlightPurple,
                         focusedTextColor = gray_3,
                         focusedContainerColor = gray_9,
                         unfocusedContainerColor = gray_9,
@@ -291,7 +283,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
                     .fillMaxWidth()
                     .padding(bottom = 32.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = highligtPurple,
+                    containerColor = highlightPurple,
                     contentColor = gray_1,
                     disabledContainerColor = gray_6,
                     disabledContentColor = gray_5),

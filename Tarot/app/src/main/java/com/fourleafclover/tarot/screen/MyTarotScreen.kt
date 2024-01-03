@@ -40,7 +40,7 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highligtPurple
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 
 
@@ -73,7 +73,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                 text = "${myTarotResults.size}", style = getTextStyle(
                     fontSize = 14,
                     fontWeight = FontWeight.Medium,
-                    color = highligtPurple,
+                    color = highlightPurple,
                 )
             )
 

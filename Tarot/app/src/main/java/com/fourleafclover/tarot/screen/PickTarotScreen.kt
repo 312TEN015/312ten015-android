@@ -4,17 +4,14 @@ package com.fourleafclover.tarot.screen
 import android.util.Log
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -33,7 +30,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -65,8 +61,7 @@ import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highligtPurple
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.roundToInt
 
@@ -307,7 +302,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     .padding(bottom = 34.dp)
                     .padding(horizontal = 20.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = highligtPurple,
+                    containerColor = highlightPurple,
                     contentColor = gray_1,
                     disabledContainerColor = gray_5,
                     disabledContentColor = gray_6

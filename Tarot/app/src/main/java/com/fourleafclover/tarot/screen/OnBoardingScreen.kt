@@ -23,7 +23,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -35,7 +34,7 @@ import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highligtPurple
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -91,7 +90,7 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
                 .padding(bottom = 49.dp, end = 20.dp, start = 20.dp)
                 .alpha(if (pagerState.currentPage == onboardPagesList.size - 1) 1f else 0f),
             colors = ButtonDefaults.buttonColors(
-                containerColor = highligtPurple,
+                containerColor = highlightPurple,
                 contentColor = gray_1,
                 disabledContainerColor = gray_5,
                 disabledContentColor = gray_6

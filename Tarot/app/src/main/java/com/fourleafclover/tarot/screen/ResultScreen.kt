@@ -3,7 +3,6 @@
 package com.fourleafclover.tarot.screen
 
 import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,7 +24,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,16 +53,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.AppBarClose
-import com.fourleafclover.tarot.AppBarCloseWithoutSave
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.backgroundModifier
-import com.fourleafclover.tarot.data.PreferenceUtil
 import com.fourleafclover.tarot.data.getCardImageId
 import com.fourleafclover.tarot.data.getPickedTopic
 import com.fourleafclover.tarot.data.pickedTopicNumber
-import com.fourleafclover.tarot.data.selectedTarotResult
 import com.fourleafclover.tarot.data.tarotOutputDto
 import com.fourleafclover.tarot.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -75,7 +69,7 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highligtPurple
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.absoluteValue
 
@@ -183,7 +177,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     style = getTextStyle(
                         fontSize = 26,
                         fontWeight = FontWeight.Medium,
-                        color = highligtPurple
+                        color = highlightPurple
                     ),
                     modifier = Modifier.padding(top = 48.dp)
                 )
@@ -242,7 +236,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = highligtPurple,
+                        containerColor = highlightPurple,
                         contentColor = gray_1,
                         disabledContainerColor = gray_5,
                         disabledContentColor = gray_6
@@ -364,7 +358,7 @@ fun CustomSlider(
                 style = getTextStyle(
                     fontSize = 16,
                     fontWeight = FontWeight.Medium,
-                    color = highligtPurple
+                    color = highlightPurple
                 ),
                 lineHeight = 28.sp,
                 modifier = Modifier.padding(bottom = 12.dp))
