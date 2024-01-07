@@ -46,7 +46,7 @@ var pickedTopicNumber = 0
 
 val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))
 
-val tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
+var tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
 
 var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
 

@@ -3,6 +3,11 @@ package com.fourleafclover.tarot.ui.screen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,12 +17,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +44,7 @@ import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +63,25 @@ fun LoadingScreen(navController: NavController = rememberNavController()){
         send = true
     }
 
+    // 로딩 화면 회전
+    var currentRotation by remember { mutableStateOf(0f) }
+
+    val rotation = remember("rotate") { Animatable(currentRotation) }
+
+    LaunchedEffect("rotate") {
+        rotation.animateTo(
+            targetValue = currentRotation + 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(3000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            )
+        ) {
+            currentRotation = value
+        }
+    }
+
+
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(gray_8),
@@ -62,7 +90,9 @@ fun LoadingScreen(navController: NavController = rememberNavController()){
     ) {
         Image(painter = painterResource(id = R.drawable.nonicons_loading_16),
             contentDescription ="",
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier
+                .wrapContentSize()
+                .rotate(rotation.value)
         )
         Text(text = "선택하신 카드의 의미를\n열심히 해석하고 있어요!",
             style = getTextStyle(
@@ -94,12 +124,14 @@ fun sendRequest(localContext: Context, navController: NavController) {
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
                 }
+                
+                tarotOutputDto = response.body()!!
 
-                tarotOutputDto.cardResults = response.body()!!.cardResults
-                tarotOutputDto.overallResult = response.body()!!.overallResult
-                tarotOutputDto.tarotId = response.body()!!.tarotId
-                tarotOutputDto.tarotType = response.body()!!.tarotType
-                tarotOutputDto.cards = response.body()!!.cards
+//                tarotOutputDto.cardResults = response.body()!!.cardResults
+//                tarotOutputDto.overallResult = response.body()!!.overallResult
+//                tarotOutputDto.tarotId = response.body()!!.tarotId
+//                tarotOutputDto.tarotType = response.body()!!.tarotType
+//                tarotOutputDto.cards = response.body()!!.cards
 
                 Log.d("", "${tarotOutputDto.cardResults}--------")
                 Log.d("", "${tarotOutputDto.overallResult}--------")
