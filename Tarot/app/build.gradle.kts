@@ -27,6 +27,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            manifestPlaceholders["appName"] = "@string/app_name"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_tarot_for_u"
+        }
+
+        debug {
+            applicationIdSuffix = ".dev"
+            manifestPlaceholders["appName"] = "@string/app_name_dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_tarot_for_u"
+
         }
     }
     compileOptions {

@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Tarot</string>
+    <string name="app_name">TarotForU</string>
+    <string name="app_name_dev">TarotForU</string>
 
 
     <!--     타로 카드 번호, 이름       -->
