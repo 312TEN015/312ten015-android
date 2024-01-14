@@ -26,12 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.MyApplication.Companion.tarotService
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.utils.tarotService
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.getTextStyle

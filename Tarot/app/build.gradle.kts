@@ -20,24 +20,60 @@ android {
         }
     }
 
+
+    signingConfigs {
+        create("release") {
+            keyAlias = rootProject.properties["KEY_ALIAS"].toString()
+            keyPassword = rootProject.properties["KEY_PASSWORD"].toString()
+            storeFile = File(rootProject.properties["STORE_FILE"].toString())
+            storePassword = rootProject.properties["STORE_PASSWORD"].toString()
+        }
+    }
+
     buildTypes {
-        release {
+        // 개발용
+        debug {
             isMinifyEnabled = false
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+            manifestPlaceholders["app_name"] = "@string/app_name_dev"
+            manifestPlaceholders["app_icon"] = "@mipmap/ic_launcher"
+        }
+
+        // 배포용
+        release {
+            manifestPlaceholders += mapOf()
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            manifestPlaceholders["appName"] = "@string/app_name"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_tarot_for_u"
-        }
-
-        debug {
-            applicationIdSuffix = ".dev"
-            manifestPlaceholders["appName"] = "@string/app_name_dev"
-            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_tarot_for_u"
+            signingConfig = signingConfigs.getByName("release")
+            manifestPlaceholders["app_name"] = "@string/app_name"
+            manifestPlaceholders["app_icon"] = "@mipmap/ic_launcher_tarot_for_u"
 
         }
     }
+
+    flavorDimensions.add("server")
+    productFlavors {
+        // 개발용
+        create("dev") {
+            dimension = "server"
+            buildConfigField("String", "BASE_URL", "\"http://52.78.64.39:3000\"")
+            buildConfigField("String", "SERVER", "\"dev\"")
+            versionNameSuffix = "-dev"
+        }
+
+        // 배포용
+        create("live") {
+            dimension = "server"
+            buildConfigField("String", "BASE_URL", "\"http://52.78.64.39:3000\"")
+            buildConfigField("String", "SERVER", "\"live\"")
+            versionNameSuffix = "-live"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -48,6 +84,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.7"
