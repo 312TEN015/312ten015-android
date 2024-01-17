@@ -58,6 +58,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     // 요청을 한번만 보내도록 함
     if (!send){
+//        Log.d("", tarotResultArray.joinToString(" "))
         getTarotRequest(localContext, tarotResultArray)
         send = true
     }
@@ -181,7 +182,7 @@ fun getTarotRequest(
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
                 }
-
+                Log.d("", response.body().toString())
                 myTarotResults = arrayListOf()
 
                 for (item in response.body()!!){
