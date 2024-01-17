@@ -22,3 +22,8 @@ val gray_6 = Color(0xFF686868)
 val gray_7 = Color(0xFF404040)
 val gray_8 = Color(0xFF323232)
 val gray_9 = Color(0xFF262626)
+
+val primaryLove = Color(0xFFFD88FF)
+val primaryStudy = Color(0xFFBA84FF)
+val primaryDream = Color(0xFFFFE4A0)
+val primaryJob = Color(0xFFFFB179)

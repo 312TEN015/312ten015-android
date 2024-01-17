@@ -29,7 +29,7 @@ data class TarotOutputDto(
 ) {
     val createdAt: String
         get() {
-            createdAt_ = createdAt_.replace("(Coordinated Universal Time)", "")
+            createdAt_ = createdAt_.replace(" (Coordinated Universal Time)", "")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val engTimeFormat = DateTimeFormatter.ofPattern("E MMM d u H:m:s 'GMT'Z", Locale.ENGLISH)
                 val dateTime = OffsetDateTime.parse(createdAt_, engTimeFormat)
