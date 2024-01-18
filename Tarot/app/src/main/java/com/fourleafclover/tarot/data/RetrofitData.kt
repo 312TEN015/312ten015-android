@@ -1,11 +1,7 @@
 package com.fourleafclover.tarot.data
 
-import android.os.Build
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -29,18 +25,12 @@ data class TarotOutputDto(
 ) {
     val createdAt: String
         get() {
-            createdAt_ = createdAt_.replace(" (Coordinated Universal Time)", "")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val engTimeFormat = DateTimeFormatter.ofPattern("E MMM d u H:m:s 'GMT'Z", Locale.ENGLISH)
-                val dateTime = OffsetDateTime.parse(createdAt_, engTimeFormat)
-                val koreaTimeFormat = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일", Locale.KOREA)
-                return dateTime.format(koreaTimeFormat)
-            }else{
-                val d = Date(createdAt_)
-                val sdf1 = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
-                sdf1.timeZone = TimeZone.getTimeZone("GMT")
-                return sdf1.format(d)
-            }
+            // ex) createdAt_ = 2024-01-14T12:38:23.000Z
+            val usFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
+            usFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val usDateTime = usFormat.parse(createdAt_) ?: return "wrong date format"
+            val koreaFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA)
+            return koreaFormat.format(usDateTime)
         }
 }
 
