@@ -3,6 +3,7 @@ package com.fourleafclover.tarot.ui.screen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -33,29 +34,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.BuildConfig
 import com.fourleafclover.tarot.MyApplication.Companion.tarotService
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.utils.getPath
 import com.fourleafclover.tarot.tarotInputDto
 import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 
 @Composable
 @Preview
-fun LoadingScreen(navController: NavController = rememberNavController()){
+fun LoadingScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
 
     var send by remember { mutableStateOf(false) }
+
+    PreventBackPressed()
+
 
     // 요청을 한번만 보내도록 함
     if (!send){
@@ -110,7 +123,7 @@ fun LoadingScreen(navController: NavController = rememberNavController()){
     }
 }
 
-fun sendRequest(localContext: Context, navController: NavController) {
+fun sendRequest(localContext: Context, navController: NavHostController) {
 
     tarotService.postTarotResult(tarotInputDto, getPath())
         .enqueue(object : Callback<TarotOutputDto>{
@@ -127,23 +140,11 @@ fun sendRequest(localContext: Context, navController: NavController) {
                 
                 tarotOutputDto = response.body()!!
 
-//                tarotOutputDto.cardResults = response.body()!!.cardResults
-//                tarotOutputDto.overallResult = response.body()!!.overallResult
-//                tarotOutputDto.tarotId = response.body()!!.tarotId
-//                tarotOutputDto.tarotType = response.body()!!.tarotType
-//                tarotOutputDto.cards = response.body()!!.cards
-
                 Log.d("", "${tarotOutputDto.cardResults}--------")
                 Log.d("", "${tarotOutputDto.overallResult}--------")
 
 
-                navController.navigate(ScreenEnum.ResultScreen.name) {
-                    navController.graph.startDestinationRoute?.let {
-                        popUpTo(it) { inclusive = true }
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
+                navigateInclusive(navController, ScreenEnum.ResultScreen.name)
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {

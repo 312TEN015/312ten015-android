@@ -1,12 +1,10 @@
 package com.fourleafclover.tarot.ui.component
 
 import android.app.Activity
-import android.content.Context
 import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -30,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -96,60 +93,6 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
 }
 
 @Composable
-fun AppBarCloseWithoutSave(navController: NavHostController,
-                pickedTopicTemplate: TarotSubjectData,
-                backgroundColor: Color
-) {
-
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
-
-    if (openDialog){
-        Dialog(onDismissRequest = { openDialog = false }) {
-            CloseWithoutSaveDialog(onClickNo = { openDialog = false },
-                onClickOk = {
-                    // go to home with clear back stack
-                    navController.navigate(ScreenEnum.HomeScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {  inclusive = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                })
-        }
-    }
-
-    Box(modifier = Modifier.background(color = backgroundColor)) {
-
-        Box(
-            modifier = Modifier
-                .padding(top = 28.dp, bottom = 10.dp)
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = pickedTopicTemplate.majorTopic,
-                style = getTextStyle(16, FontWeight.Medium, white),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
-
-            Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = 20.dp)
-                    .clickable { openDialog = true }, alignment = Alignment.CenterEnd
-            )
-        }
-    }
-}
-
-@Composable
 @Preview
 fun AppBarClose(navController: NavHostController = rememberNavController(),
                 pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
@@ -184,16 +127,19 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
             textAlign = TextAlign.Center
         )
 
-        Image(
-            painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
-            contentDescription = "닫기버튼",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .clickable { openDialog = true }
-                .padding(end = 20.dp)
-                .size(28.dp),
-            alignment = Alignment.Center
-        )
+        Box(modifier = Modifier
+            .wrapContentSize()
+            .align(Alignment.CenterEnd)
+            .padding(end = 20.dp)) {
+            Image(
+                painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
+                contentDescription = "닫기버튼",
+                modifier = Modifier
+                    .clickable { openDialog = true }
+                    .size(28.dp),
+                alignment = Alignment.Center
+            )
+        }
     }
 }
 

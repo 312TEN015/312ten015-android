@@ -3,6 +3,7 @@
 package com.fourleafclover.tarot.ui.screen
 
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -32,11 +34,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -55,6 +53,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.data.CardResultData
+import com.fourleafclover.tarot.data.OverallResultData
+import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.pickedTopicNumber
@@ -62,8 +63,11 @@ import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.CloseDialog
 import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
+import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -77,79 +81,64 @@ import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.absoluteValue
 
 
+
+var openCloseDialog = mutableStateOf(false) // close dialog state
+var saveState = mutableStateOf(false)   // 타로 결과 저장했는지 여부
+var openCompleteDialog = mutableStateOf(false)  // 타로 저장 완료 dialog state
+
 @Preview
 @Composable
 fun ResultScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
 
+//    tarotOutputDto = TarotOutputDto(
+//        "0",
+//        0,
+//        arrayListOf(0, 1, 2),
+//        "2024-01-14T12:38:23.000Z",
+//        arrayListOf(
+//        CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
+//        CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
+//        CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")),
+//        OverallResultData("summary result", "full result")
+//    )
+
     Column(modifier = backgroundModifier)
     {
 
-        var openDialog by remember { mutableStateOf(false) }
-
-        var saveState by rememberSaveable { mutableStateOf(false) }
+        ControlDialog(navController)
 
 
-        if (openDialog && !saveState){
-            Dialog(onDismissRequest = { openDialog = false }) {
-                CloseWithoutSaveDialog(onClickNo = { openDialog = false },
-                    onClickOk = {
-                        // go to home with clear back stack
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {  inclusive = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    })
-            }
-        }else if(openDialog && saveState){
-            Dialog(onDismissRequest = { openDialog = false }) {
-                CloseDialog(onClickNo = { openDialog = false },
-                    onClickOk = {
-                        // go to home with clear back stack
-                        navController.navigate(ScreenEnum.HomeScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) {  inclusive = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    })
-            }
-        }
-
-        Box(modifier = Modifier.background(color = gray_8)) {
-
-            Box(
+        Box(
+            modifier = appBarModifier
+                .background(color = backgroundColor_1)
+                .padding(top = 10.dp, bottom = 10.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = getPickedTopic(pickedTopicNumber).majorTopic,
+                style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
-                    .padding(top = 28.dp, bottom = 10.dp)
-                    .wrapContentHeight()
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = getPickedTopic(pickedTopicNumber).majorTopic,
-                    style = getTextStyle(16, FontWeight.Medium, white),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
+                    .fillMaxWidth()
+                    .align(Alignment.Center),
+                textAlign = TextAlign.Center
+            )
 
-                Image(painter = painterResource(id = R.drawable.close), contentDescription = "닫기버튼",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 20.dp)
-                        .clickable { openDialog = true }, alignment = Alignment.CenterEnd
-                )
-            }
+            Image(
+                painter = painterResource(id = R.drawable.cancel),
+                contentDescription = "닫기버튼",
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .clickable { openCloseDialog.value = true }
+                    .padding(end = 20.dp)
+                    .size(28.dp),
+                alignment = Alignment.Center
+            )
         }
 
         Column(modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .background(color = gray_8)) {
+        ) {
 
             Text(
                 text = "선택하신 카드는\n이런 의미를 담고 있어요.",
@@ -209,19 +198,9 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         .wrapContentHeight()
                 )
 
-                var openCompleteDialog by remember {
-                    mutableStateOf(false)
-                }
-
-                if (openCompleteDialog){
-                    Dialog(onDismissRequest = { openCompleteDialog = false }) {
-                        SaveCompletedDialog(onClickOk = { openCompleteDialog = false })
-                    }
-                }
-
                 Button(
                     onClick = {
-                        openCompleteDialog = true
+                        openCompleteDialog.value = true
 
                         // 타로 결과 id 저장
                         val tmpArray = MyApplication.prefs.getTarotResultArray()
@@ -230,10 +209,10 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         }
                         tmpArray.add(tarotOutputDto.tarotId)
                         MyApplication.prefs.saveTarotResult(tmpArray)
-                        saveState = true
+                        saveState.value = true
                     },
                     shape = RoundedCornerShape(10.dp),
-                    enabled = !saveState,
+                    enabled = !saveState.value,
                     modifier = Modifier
                         .wrapContentHeight()
                         .fillMaxWidth()
@@ -246,15 +225,13 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     )
                 ) {
                     Text(
-                        text = if (saveState) "저장 완료!" else "타로 저장하기",
+                        text = if (saveState.value) "저장 완료!" else "타로 저장하기",
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                 }
 
                 Button(
-                    onClick = {
-                        openDialog = true
-                    },
+                    onClick = { openCloseDialog.value = true },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .wrapContentHeight()
@@ -432,4 +409,45 @@ fun DotsIndicator(
             }
         }
     }
+}
+
+@Composable
+fun OpenCloseDialog(navController: NavHostController){
+    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 안한 경우
+    if (openCloseDialog.value && !saveState.value){
+        Dialog(onDismissRequest = { openCloseDialog.value = false }) {
+            CloseWithoutSaveDialog(onClickNo = { openCloseDialog.value = false },
+                onClickOk = {
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 한 경우
+    else if(openCloseDialog.value && saveState.value){
+        Dialog(onDismissRequest = { openCloseDialog.value = false }) {
+            CloseDialog(onClickNo = { openCloseDialog.value = false },
+                onClickOk = {
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+
+}
+
+@Composable
+fun OpenCompleteDialog(){
+    // 타로 결과 저장 버튼 눌렀을 때
+    if (openCompleteDialog.value){
+        Dialog(onDismissRequest = { openCompleteDialog.value = false }) {
+            SaveCompletedDialog(onClickOk = { openCompleteDialog.value = false })
+        }
+    }
+}
+
+@Composable
+fun ControlDialog(navController: NavHostController){
+    BackHandler { openCloseDialog.value = true }
+    OpenCloseDialog(navController = navController)
+    OpenCompleteDialog()
+
 }

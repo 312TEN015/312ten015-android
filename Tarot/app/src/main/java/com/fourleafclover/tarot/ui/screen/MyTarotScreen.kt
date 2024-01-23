@@ -41,6 +41,7 @@ import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_4
@@ -68,7 +69,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
         .fillMaxSize()) {
 
         // MY 타로 앱바
-        AppBarPlain(title = "MY 타로")
+        AppBarPlain(title = "MY 타로", backgroundColor = backgroundColor_2)
 
         // 갯수 표시
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){

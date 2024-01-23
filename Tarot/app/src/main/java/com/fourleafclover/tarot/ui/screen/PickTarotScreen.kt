@@ -47,10 +47,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.BuildConfig
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.utils.getCardImageId
-import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotInputDto
@@ -58,16 +57,18 @@ import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
-import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.getCardImageId
+import com.fourleafclover.tarot.utils.getPickedTopic
 import kotlin.math.roundToInt
 
 
@@ -286,13 +287,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                             tarotInputDto.cards = arrayListOf(firstCardNumber, secondCardNumber, thirdCardNumber)
 
-                            navController.navigate(ScreenEnum.LoadingScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateInclusive(navController, ScreenEnum.LoadingScreen.name)
                         }
 
                         Log.d("", "${cards.size}, {${cards.joinToString (",")}}")

@@ -3,6 +3,7 @@ package com.fourleafclover.tarot.ui.screen
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +37,7 @@ import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -60,6 +62,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 //    val tmpArray = MyApplication.prefs.getTarotResultArray()
 //    val tarotResultArray = arrayListOf<String>()
 //    tarotResultArray.add(tmpArray[(tmpArray.size-1)])
+
+    FinishOnBackPressed()
 
     var send by remember { mutableStateOf(false) }
 
