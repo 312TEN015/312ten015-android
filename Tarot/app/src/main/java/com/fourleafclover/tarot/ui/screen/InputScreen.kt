@@ -97,20 +97,7 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
 
         AppBarClose(navController = navController, pickedTopicTemplate = pickedTopicTemplate, backgroundColor = pickedTopicTemplate.primaryColor)
 
-        val imoji = getSubjectImoji(localContext, pickedTopicNumber)
-        Text(
-            text = "$imoji ${pickedTopicTemplate.majorQuestion}",
-            style = getTextStyle(22, FontWeight.Bold, gray_9),
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = pickedTopicTemplate.primaryColor)
-                .padding(top = 15.dp, bottom = 43.dp),
-            textAlign = TextAlign.Center
-        )
-
-        Column(modifier = Modifier
-            .padding(horizontal = 20.dp)
-        ) {
+        Column(modifier = Modifier) {
 
             val numberOfQuestion = remember { 3 }
 
@@ -141,8 +128,20 @@ fun QuestionsComponent(allFilled: Boolean = false,
     // header -----------------------------------------------------------
 
     if (idx == 0){
-        Column(modifier = Modifier.padding(top = 24.dp, bottom = 40.dp)) {
-            Row(modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)) {
+        Column(modifier = Modifier.padding(bottom = 40.dp)) {
+
+            val imoji = getSubjectImoji(context, pickedTopicNumber)
+            Text(
+                text = "$imoji ${pickedTopicTemplate.majorQuestion}",
+                style = getTextStyle(22, FontWeight.Bold, gray_9),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = pickedTopicTemplate.primaryColor)
+                    .padding(top = 15.dp, bottom = 43.dp),
+                textAlign = TextAlign.Center
+            )
+
+            Row(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 12.dp).padding(horizontal = 20.dp)) {
 
                 Text(
                     text = "마음속에 있는 고민거리를\n입력해보세요!",
@@ -163,7 +162,7 @@ fun QuestionsComponent(allFilled: Boolean = false,
                     alignment = Alignment.CenterEnd)
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 20.dp)) {
                 Text(
                     text = "TIP!",
                     style = getTextStyle(12, FontWeight.Normal, highlightPurple),
@@ -193,7 +192,8 @@ fun QuestionsComponent(allFilled: Boolean = false,
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(top = 72.dp, bottom = 44.dp),
+                .padding(top = 72.dp, bottom = 44.dp)
+                .padding(horizontal = 20.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = highlightPurple,
                 contentColor = gray_1,
@@ -218,7 +218,7 @@ fun QuestionsComponent(allFilled: Boolean = false,
     var text by remember { mutableStateOf(TextFieldValue("")) }
     val maxChar = remember { 50 }
 
-    Column(modifier = Modifier.padding(bottom = 32.dp)) {
+    Column(modifier = Modifier.padding(bottom = 32.dp).padding(horizontal = 20.dp)) {
 
 
         Column(modifier = Modifier

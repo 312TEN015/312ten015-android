@@ -74,7 +74,7 @@ import kotlin.math.roundToInt
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
     var showIndicator by remember { mutableStateOf(true) }
-    setStatusbarColor(LocalView.current, gray_9)
+//    setStatusbarColor(LocalView.current, gray_9)
 
 
     Column(modifier = backgroundModifier.clickable {
@@ -84,7 +84,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
         AppBarClose(navController = navController,
             pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
-            gray_8)
+            gray_9)
 
 
         val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
