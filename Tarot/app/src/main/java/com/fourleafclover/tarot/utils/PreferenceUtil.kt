@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 const val tarotResultListKey = "savedTarotList"
 const val sharedPreferencesKey = "saved_tarots"
 const val onBoardingKey = "onBoardingCompleted"
+const val pickCardIndicateKey = "pickCardIndicateCompleted"
 
 class PreferenceUtil(context: Context) {
 
@@ -48,5 +49,17 @@ class PreferenceUtil(context: Context) {
 
     fun setOnBoardingComplete() {
         prefs.edit().putBoolean(onBoardingKey, true).apply()
+    }
+
+    fun setPickCardIndicateComplete() {
+        prefs.edit().putBoolean(pickCardIndicateKey, false).apply()
+    }
+
+    fun isPickCardIndicateComplete(): Boolean {
+        return prefs.getBoolean(pickCardIndicateKey, true)
+    }
+
+    fun deleteIsPickCardIndicateComplete(){
+        prefs.edit().remove(pickCardIndicateKey).commit()
     }
 }

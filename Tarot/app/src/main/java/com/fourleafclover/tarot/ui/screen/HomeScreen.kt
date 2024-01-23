@@ -33,9 +33,12 @@ import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_9
@@ -50,7 +53,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     val localContext = LocalContext.current
 
-    setStatusbarColor(LocalView.current, gray_9)
+    setStatusbarColor(LocalView.current, backgroundColor_2)
 
     val tarotResultArray = MyApplication.prefs.getTarotResultArray()
     // 영상 촬영용
@@ -62,13 +65,11 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     // 요청을 한번만 보내도록 함
     if (!send){
-//        Log.d("", tarotResultArray.joinToString(" "))
         getTarotRequest(localContext, tarotResultArray)
         send = true
     }
 
-    Column(modifier = Modifier
-        .background(color = gray_9)
+    Column(modifier = getBackgroundModifier(backgroundColor_2)
         .padding(horizontal = 20.dp)
         .padding(bottom = 60.dp)
         .verticalScroll(rememberScrollState())) {
@@ -91,25 +92,13 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                         .padding(bottom = 8.dp)
                         .clickable {
                             pickedTopicNumber = 0
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }, painter = painterResource(id = R.drawable.category_love), contentDescription = "연애운")
                     Image(painter = painterResource(id = R.drawable.category_dream),
                         contentDescription = "소망운",
                         modifier = Modifier.clickable {
-                        pickedTopicNumber = 2
-                        navController.navigate(ScreenEnum.InputScreen.name) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                            pickedTopicNumber = 2
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
                 }
@@ -119,13 +108,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                         .padding(bottom = 6.dp)
                         .clickable {
                             pickedTopicNumber = 1
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         },
                         painter = painterResource(id = R.drawable.category_study),
                         contentDescription = "학업운")
@@ -133,13 +116,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                         contentDescription = "취업운",
                         modifier = Modifier.clickable {
                             pickedTopicNumber = 3
-                            navController.navigate(ScreenEnum.InputScreen.name) {
-                                navController.graph.startDestinationRoute?.let {
-                                    popUpTo(it) { saveState = true }
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
                 }

@@ -37,6 +37,7 @@ import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
@@ -67,20 +68,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
         .fillMaxSize()) {
 
         // MY 타로 앱바
-        Box(modifier = Modifier
-            .padding(top = 10.dp)
-            .height(48.dp)
-            .fillMaxWidth(), contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "MY 타로",
-                style = getTextStyle(16, FontWeight.Medium, white),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
-        }
+        AppBarPlain(title = "MY 타로")
 
         // 갯수 표시
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
@@ -215,7 +203,8 @@ fun MyTarotItemComponent(navController: NavHostController = rememberNavControlle
                 modifier = Modifier
                     .size(24.dp)
                     .padding(top = 6.dp, end = 6.dp)
-                    .fillMaxHeight().align(Alignment.Top),
+                    .fillMaxHeight()
+                    .align(Alignment.Top),
                 contentDescription = ""
             )
         }

@@ -49,7 +49,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.BuildConfig
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.constant.questionCount
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.utils.getPickedTopic
@@ -62,6 +64,7 @@ import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -92,22 +95,25 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
 
     setStatusbarColor(LocalView.current, pickedTopicTemplate.primaryColor)
 
-    Column(modifier = getBackgroundModifier(gray_9))
+    Column(modifier = getBackgroundModifier(backgroundColor_2))
     {
 
         AppBarClose(navController = navController, pickedTopicTemplate = pickedTopicTemplate, backgroundColor = pickedTopicTemplate.primaryColor)
 
         Column(modifier = Modifier) {
 
-            val numberOfQuestion = remember { 3 }
-
             var allFilled by remember { mutableStateOf(false) }
 
-            allFilled = (text1.value.text.isNotBlank() && text2.value.text.isNotBlank() && text3.value.text.isNotBlank())
+            // 테스트 코드
+            allFilled = if (BuildConfig.DEBUG){
+                true
+            } else {
+                (text1.value.text.isNotBlank() && text2.value.text.isNotBlank() && text3.value.text.isNotBlank())
+            }
 
             LazyColumn(content = {
                 // numberOfQuestion + header + footer
-                items(numberOfQuestion + 2){
+                items(questionCount + 2){
                     QuestionsComponent(allFilled, pickedTopicTemplate, it, navController, localContext)
                 }
 
@@ -183,7 +189,7 @@ fun QuestionsComponent(allFilled: Boolean = false,
 
     // footer ------------------------------------------------------------
 
-    if (idx == 4){
+    if (idx == questionCount+1){
         Button(
             onClick = {
                 navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)

@@ -22,6 +22,7 @@ class MyApplication: Application() {
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)
 //        prefs.deleteAllTarotResults()
+//        prefs.deleteIsPickCardIndicateComplete()
 
         // 서버 초기화
         val okHttpClient = OkHttpClient().newBuilder()

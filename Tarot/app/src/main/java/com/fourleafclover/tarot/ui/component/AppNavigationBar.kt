@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.view.WindowCompat
@@ -43,16 +44,20 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.getPickedTopic
 
 
 val backgroundModifier = Modifier
-    .background(color = gray_8)
+    .background(color = backgroundColor_1)
     .fillMaxSize()
 
 fun getBackgroundModifier(color: Color): Modifier = Modifier
@@ -62,10 +67,33 @@ fun getBackgroundModifier(color: Color): Modifier = Modifier
 fun setStatusbarColor(view: View, color: Color){
     val window = (view.context as Activity).window
     window.statusBarColor = color.toArgb()
-    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = (color != gray_9)
+    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = (color != backgroundColor_1 && color != backgroundColor_2)
 }
 
 /* AppBar ---------------------------------------------------------------------------------- */
+
+val appBarModifier = Modifier
+    .height(48.dp)
+    .fillMaxWidth()
+
+@Composable
+@Preview
+fun AppBarPlain(navController: NavHostController = rememberNavController(),
+                title: String = "MY 타로",
+                backgroundColor: Color = backgroundColor_1
+) {
+    Box(modifier = appBarModifier.background(color = backgroundColor), contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "MY 타로",
+            style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center
+        )
+    }
+}
 
 @Composable
 fun AppBarCloseWithoutSave(navController: NavHostController,
@@ -122,9 +150,10 @@ fun AppBarCloseWithoutSave(navController: NavHostController,
 }
 
 @Composable
-fun AppBarClose(navController: NavHostController,
-                pickedTopicTemplate: TarotSubjectData,
-                backgroundColor: Color
+@Preview
+fun AppBarClose(navController: NavHostController = rememberNavController(),
+                pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
+                backgroundColor: Color = backgroundColor_1
 ) {
 
     var openDialog by remember {
@@ -135,48 +164,36 @@ fun AppBarClose(navController: NavHostController,
         Dialog(onDismissRequest = { openDialog = false }) {
             CloseDialog(onClickNo = { openDialog = false },
                 onClickOk = {
-                    // go to home with clear back stack
-                    navController.navigate(ScreenEnum.HomeScreen.name) {
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) {  inclusive = true }
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
         }
     }
 
-    Box(modifier = Modifier.background(color = backgroundColor)) {
-
-        Box(
+    Box(
+        modifier = appBarModifier
+            .background(color = backgroundColor)
+            .padding(top = 10.dp, bottom = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = pickedTopicTemplate.majorTopic,
+            style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
             modifier = Modifier
-                .padding(top = 10.dp, bottom = 10.dp)
-                .wrapContentHeight()
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = pickedTopicTemplate.majorTopic,
-                style = getTextStyle(16, FontWeight.Medium, if (backgroundColor != gray_9) gray_9 else white),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(26.dp)
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center
+        )
 
-            Image(painter = painterResource(id = if (backgroundColor != gray_9) R.drawable.cancel_black else R.drawable.close), contentDescription = "닫기버튼",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(28.dp)
-                    .padding(end = 20.dp)
-                    .clickable(interactionSource = remember { MutableInteractionSource() },
-                        indication = null)
-                    { openDialog = true },
-                alignment = Alignment.CenterEnd
-            )
-        }
+        Image(
+            painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
+            contentDescription = "닫기버튼",
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .clickable { openDialog = true }
+                .padding(end = 20.dp)
+                .size(28.dp),
+            alignment = Alignment.Center
+        )
     }
 }
 
@@ -228,13 +245,7 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     selected = currentRoute == item.screenName,
                     alwaysShowLabel = true,
                     onClick = {
-                        navController.navigate(item.screenName) {
-                            navController.graph.startDestinationRoute?.let {
-                                popUpTo(it) { saveState = true }
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navigateInclusive(navController, item.screenName)
                     }
                 )
             }
