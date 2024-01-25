@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.screen
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -136,8 +137,16 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 Image(painter = painterResource(id = R.drawable.category_today),
                     contentDescription = "오늘의 운세",
                     Modifier.clickable {
-                        pickedTopicNumber = 4
-                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
+//                        pickedTopicNumber = 4
+//                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
+
+                        val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
+                        intent.type = "text/plain"
+                        val blogUrl = "tarotforu://share?resultId=QLILQXcNipQq87fH_i_mb"
+                        val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
+                        intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
+                        val chooserTitle = "친구에게 공유하기"
+                        localContext.startActivity(Intent.createChooser(intent, chooserTitle))
                     })
 
             }
