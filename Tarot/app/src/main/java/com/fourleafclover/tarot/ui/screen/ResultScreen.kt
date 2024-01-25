@@ -149,7 +149,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                     .fillMaxWidth()
             )
 
-            Log.d("", tarotOutputDto.toString())
+
             val tmpList = arrayListOf<Int>()
             for (i in tarotOutputDto.cards) {
                 tmpList.add(getCardImageId(localContext, i.toString()))
