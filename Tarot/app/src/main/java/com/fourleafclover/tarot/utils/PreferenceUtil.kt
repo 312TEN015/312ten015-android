@@ -3,6 +3,10 @@ package com.fourleafclover.tarot.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.myTarotResults
+import com.fourleafclover.tarot.selectedTarotResult
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
@@ -24,7 +28,8 @@ class PreferenceUtil(context: Context) {
     fun getTarotResultArray(): ArrayList<String> {
         val stringPrefs = getString(tarotResultListKey, "[]")
         return GsonBuilder().create().fromJson(
-            stringPrefs, object: TypeToken<ArrayList<String>>(){}.type
+            stringPrefs,
+            object: TypeToken<ArrayList<String>>(){}.type
         )
     }
 
@@ -41,6 +46,15 @@ class PreferenceUtil(context: Context) {
 
     fun deleteAllTarotResults(){
         prefs.edit().remove(tarotResultListKey).commit()
+    }
+
+    fun deleteTarotResult(){
+//        val updatedArray = MyApplication.prefs
+//            .getTarotResultArray()
+//            .filter { it != selectedTarotResult.tarotId }
+        myTarotResults = myTarotResults.filter { it.tarotId != selectedTarotResult.tarotId } as ArrayList<TarotOutputDto>
+
+        MyApplication.prefs.saveTarotResult(myTarotResults.map { it.tarotId } as ArrayList<String>)
     }
 
     fun isOnBoardingComplete(): Boolean{

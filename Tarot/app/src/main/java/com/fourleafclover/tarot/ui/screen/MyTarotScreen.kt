@@ -2,6 +2,7 @@
 package com.fourleafclover.tarot.ui.screen
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,11 +20,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,18 +41,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.AppBarPlain
-import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
+import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
@@ -53,76 +65,93 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 
+var showSheet = mutableStateOf(true)
 
 @Preview
 @Composable
 fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
-//    myTarotResults.add(TarotOutputDto("0", 0, arrayListOf(), "2024-01-14T12:38:23.000Z", arrayListOf(), null))
-//    myTarotResults.add(TarotOutputDto("0", 1, arrayListOf(), "2024-01-15T12:38:23.000Z", arrayListOf(), null))
-//    myTarotResults.add(TarotOutputDto("0", 2, arrayListOf(), "2024-01-16T12:38:23.000Z", arrayListOf(), null))
-//    myTarotResults.add(TarotOutputDto("0", 3, arrayListOf(), "2024-01-17T12:38:23.000Z", arrayListOf(), null))
-//    myTarotResults.add(TarotOutputDto("0", 4, arrayListOf(), "2024-01-184T12:38:23.000Z", arrayListOf(), null))
+    myTarotResults.add(TarotOutputDto("0", 0, arrayListOf(), "2024-01-14T12:38:23.000Z", arrayListOf(), null))
+    myTarotResults.add(TarotOutputDto("1", 1, arrayListOf(), "2024-01-15T12:38:23.000Z", arrayListOf(), null))
+    myTarotResults.add(TarotOutputDto("2", 2, arrayListOf(), "2024-01-16T12:38:23.000Z", arrayListOf(), null))
+    myTarotResults.add(TarotOutputDto("3", 3, arrayListOf(), "2024-01-17T12:38:23.000Z", arrayListOf(), null))
+    myTarotResults.add(TarotOutputDto("4", 4, arrayListOf(), "2024-01-184T12:38:23.000Z", arrayListOf(), null))
 
-    Column(modifier = Modifier
-        .background(color = gray_9)
-        .padding(horizontal = 20.dp)
-        .fillMaxSize()) {
+    Box {
 
-        // MY 타로 앱바
-        AppBarPlain(title = "MY 타로", backgroundColor = backgroundColor_2)
-
-        // 갯수 표시
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End){
-            Text(
-                text = "${myTarotResults.size}", style = getTextStyle(
-                    fontSize = 14,
-                    fontWeight = FontWeight.Medium,
-                    color = highlightPurple,
-                )
-            )
-
-            Text(
-                text = "/10", style = getTextStyle(
-                    fontSize = 14,
-                    fontWeight = FontWeight.Medium,
-                    color = gray_6,
-                )
-            )
-
+        if (showSheet.value) {
+            BottomSheet()
         }
 
-        // 메인
-        Box {
+        Column(
+            modifier = Modifier
+                .background(color = gray_9)
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+        ) {
 
-            // 목록이 비어있는 경우
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(bottom = 60.dp)
-                    .alpha(if (myTarotResults.size == 0) 1f else 0f)) {
-                Image(painter = painterResource(id = R.drawable.illust_crystalball),
-                    contentDescription = "아직 저장된 타로 기록이 없어요!",
-                    modifier = Modifier.padding(bottom = 24.dp))
-                Text(text = "아직 저장된\n타로 기록이 없어요!",
-                    style = getTextStyle(
-                    fontSize = 14,
-                    fontWeight = FontWeight.Medium,
-                    color = gray_5),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp)
+            // MY 타로 앱바
+            AppBarPlain(title = "MY 타로", backgroundColor = backgroundColor_2)
+
+            // 갯수 표시
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                Text(
+                    text = "${myTarotResults.size}", style = getTextStyle(
+                        fontSize = 14,
+                        fontWeight = FontWeight.Medium,
+                        color = highlightPurple,
+                    )
+                )
+
+                Text(
+                    text = "/10", style = getTextStyle(
+                        fontSize = 14,
+                        fontWeight = FontWeight.Medium,
+                        color = gray_6,
+                    )
+                )
+
             }
 
-            // 목록 있는 경우
-            LazyColumn(
-                Modifier.padding(bottom = 50.dp),
-                contentPadding = PaddingValues(vertical = 10.dp),
-                content = {
-                    items(myTarotResults.size) {
-                        MyTarotItemComponent(navController, it)
-                    }
+            // 메인
+            Box {
 
-                })
+                // 목록이 비어있는 경우
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 60.dp)
+                        .alpha(if (myTarotResults.size == 0) 1f else 0f)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.illust_crystalball),
+                        contentDescription = "아직 저장된 타로 기록이 없어요!",
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
+                    Text(
+                        text = "아직 저장된\n타로 기록이 없어요!",
+                        style = getTextStyle(
+                            fontSize = 14,
+                            fontWeight = FontWeight.Medium,
+                            color = gray_5
+                        ),
+                        textAlign = TextAlign.Center,
+                        lineHeight = 20.sp
+                    )
+                }
+
+                // 목록 있는 경우
+                LazyColumn(
+                    Modifier.padding(bottom = 50.dp),
+                    contentPadding = PaddingValues(vertical = 10.dp),
+                    content = {
+                        items(myTarotResults.size) {
+                            MyTarotItemComponent(navController, it)
+                        }
+
+                    })
+            }
         }
     }
 }
@@ -189,7 +218,8 @@ fun MyTarotItemComponent(navController: NavHostController = rememberNavControlle
                 }
 
                 Text(
-                    text = myTarotResults[idx].createdAt, style = getTextStyle(
+                    text = myTarotResults[idx].createdAt,
+                    style = getTextStyle(
                         fontSize = 12,
                         fontWeight = FontWeight.Normal,
                         color = gray_4
@@ -205,9 +235,40 @@ fun MyTarotItemComponent(navController: NavHostController = rememberNavControlle
                     .size(24.dp)
                     .padding(top = 6.dp, end = 6.dp)
                     .fillMaxHeight()
-                    .align(Alignment.Top),
+                    .align(Alignment.Top)
+                    .clickable {
+                        selectedTarotResult = myTarotResults[idx]
+                        showSheet.value = true
+                    },
                 contentDescription = ""
             )
         }
     }
+}
+
+@Composable
+fun BottomSheet() {
+    val modalBottomSheetState = rememberModalBottomSheetState()
+
+    ModalBottomSheet(
+        onDismissRequest = { showSheet.value = false },
+        sheetState = modalBottomSheetState,
+        contentColor = BottomSheetDefaults.ContainerColor
+    ) {
+        Text(
+            text = "삭제하기",
+            style = getTextStyle(
+                fontSize = 18,
+                fontWeight = FontWeight.Normal,
+                color = gray_9
+            ),
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 20.dp)
+                .clickable {
+                    showSheet.value = false
+                    MyApplication.prefs.deleteTarotResult()
+                })
+    }
+
 }
