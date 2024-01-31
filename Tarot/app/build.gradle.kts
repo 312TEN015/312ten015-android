@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -132,4 +133,8 @@ dependencies {
 
     //splashscreen api
     implementation ("androidx.core:core-splashscreen:1.0.1")
+
+    // firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-dynamic-links-ktx")
 }
