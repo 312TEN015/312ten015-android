@@ -17,7 +17,7 @@ fun FinishOnBackPressed() {
     var backPressedTime = 0L
 
     BackHandler(enabled = backPressedState) {
-        if(System.currentTimeMillis() - backPressedTime <= 400L) {
+        if(System.currentTimeMillis() - backPressedTime <= 1000L) {
             // 앱 종료
             (context as Activity).finish()
         } else {

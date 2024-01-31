@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
@@ -25,11 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +50,11 @@ import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.getSubjectImoji
 import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -60,40 +71,12 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
     val localContext = LocalContext.current
     Log.d("", "${selectedTarotResult.overallResult?.full }")
     val tarotSubjectData = getPickedTopic(selectedTarotResult.tarotType)
+    setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
     {
 
-        Box(modifier = Modifier.background(color = gray_8)) {
-
-            Box(
-                modifier = Modifier
-                    .padding(top = 28.dp, bottom = 10.dp)
-                    .wrapContentHeight()
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "MY 타로",
-                    style = getTextStyle(16, FontWeight.Medium, white),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.Center),
-                    textAlign = TextAlign.Center
-                )
-
-                Image(painter = painterResource(id = R.drawable.arrow_left),
-                    contentDescription = "닫기버튼",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 20.dp)
-                        .clickable {
-                            // 뒤로가기
-                            navController.popBackStack() },
-                    alignment = Alignment.CenterStart
-                )
-            }
-        }
+        AppBarPlain(navController = navController, title = "MY 타로", backgroundColor = backgroundColor_1, backButtonVisible = true)
 
         Column(modifier = Modifier
             .fillMaxSize()
@@ -214,18 +197,22 @@ fun CustomMySlider(
         Row(
             modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
         ) {
+
+            val itemWidth by remember { mutableStateOf(140.dp) }
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            val horizontalPadding by remember { mutableStateOf(screenWidth / 2 - itemWidth / 2) }
 
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
-                pageSpacing = 0.dp,
+                pageSpacing = 12.dp,
                 userScrollEnabled = true,
                 reverseLayout = false,
-                contentPadding = PaddingValues(horizontal = 100.dp),
+                contentPadding = PaddingValues(horizontal = horizontalPadding),
                 beyondBoundsPageCount = 0,
-                pageSize = PageSize.Fill,
+                pageSize = PageSize.Fixed(itemWidth),
                 key = null,
                 pageContent = { page ->
                     val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
@@ -247,7 +234,7 @@ fun CustomMySlider(
                             painter = painter,
                             contentDescription = null,
                             modifier = Modifier
-                                .width(140.dp)
+                                .width(itemWidth)
                                 .aspectRatio(imageRatio)
                         )
                     }

@@ -25,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,8 +40,10 @@ import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.selectedTarotResult
 import com.fourleafclover.tarot.ui.component.AppBarPlain
+import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -57,6 +60,7 @@ var showSheet = mutableStateOf(false)
 @Preview
 @Composable
 fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
+    setStatusbarColor(LocalView.current, backgroundColor_2)
 
     Box {
 
@@ -72,7 +76,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
         ) {
 
             // MY 타로 앱바
-            AppBarPlain(title = "MY 타로", backgroundColor = backgroundColor_2)
+            AppBarPlain(title = "MY 타로", backgroundColor = backgroundColor_2, backButtonVisible = false)
 
             // 갯수 표시
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {

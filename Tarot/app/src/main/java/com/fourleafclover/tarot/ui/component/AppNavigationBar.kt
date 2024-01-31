@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.component
 
 import android.app.Activity
+import android.util.Log
 import android.view.View
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -80,9 +81,14 @@ val appBarModifier = Modifier
 @Preview
 fun AppBarPlain(navController: NavHostController = rememberNavController(),
                 title: String = "MY 타로",
-                backgroundColor: Color = backgroundColor_1
+                backgroundColor: Color = backgroundColor_1,
+                backButtonVisible: Boolean = true
 ) {
-    Box(modifier = appBarModifier.background(color = backgroundColor), contentAlignment = Alignment.Center
+    Box(
+        modifier = appBarModifier
+            .background(color = backgroundColor)
+            .padding(top = 10.dp, bottom = 10.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = "MY 타로",
@@ -92,6 +98,26 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
                 .align(Alignment.Center),
             textAlign = TextAlign.Center
         )
+
+        if (backButtonVisible) {
+            Box(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        // 뒤로가기
+                        navController.popBackStack()
+                    }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.arrow_left),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 20.dp),
+                    alignment = Alignment.CenterStart
+                )
+            }
+        }
     }
 }
 

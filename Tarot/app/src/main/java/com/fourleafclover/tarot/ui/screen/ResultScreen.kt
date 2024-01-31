@@ -34,12 +34,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -273,18 +276,22 @@ fun CustomSlider(
         Row(
             modifier = modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
         ) {
+
+            val itemWidth by remember { mutableStateOf(140.dp) }
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+            val horizontalPadding by remember { mutableStateOf(screenWidth / 2 - itemWidth / 2) }
 
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
-                pageSpacing = 0.dp,
+                pageSpacing = 12.dp,
                 userScrollEnabled = true,
                 reverseLayout = false,
-                contentPadding = PaddingValues(horizontal = 100.dp),
+                contentPadding = PaddingValues(horizontal = horizontalPadding),
                 beyondBoundsPageCount = 0,
-                pageSize = PageSize.Fill,
+                pageSize = PageSize.Fixed(itemWidth),
                 key = null,
                 pageContent = { page ->
                     val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
@@ -306,7 +313,7 @@ fun CustomSlider(
                             painter = painter,
                             contentDescription = null,
                             modifier = Modifier
-                                .width(140.dp)
+                                .width(itemWidth)
                                 .aspectRatio(imageRatio)
                         )
                     }
