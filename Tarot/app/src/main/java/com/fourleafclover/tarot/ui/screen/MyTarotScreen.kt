@@ -1,8 +1,6 @@
 
 package com.fourleafclover.tarot.ui.screen
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,25 +12,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,38 +35,28 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.selectedTarotResult
-import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.AppBarPlain
-import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
-import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
-import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 
-var showSheet = mutableStateOf(true)
+var showSheet = mutableStateOf(false)
 
 @Preview
 @Composable
 fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
-    myTarotResults.add(TarotOutputDto("0", 0, arrayListOf(), "2024-01-14T12:38:23.000Z", arrayListOf(), null))
-    myTarotResults.add(TarotOutputDto("1", 1, arrayListOf(), "2024-01-15T12:38:23.000Z", arrayListOf(), null))
-    myTarotResults.add(TarotOutputDto("2", 2, arrayListOf(), "2024-01-16T12:38:23.000Z", arrayListOf(), null))
-    myTarotResults.add(TarotOutputDto("3", 3, arrayListOf(), "2024-01-17T12:38:23.000Z", arrayListOf(), null))
-    myTarotResults.add(TarotOutputDto("4", 4, arrayListOf(), "2024-01-184T12:38:23.000Z", arrayListOf(), null))
 
     Box {
 
@@ -157,8 +139,9 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 }
 
 @Composable
-fun MyTarotItemComponent(navController: NavHostController = rememberNavController(),
-                         idx: Int = 0
+fun MyTarotItemComponent(
+    navController: NavHostController = rememberNavController(),
+    idx: Int = 0
 ){
     Box(modifier = Modifier
         .padding(bottom = 16.dp)

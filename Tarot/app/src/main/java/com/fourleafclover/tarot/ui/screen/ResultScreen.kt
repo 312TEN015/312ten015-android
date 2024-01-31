@@ -203,12 +203,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
                         openCompleteDialog.value = true
 
                         // 타로 결과 id 저장
-                        val tmpArray = MyApplication.prefs.getTarotResultArray()
-                        if (tmpArray.size >= 10){
-                            tmpArray.removeFirst()
-                        }
-                        tmpArray.add(tarotOutputDto.tarotId)
-                        MyApplication.prefs.saveTarotResult(tmpArray)
+                        MyApplication.prefs.addTarotResult(tarotOutputDto.tarotId)
                         saveState.value = true
                     },
                     shape = RoundedCornerShape(10.dp),

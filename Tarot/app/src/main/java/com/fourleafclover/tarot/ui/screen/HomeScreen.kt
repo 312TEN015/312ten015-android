@@ -163,7 +163,7 @@ fun getTarotRequest(
     localContext: Context,
     tarotResultArray: ArrayList<String>
 ) {
-
+    Log.d("", tarotResultArray.joinToString(" "))
     tarotService.getMyTarotResult(TarotIdsInputDto(tarotResultArray))
         .enqueue(object : Callback<ArrayList<TarotOutputDto>> {
             override fun onResponse(
@@ -176,19 +176,13 @@ fun getTarotRequest(
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
                 }
-                Log.d("", response.body().toString())
+//                Log.d("", response.body().toString())
                 myTarotResults = arrayListOf()
 
                 for (item in response.body()!!){
                     myTarotResults.add(item)
                     Log.d("", "${item.toString()}--------")
                 }
-//                myTarotResults.add(TarotOutputDto("0", 2, arrayListOf(), "2023년 12월 16일", arrayListOf(), null))
-//                myTarotResults.add(TarotOutputDto("0", 3, arrayListOf(), "2023년 12월 15일", arrayListOf(), null))
-
-
-
-
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {

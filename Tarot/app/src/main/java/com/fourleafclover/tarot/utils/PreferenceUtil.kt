@@ -43,18 +43,24 @@ class PreferenceUtil(context: Context) {
         Log.d("", "saveTarotResult: ${getString(tarotResultListKey, "[]")}")
     }
 
+    fun addTarotResult(tarotId: String){
+        saveTarotResult(
+            getTarotResultArray()
+                .apply {
+                    if (this.size >= 10) this.removeFirst()
+                    add(tarotId)
+                })
+    }
+
 
     fun deleteAllTarotResults(){
         prefs.edit().remove(tarotResultListKey).commit()
     }
 
     fun deleteTarotResult(){
-//        val updatedArray = MyApplication.prefs
-//            .getTarotResultArray()
-//            .filter { it != selectedTarotResult.tarotId }
         myTarotResults = myTarotResults.filter { it.tarotId != selectedTarotResult.tarotId } as ArrayList<TarotOutputDto>
 
-        MyApplication.prefs.saveTarotResult(myTarotResults.map { it.tarotId } as ArrayList<String>)
+        saveTarotResult(myTarotResults.map { it.tarotId } as ArrayList<String>)
     }
 
     fun isOnBoardingComplete(): Boolean{
