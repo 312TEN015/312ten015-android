@@ -1,12 +1,13 @@
 package com.fourleafclover.tarot.ui.screen
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,26 +36,73 @@ import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.selectedTarotResult
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
-import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.setDynamicLink
+import com.google.firebase.Firebase
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.dynamicLinks
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
 
 @Preview
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     val localContext = LocalContext.current
+    val activity = localContext.findActivity()
+    // TODO 이거 초기화되어서 백 눌러도 안되는것
+    var sendShared by remember { mutableStateOf(false) }
+
+    if (activity != null) {
+
+        val intent = activity.intent
+        Firebase.dynamicLinks
+            .getDynamicLink(intent)
+            .addOnSuccessListener(activity) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+                Log.w("DynamicLink", "getDynamicLink:onSuccess")
+                // Get deep link from result (may be null if no link is found)
+                if (pendingDynamicLinkData != null) {
+                    val deepLink = pendingDynamicLinkData.link
+                    val deppLinkString = deepLink.toString()
+                    val sharedTarotId = Uri.parse(deppLinkString).getQueryParameter("tarotId")
+                    Log.d("DynamicLink", deppLinkString)
+                    Log.d("DynamicLink", sharedTarotId!!)
+
+                    if (!sendShared && sharedTarotId.isNotEmpty()) {
+                        Log.d("DynamicLink", "HomeScreen")
+                        sendShared = true
+                        getSharedTarotRequest(localContext, navController, sharedTarotId)
+                    }
+
+                }
+
+
+            }
+            .addOnFailureListener(activity) { e ->
+                Log.w(
+                    "DynamicLink",
+                    "getDynamicLink:onFailure",
+                    e
+                )
+            }
+    }
 
     setStatusbarColor(LocalView.current, backgroundColor_2)
 
@@ -140,13 +188,9 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 //                        pickedTopicNumber = 4
 //                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
 
-                        val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
-                        intent.type = "text/plain"
-                        val blogUrl = "tarotforu://share?resultId=QLILQXcNipQq87fH_i_mb"
-                        val content = "친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"
-                        intent.putExtra(Intent.EXTRA_TEXT,"$content\n\n$blogUrl")
-                        val chooserTitle = "친구에게 공유하기"
-                        localContext.startActivity(Intent.createChooser(intent, chooserTitle))
+                        setDynamicLink(localContext, "5UBpn2BedIwbVAe_gjVDr")
+
+
                     })
 
             }
@@ -183,6 +227,39 @@ fun getTarotRequest(
                     myTarotResults.add(item)
                     Log.d("", "${item.toString()}--------")
                 }
+            }
+
+            override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
+                Log.d("", "onFailure--------!")
+                Log.d("", "${t.cause}--------!")
+                Log.d("", "${t.message}--------!")
+                Log.d("", "${t.stackTrace}--------!")
+            }
+        })
+
+}
+
+fun getSharedTarotRequest(
+    localContext: Context,
+    navController: NavHostController,
+    tarotId: String
+) {
+
+    tarotService.getMyTarotResult(TarotIdsInputDto(arrayListOf(tarotId)))
+        .enqueue(object : Callback<ArrayList<TarotOutputDto>> {
+            override fun onResponse(
+                call: Call<ArrayList<TarotOutputDto>>,
+                response: Response<ArrayList<TarotOutputDto>>
+            ) {
+
+                Log.d("", "onResponse--------")
+                if (response.body() == null){
+                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
+                    return
+                }
+
+                selectedTarotResult = response.body()!![0]
+                navigateInclusive(navController, ScreenEnum.MyTarotDetailScreen.name)
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {

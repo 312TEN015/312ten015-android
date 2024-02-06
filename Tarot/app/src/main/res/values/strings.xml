@@ -35,4 +35,9 @@
     <string name="imoji_study">"📚"</string>
     <string name="imoji_dream">"⭐️"</string>
     <string name="imoji_job">"💼"</string>
+
+
+    <!--  공유하기  -->
+    <string name="share_title">"친구에게 공유하기"</string>
+    <string name="share_content">"친구가 링크를 공유했어요!\n어떤 링크인지 들어가서 확인해볼까요?"</string>
 </resources>

@@ -35,7 +35,6 @@ android {
         // 개발용
         debug {
             isMinifyEnabled = false
-            applicationIdSuffix = ".debug"
             isDebuggable = true
             manifestPlaceholders["app_name"] = "@string/app_name_dev"
             manifestPlaceholders["app_icon"] = "@mipmap/ic_launcher"
@@ -43,7 +42,6 @@ android {
 
         // 배포용
         release {
-            manifestPlaceholders += mapOf()
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

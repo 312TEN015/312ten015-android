@@ -13,6 +13,15 @@ import com.fourleafclover.tarot.ui.navigation.NavigationHost
 import com.fourleafclover.tarot.ui.theme.TarotTheme
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.google.firebase.Firebase
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
+import com.google.firebase.dynamiclinks.dynamicLinks
 
 class MainActivity : ComponentActivity() {
     private lateinit var splashScreen: SplashScreen
@@ -40,7 +49,6 @@ class MainActivity : ComponentActivity() {
                 NavigationHost()
             }
         }
-
     }
 
     @Preview
