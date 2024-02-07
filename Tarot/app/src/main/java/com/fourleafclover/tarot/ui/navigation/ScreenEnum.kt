@@ -16,6 +16,9 @@ enum class ScreenEnum {
     OnBoardingScreen,     // 온보딩 화면
     LoadingScreen,     // 로딩 화면
 
+    ShareDetailScreen,     // 공유하기 타로 상세 화면
+
+
 
 
 }

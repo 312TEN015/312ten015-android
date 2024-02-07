@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.ui.component.DotsIndicator
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.getTextStyle

@@ -91,7 +91,7 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "MY 타로",
+            text = title,
             style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
             modifier = Modifier
                 .fillMaxWidth()

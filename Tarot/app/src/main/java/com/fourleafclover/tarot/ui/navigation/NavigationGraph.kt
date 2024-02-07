@@ -19,6 +19,7 @@ import com.fourleafclover.tarot.ui.screen.MyTarotScreen
 import com.fourleafclover.tarot.ui.screen.PagerOnBoarding
 import com.fourleafclover.tarot.ui.screen.PickTarotScreen
 import com.fourleafclover.tarot.ui.screen.ResultScreen
+import com.fourleafclover.tarot.ui.screen.ShareDetailScreen
 
 @Composable
 fun NavigationHost() {
@@ -60,6 +61,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.MyTarotDetailScreen.name) {
                 MyTarotDetailScreen(navController)
+            }
+            composable(ScreenEnum.ShareDetailScreen.name) {
+                ShareDetailScreen(navController)
             }
         }
 

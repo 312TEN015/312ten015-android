@@ -1,11 +1,7 @@
 package com.fourleafclover.tarot.ui.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,11 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.utils.getPickedTopic
-import com.fourleafclover.tarot.utils.getSubjectImoji
-import com.fourleafclover.tarot.selectedTarotResult
-import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -43,19 +34,20 @@ import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.setDynamicLink
+import com.fourleafclover.tarot.utils.getPickedTopic
+import com.fourleafclover.tarot.utils.getSubjectImoji
 
 @Composable
 @Preview
-fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
+fun ShareDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
-    val tarotSubjectData = getPickedTopic(selectedTarotResult.tarotType)
+    val tarotSubjectData = getPickedTopic(sharedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
     {
 
-        AppBarPlain(navController = navController, title = "MY 타로", backgroundColor = backgroundColor_1, backButtonVisible = true)
+        AppBarPlain(navController = navController, title = "공유하기", backgroundColor = backgroundColor_1, backButtonVisible = false)
 
         Column(modifier = Modifier
             .fillMaxSize()
@@ -78,7 +70,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
+                val imoji = getSubjectImoji(localContext, sharedTarotResult.tarotType)
                 Text(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     style = getTextStyle(22, FontWeight.Bold, gray_2),
@@ -89,7 +81,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 Text(
-                    text = selectedTarotResult.createdAt,
+                    text = sharedTarotResult.createdAt,
                     style = getTextStyle(14, FontWeight.Medium, gray_4),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -98,15 +90,13 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
             }
 
-
-            CardSlider(tarotResult = selectedTarotResult, localContext = localContext)
+            CardSlider(tarotResult = sharedTarotResult, localContext = localContext)
 
             Column(
                 modifier = Modifier
                     .background(color = gray_8)
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(horizontal = 20.dp)
             ) {
 
                 Text(
@@ -120,7 +110,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 Text(
-                    text = selectedTarotResult.overallResult?.summary.toString(),
+                    text = sharedTarotResult.overallResult?.summary.toString(),
                     style = getTextStyle(
                         fontSize = 18,
                         fontWeight = FontWeight.Medium,
@@ -131,7 +121,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 Text(
-                    text = selectedTarotResult.overallResult?.full.toString(),
+                    text = sharedTarotResult.overallResult?.full.toString(),
                     style = getTextStyle(
                         fontSize = 16,
                         fontWeight = FontWeight.Medium,
@@ -142,27 +132,6 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                         .padding(top = 12.dp, bottom = 64.dp)
                         .wrapContentHeight()
                 )
-
-                Row(modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
-                    .padding(bottom = 45.dp)
-                    .clickable {
-                        setDynamicLink(localContext, tarotOutputDto.tarotId)
-                    },
-                    horizontalArrangement = Arrangement.Center)
-                {
-                    Image(painter = painterResource(id = R.drawable.share),
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 3.dp))
-                    Text(
-                        text = "공유하기",
-                        style = getTextStyle(
-                            fontSize = 16,
-                            fontWeight = FontWeight.Medium,
-                            color = gray_3
-                        )
-                    )
-                }
             }
         }
     }

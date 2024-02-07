@@ -3,7 +3,6 @@ package com.fourleafclover.tarot.ui.screen
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -36,7 +35,7 @@ import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
@@ -47,7 +46,6 @@ import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.setDynamicLink
 import com.google.firebase.Firebase
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.dynamicLinks
@@ -67,10 +65,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
     val localContext = LocalContext.current
     val activity = localContext.findActivity()
-    // TODO 이거 초기화되어서 백 눌러도 안되는것
-    var sendShared by remember { mutableStateOf(false) }
 
-    if (activity != null) {
+    if (activity != null && activity.intent != null) {
 
         val intent = activity.intent
         Firebase.dynamicLinks
@@ -85,11 +81,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     Log.d("DynamicLink", deppLinkString)
                     Log.d("DynamicLink", sharedTarotId!!)
 
-                    if (!sendShared && sharedTarotId.isNotEmpty()) {
-                        Log.d("DynamicLink", "HomeScreen")
-                        sendShared = true
-                        getSharedTarotRequest(localContext, navController, sharedTarotId)
-                    }
+                    activity.intent = null
+                    getSharedTarotRequest(localContext, navController, sharedTarotId)
 
                 }
 
@@ -185,12 +178,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 Image(painter = painterResource(id = R.drawable.category_today),
                     contentDescription = "오늘의 운세",
                     Modifier.clickable {
-//                        pickedTopicNumber = 4
-//                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
-
-                        setDynamicLink(localContext, "5UBpn2BedIwbVAe_gjVDr")
-
-
+                        pickedTopicNumber = 4
+                        navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
                     })
 
             }
@@ -258,8 +247,9 @@ fun getSharedTarotRequest(
                     return
                 }
 
-                selectedTarotResult = response.body()!![0]
-                navigateInclusive(navController, ScreenEnum.MyTarotDetailScreen.name)
+                sharedTarotResult = response.body()!![0]
+                Log.d("", sharedTarotResult.toString())
+                navigateInclusive(navController, ScreenEnum.ShareDetailScreen.name)
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {

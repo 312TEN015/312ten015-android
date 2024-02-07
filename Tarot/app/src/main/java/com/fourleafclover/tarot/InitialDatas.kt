@@ -54,11 +54,13 @@ val SubjectToday = TarotSubjectData(
 // 4 -> 오늘의 운세
 var pickedTopicNumber = 0
 
-val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))
+val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))     // 타로 결과를 맏기 위해 입력한 데이터
 
-var tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
+var tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)     // 서버에서 받은 새 타로 데이터
 
-var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)
+var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)        // 리스트에서 선택한 타로 데이터
+
+var sharedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)          // 공유하기로 받은 타로 데이터
 
 var myTarotResults = arrayListOf<TarotOutputDto>()
 

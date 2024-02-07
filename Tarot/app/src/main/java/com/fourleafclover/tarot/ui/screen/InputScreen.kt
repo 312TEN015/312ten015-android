@@ -104,12 +104,8 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
 
             var allFilled by remember { mutableStateOf(false) }
 
-            // 테스트 코드
-            allFilled = if (BuildConfig.DEBUG){
-                true
-            } else {
-                (text1.value.text.isNotBlank() && text2.value.text.isNotBlank() && text3.value.text.isNotBlank())
-            }
+            allFilled = (text1.value.text.isNotBlank() && text2.value.text.isNotBlank() && text3.value.text.isNotBlank())
+
 
             LazyColumn(content = {
                 // numberOfQuestion + header + footer

@@ -152,7 +152,8 @@ fun MyTarotItemComponent(
         .clickable {
             selectedTarotResult = myTarotResults[idx]
             navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
-        }) {
+        })
+    {
 
         Row(
             modifier = Modifier
