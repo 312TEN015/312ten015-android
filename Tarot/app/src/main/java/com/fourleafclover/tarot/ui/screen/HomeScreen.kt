@@ -3,7 +3,6 @@ package com.fourleafclover.tarot.ui.screen
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -46,9 +45,7 @@ import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.white
-import com.google.firebase.Firebase
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData
-import com.google.firebase.dynamiclinks.dynamicLinks
+import com.fourleafclover.tarot.utils.receiveShareRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -67,43 +64,12 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     val activity = localContext.findActivity()
 
     if (activity != null && activity.intent != null) {
-
-        val intent = activity.intent
-        Firebase.dynamicLinks
-            .getDynamicLink(intent)
-            .addOnSuccessListener(activity) { pendingDynamicLinkData: PendingDynamicLinkData? ->
-                Log.w("DynamicLink", "getDynamicLink:onSuccess")
-                // Get deep link from result (may be null if no link is found)
-                if (pendingDynamicLinkData != null) {
-                    val deepLink = pendingDynamicLinkData.link
-                    val deppLinkString = deepLink.toString()
-                    val sharedTarotId = Uri.parse(deppLinkString).getQueryParameter("tarotId")
-                    Log.d("DynamicLink", deppLinkString)
-                    Log.d("DynamicLink", sharedTarotId!!)
-
-                    activity.intent = null
-                    getSharedTarotRequest(localContext, navController, sharedTarotId)
-
-                }
-
-
-            }
-            .addOnFailureListener(activity) { e ->
-                Log.w(
-                    "DynamicLink",
-                    "getDynamicLink:onFailure",
-                    e
-                )
-            }
+        receiveShareRequest(activity, navController)
     }
 
     setStatusbarColor(LocalView.current, backgroundColor_2)
 
     val tarotResultArray = MyApplication.prefs.getTarotResultArray()
-    // 영상 촬영용
-//    val tmpArray = MyApplication.prefs.getTarotResultArray()
-//    val tarotResultArray = arrayListOf<String>()
-//    tarotResultArray.add(tmpArray[(tmpArray.size-1)])
 
     FinishOnBackPressed()
 

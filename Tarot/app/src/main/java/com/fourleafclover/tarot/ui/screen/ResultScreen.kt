@@ -1,9 +1,6 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
 package com.fourleafclover.tarot.ui.screen
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,13 +37,11 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.utils.getCardImageId
-import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.CloseDialog
 import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
-import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -62,6 +57,8 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.getCardImageId
+import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 var openCloseDialog = mutableStateOf(false) // close dialog state

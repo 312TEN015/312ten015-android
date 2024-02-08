@@ -1,13 +1,15 @@
 package com.fourleafclover.tarot.utils
 
-import android.content.ClipData
-import android.content.ClipboardManager
+import android.app.Activity
 import android.content.Context
-import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.ui.screen.getSharedTarotRequest
 import com.google.firebase.Firebase
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ShortDynamicLink
 import com.google.firebase.dynamiclinks.androidParameters
 import com.google.firebase.dynamiclinks.dynamicLink
@@ -22,7 +24,6 @@ fun showShareSheet(context: Context, link: Uri?){
     intent.putExtra(Intent.EXTRA_TEXT,"${context.resources.getString(R.string.share_content)}\n\n$link")
     context.startActivity(Intent.createChooser(intent, null));
 }
-
 
 
 fun setDynamicLink(context: Context, tarotId: String){
@@ -51,4 +52,33 @@ fun setDynamicLink(context: Context, tarotId: String){
         // 실패한 경우 긴 링크 사용
         showShareSheet(context, dynamicLink.uri)
     }
+}
+
+fun receiveShareRequest(activity: Activity, navController: NavHostController){
+    Firebase.dynamicLinks
+        .getDynamicLink(activity.intent)
+        .addOnSuccessListener(activity) { pendingDynamicLinkData: PendingDynamicLinkData? ->
+            Log.w("DynamicLink", "getDynamicLink:onSuccess")
+            // Get deep link from result (may be null if no link is found)
+            if (pendingDynamicLinkData != null) {
+                val deepLink = pendingDynamicLinkData.link
+                val deppLinkString = deepLink.toString()
+                val sharedTarotId = Uri.parse(deppLinkString).getQueryParameter("tarotId")
+                Log.d("DynamicLink", deppLinkString)
+                Log.d("DynamicLink", sharedTarotId!!)
+
+                activity.intent = null
+                getSharedTarotRequest(activity, navController, sharedTarotId)
+
+            }
+
+
+        }
+        .addOnFailureListener(activity) { e ->
+            Log.w(
+                "DynamicLink",
+                "getDynamicLink:onFailure",
+                e
+            )
+        }
 }
