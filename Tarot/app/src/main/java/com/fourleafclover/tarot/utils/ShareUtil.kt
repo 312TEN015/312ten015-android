@@ -1,6 +1,9 @@
 package com.fourleafclover.tarot.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
+import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
 import android.net.Uri
 import com.fourleafclover.tarot.R
@@ -14,10 +17,10 @@ import com.google.firebase.dynamiclinks.shortLinkAsync
 
 
 fun showShareSheet(context: Context, link: Uri?){
-    val intent = Intent(Intent.ACTION_SEND_MULTIPLE)
+    val intent = Intent(Intent.ACTION_SEND)
     intent.type = "text/plain"
     intent.putExtra(Intent.EXTRA_TEXT,"${context.resources.getString(R.string.share_content)}\n\n$link")
-    context.startActivity(Intent.createChooser(intent, context.resources.getString(R.string.share_title)))
+    context.startActivity(Intent.createChooser(intent, null));
 }
 
 

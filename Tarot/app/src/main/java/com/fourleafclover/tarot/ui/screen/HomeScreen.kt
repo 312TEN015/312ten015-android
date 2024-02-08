@@ -133,7 +133,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             )
 
             Row(Modifier.padding(bottom = 32.dp)) {
-                Column(modifier = Modifier.padding(end = 8.dp)) {
+                Column(modifier = Modifier.padding(end = 4.dp).weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
@@ -149,7 +149,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     )
                 }
 
-                Column {
+                Column(modifier = Modifier.padding(start = 4.dp).weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 6.dp)
                         .clickable {
@@ -247,8 +247,10 @@ fun getSharedTarotRequest(
                     return
                 }
 
+                Log.d("", response.body()!!.toString())
+                Log.d("", response.body()!!.toString())
+
                 sharedTarotResult = response.body()!![0]
-                Log.d("", sharedTarotResult.toString())
                 navigateInclusive(navController, ScreenEnum.ShareDetailScreen.name)
             }
 

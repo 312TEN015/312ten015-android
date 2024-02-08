@@ -287,7 +287,7 @@ fun OverallResult(){
                 style = getTextStyle(
                     fontSize = 16,
                     fontWeight = FontWeight.Medium,
-                    color = if (saveState.value) white else gray_5
+                    color = if (!saveState.value) white else gray_5
                 ),
             )
         }

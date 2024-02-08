@@ -147,7 +147,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     .padding(vertical = 16.dp, horizontal = 16.dp)
                     .padding(bottom = 45.dp)
                     .clickable {
-                        setDynamicLink(localContext, tarotOutputDto.tarotId)
+                        setDynamicLink(localContext, selectedTarotResult.tarotId)
                     },
                     horizontalArrangement = Arrangement.Center)
                 {
