@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -52,6 +54,7 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
+import com.fourleafclover.tarot.utils.getTarotRequest
 
 
 val backgroundModifier = Modifier
@@ -179,6 +182,7 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
+    val localContext = LocalContext.current
     val items = listOf<BottomNavItem>(
             BottomNavItem.Home,
             BottomNavItem.MyTarot
@@ -220,6 +224,10 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     selected = currentRoute == item.screenName,
                     alwaysShowLabel = true,
                     onClick = {
+                        if (item.screenName == ScreenEnum.MyTarotScreen.name){
+                            val tarotResultArray = MyApplication.prefs.getTarotResultArray()
+                            getTarotRequest(localContext, tarotResultArray)
+                        }
                         navigateInclusive(navController, item.screenName)
                     }
                 )
