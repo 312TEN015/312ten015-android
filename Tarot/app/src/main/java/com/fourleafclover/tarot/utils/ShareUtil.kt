@@ -7,7 +7,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.ui.screen.getSharedTarotRequest
 import com.google.firebase.Firebase
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ShortDynamicLink
