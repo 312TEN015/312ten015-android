@@ -32,126 +32,22 @@ import com.fourleafclover.tarot.ui.theme.white
 @Composable
 @Preview
 fun CloseDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
-
-    Surface(modifier = Modifier,
-        shape = RoundedCornerShape(size = 10.dp),
-        color = white){
-
-        Column(modifier = Modifier
-            .width(288.dp)
-            .height(180.dp)
-            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
-
-            Text(text = "운세 보기를 중단하고\n나가시겠습니까?",
-                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
-
-            Row {
-                Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_2,
-                        contentColor = gray_8
-                    )
-                ) {
-                    Text(
-                        text = "아니요",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8)
-                    )
-                }
-
-                Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_8,
-                        contentColor = gray_2
-                    )
-                ) {
-                    Text(
-                        text = "네",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_2)
-                    )
-                }
-            }
-
-        }
-
-    }
-
+    YesNoDialog("운세 보기를 중단하고\n나가시겠습니까?", onClickNo, onClickOk)
 }
 
 
 @Composable
+@Preview
 fun CloseWithoutSaveDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
-
-    Surface(modifier = Modifier,
-        shape = RoundedCornerShape(size = 10.dp),
-        color = white){
-
-        Column(modifier = Modifier
-            .width(288.dp)
-            .height(180.dp)
-            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
-
-            Text(text = "타로 결과를 저장하지 않고\n나가시겠습니까?",
-                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
-
-            Row {
-                Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_2,
-                        contentColor = gray_8
-                    )
-                ) {
-                    Text(
-                        text = "아니요",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8)
-                    )
-                }
-
-                Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_8,
-                        contentColor = gray_2
-                    )
-                ) {
-                    Text(
-                        text = "네",
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_2)
-                    )
-                }
-            }
-
-        }
-
-    }
-
+    YesNoDialog("타로 결과를 저장하지 않고\n나가시겠습니까?", onClickNo, onClickOk)
 }
+
+@Composable
+@Preview
+fun DeleteTarotResultDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+    YesNoDialog("해당 타로 기록을\n삭제하시겠습니까?", onClickNo, onClickOk)
+}
+
 
 
 @Preview
@@ -202,6 +98,69 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                     modifier = Modifier.padding(vertical = 8.dp),
                     style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = white)
                 )
+            }
+
+        }
+
+    }
+
+}
+
+
+@Preview
+@Composable
+fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠습니까?", onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+
+    Surface(modifier = Modifier,
+        shape = RoundedCornerShape(size = 10.dp),
+        color = white){
+
+        Column(modifier = Modifier
+            .width(288.dp)
+            .height(180.dp)
+            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
+
+            Text(text = content,
+                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp))
+
+            Row {
+                Button(onClick = onClickNo,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 4.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = gray_2,
+                        contentColor = gray_8
+                    )
+                ) {
+                    Text(
+                        text = "아니요",
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8)
+                    )
+                }
+
+                Button(onClick = onClickOk,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 4.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = gray_8,
+                        contentColor = gray_2
+                    )
+                ) {
+                    Text(
+                        text = "네",
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_2)
+                    )
+                }
             }
 
         }
