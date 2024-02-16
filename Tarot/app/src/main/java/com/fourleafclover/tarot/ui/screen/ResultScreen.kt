@@ -19,7 +19,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -67,6 +70,17 @@ var openCompleteDialog = mutableStateOf(false)  // 타로 저장 완료 dialog s
 
 @Composable
 fun ResultScreen(navController: NavHostController){
+
+    var initialize by remember { mutableStateOf(false) }
+
+    // 변수 초기화
+    if (!initialize){
+        openCloseDialog.value = false
+        saveState.value = false
+        openCompleteDialog.value = false
+        initialize = true
+    }
+
     val localContext = LocalContext.current
 
     Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
