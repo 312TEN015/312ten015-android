@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -59,6 +60,11 @@ fun Context.findActivity(): Activity? = when (this) {
 @Preview
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
+
+    // 인풋 초기화
+    text1.value = TextFieldValue("")
+    text2.value = TextFieldValue("")
+    text3.value = TextFieldValue("")
 
     val localContext = LocalContext.current
     val activity = localContext.findActivity()
