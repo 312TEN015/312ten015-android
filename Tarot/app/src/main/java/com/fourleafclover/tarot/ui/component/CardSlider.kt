@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -96,7 +97,7 @@ fun CardSlider(
                 reverseLayout = false,
                 contentPadding = PaddingValues(horizontal = horizontalPadding),
                 beyondBoundsPageCount = 0,
-                pageSize = PageSize.Fixed(itemWidth),
+                pageSize = PageSize.Fill,
                 key = null,
                 pageContent = { page ->
                     val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
@@ -180,7 +181,7 @@ fun CardSlider(
                 ),
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp,
-                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
+                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp).defaultMinSize(minHeight = 56.dp))
         }
     }
 }
