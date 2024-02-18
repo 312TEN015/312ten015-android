@@ -232,7 +232,7 @@ fun QuestionsComponent(allFilled: Boolean = false,
             textStyle = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = gray_3),
             shape = RoundedCornerShape(size = 10.dp),
             onValueChange = { newText ->
-                if (getNowTextField(idx).value.text.length >= maxChar){
+                if (newText.text.length > maxChar){
                     Toast.makeText(context, "${maxChar}자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
                 }
                 else {
