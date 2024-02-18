@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -202,7 +203,6 @@ fun QuestionsComponent(allFilled: Boolean = false,
 
     // body --------------------------------------------------------------
 
-    var text by remember { mutableStateOf(TextFieldValue("")) }
     val maxChar = remember { 50 }
 
     Column(modifier = Modifier.padding(bottom = 32.dp).padding(horizontal = 20.dp)) {
@@ -232,19 +232,14 @@ fun QuestionsComponent(allFilled: Boolean = false,
             textStyle = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = gray_3),
             shape = RoundedCornerShape(size = 10.dp),
             onValueChange = { newText ->
-                if (text.text.length >= maxChar){
+                if (getNowTextField(idx).value.text.length >= maxChar){
                     Toast.makeText(context, "${maxChar}자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    text = newText
-                    when (idx) {
-                        1 -> text1.value = newText
-                        2 -> text2.value = newText
-                        3 -> text3.value = newText
-                    }
+                    setTextField(getNowTextField(idx), newText)
                 }
                             },
-            value = text,
+            value = getNowTextField(idx).value,
             placeholder = {
                 Text(
                     text = pickedTopicTemplate.placeHolders[idx-1],
@@ -265,4 +260,17 @@ fun QuestionsComponent(allFilled: Boolean = false,
             )
         )
     }
+}
+
+fun getNowTextField(idx: Int): MutableState<TextFieldValue> {
+    return when (idx) {
+        1 -> text1
+        2 -> text2
+        3 -> text3
+        else -> { text1 }
+    }
+}
+
+fun setTextField(textField: MutableState<TextFieldValue>, newText: TextFieldValue){
+    textField.value = newText
 }

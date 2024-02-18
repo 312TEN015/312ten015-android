@@ -23,11 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.MyApplication.Companion.tarotService
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotIdsInputDto
@@ -60,26 +60,30 @@ fun Context.findActivity(): Activity? = when (this) {
 @Composable
 fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
-    val localContext = LocalContext.current
-    val activity = localContext.findActivity()
+    var initialize by remember { mutableStateOf(false) }
 
-    if (activity != null && activity.intent != null) {
-        receiveShareRequest(activity, navController)
+    /* 한번만 실행 */
+    if (!initialize){
+
+        // 공유하기 확인
+        val activity = LocalContext.current.findActivity()
+        if (activity != null && activity.intent != null) {
+            receiveShareRequest(activity, navController)
+        }
+
+        // 인풋 초기화
+        text1.value = TextFieldValue("")
+        text2.value = TextFieldValue("")
+        text3.value = TextFieldValue("")
+
+        initialize = true
     }
 
+    // 상태바 초기화
     setStatusbarColor(LocalView.current, backgroundColor_2)
 
-    val tarotResultArray = MyApplication.prefs.getTarotResultArray()
-
+    // 뒤로가기 시 행동
     FinishOnBackPressed()
-
-    var send by remember { mutableStateOf(false) }
-
-    // 요청을 한번만 보내도록 함
-    if (!send){
-        getTarotRequest(localContext, tarotResultArray)
-        send = true
-    }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)
         .padding(horizontal = 20.dp)
@@ -155,77 +159,5 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
         }
     }
-
-}
-
-fun getTarotRequest(
-    localContext: Context,
-    tarotResultArray: ArrayList<String>
-) {
-    Log.d("", tarotResultArray.joinToString(" "))
-    tarotService.getMyTarotResult(TarotIdsInputDto(tarotResultArray))
-        .enqueue(object : Callback<ArrayList<TarotOutputDto>> {
-            override fun onResponse(
-                call: Call<ArrayList<TarotOutputDto>>,
-                response: Response<ArrayList<TarotOutputDto>>
-            ) {
-
-                Log.d("", "onResponse--------")
-                if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
-                    return
-                }
-//                Log.d("", response.body().toString())
-                myTarotResults = arrayListOf()
-
-                for (item in response.body()!!){
-                    myTarotResults.add(item)
-                    Log.d("", "${item.toString()}--------")
-                }
-            }
-
-            override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
-            }
-        })
-
-}
-
-fun getSharedTarotRequest(
-    localContext: Context,
-    navController: NavHostController,
-    tarotId: String
-) {
-
-    tarotService.getMyTarotResult(TarotIdsInputDto(arrayListOf(tarotId)))
-        .enqueue(object : Callback<ArrayList<TarotOutputDto>> {
-            override fun onResponse(
-                call: Call<ArrayList<TarotOutputDto>>,
-                response: Response<ArrayList<TarotOutputDto>>
-            ) {
-
-                Log.d("", "onResponse--------")
-                if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
-                    return
-                }
-
-                Log.d("", response.body()!!.toString())
-                Log.d("", response.body()!!.toString())
-
-                sharedTarotResult = response.body()!![0]
-                navigateInclusive(navController, ScreenEnum.ShareDetailScreen.name)
-            }
-
-            override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
-            }
-        })
 
 }

@@ -1,8 +1,5 @@
 package com.fourleafclover.tarot.ui.screen
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -33,21 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication.Companion.tarotService
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.tarotInputDto
-import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
-import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.utils.getPath
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.fourleafclover.tarot.utils.sendRequest
 
 
 @Composable
@@ -111,38 +99,4 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
             color = gray_5
         ))
     }
-}
-
-fun sendRequest(localContext: Context, navController: NavHostController) {
-
-    tarotService.postTarotResult(tarotInputDto, getPath())
-        .enqueue(object : Callback<TarotOutputDto>{
-            override fun onResponse(
-                call: Call<TarotOutputDto>,
-                response: Response<TarotOutputDto>
-            ) {
-
-                Log.d("", "onResponse--------")
-                if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
-                    return
-                }
-                
-                tarotOutputDto = response.body()!!
-
-                Log.d("", "${tarotOutputDto.cardResults}--------")
-                Log.d("", "${tarotOutputDto.overallResult}--------")
-
-
-                navigateInclusive(navController, ScreenEnum.ResultScreen.name)
-            }
-
-            override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
-            }
-    })
-
 }
