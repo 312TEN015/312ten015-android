@@ -16,12 +16,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -32,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
@@ -39,6 +46,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.selectedTarotResult
 import com.fourleafclover.tarot.ui.component.AppBarPlain
+import com.fourleafclover.tarot.ui.component.DeleteTarotResultDialog
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
@@ -53,6 +61,7 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
+import kotlinx.coroutines.launch
 
 var showSheet = mutableStateOf(false)
 
@@ -235,11 +244,31 @@ fun MyTarotItemComponent(
 
 @Composable
 fun BottomSheet() {
+
     val modalBottomSheetState = rememberModalBottomSheetState()
+    var openDeleteDialog by remember { mutableStateOf(false) }
+
+    if (openDeleteDialog){
+
+        Dialog(onDismissRequest = {
+            openDeleteDialog = false
+            showSheet.value = false
+        }) {
+            DeleteTarotResultDialog(onClickNo = {
+                openDeleteDialog = false
+                showSheet.value = false
+                                                },
+                onClickOk = {
+                    MyApplication.prefs.deleteTarotResult()
+                    showSheet.value = false
+                })
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = { showSheet.value = false },
         sheetState = modalBottomSheetState,
+        dragHandle = { BottomSheetDefaults.DragHandle() },
         contentColor = BottomSheetDefaults.ContainerColor
     ) {
         Text(
@@ -253,8 +282,7 @@ fun BottomSheet() {
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 20.dp)
                 .clickable {
-                    showSheet.value = false
-                    MyApplication.prefs.deleteTarotResult()
+                    openDeleteDialog = true
                 })
     }
 
