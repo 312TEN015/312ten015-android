@@ -247,7 +247,8 @@ fun OverallResult(){
                 color = white
             ),
             lineHeight = 28.sp,
-            modifier = Modifier.padding(top = 24.dp)
+            modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
+            textAlign = TextAlign.Left
         )
 
         Text(
