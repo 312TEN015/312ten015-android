@@ -115,7 +115,8 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                         fontWeight = FontWeight.Medium,
                         color = highlightPurple
                     ),
-                    modifier = Modifier.padding(top = 48.dp)
+                    modifier = Modifier.padding(top = 48.dp).fillMaxWidth(),
+                    textAlign = TextAlign.Left
                 )
 
                 Text(
