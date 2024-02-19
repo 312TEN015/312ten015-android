@@ -100,7 +100,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
             var nowSelected by remember { mutableIntStateOf(-1) }
 
-            val pxToMove = with(LocalDensity.current) { -46.dp.toPx().roundToInt() }
+            val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
 
 
             val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
@@ -206,7 +206,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     }
 
 
-                    Column(modifier = Modifier.weight(1f)) {
+                    // 카드덱
+                    Column(modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Center) {
 
                         LazyRow(
                             modifier = Modifier
@@ -247,6 +249,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                         }
 
+                        // 인디케이터
                         Image(painter = painterResource(id = R.drawable.tarot_pick_indicator),
                             contentDescription = "",
                             modifier = Modifier

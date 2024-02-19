@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -137,7 +136,8 @@ fun CardSlider(
         Column(modifier = Modifier
             .background(color = gray_9)
             .fillMaxSize()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally)
         {
             Text(text = if (pagerState.currentPage == 0) "첫번째 카드"
@@ -180,8 +180,7 @@ fun CardSlider(
                     color = gray_3
                 ),
                 textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp).defaultMinSize(minHeight = 56.dp))
+                modifier = Modifier.padding(top = 12.dp).height(56.dp))
         }
     }
 }
