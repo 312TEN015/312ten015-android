@@ -136,7 +136,8 @@ fun CardSlider(
         Column(modifier = Modifier
             .background(color = gray_9)
             .fillMaxSize()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .padding(bottom = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally)
         {
             Text(text = if (pagerState.currentPage == 0) "첫번째 카드"
@@ -179,8 +180,7 @@ fun CardSlider(
                     color = gray_3
                 ),
                 textAlign = TextAlign.Center,
-                lineHeight = 28.sp,
-                modifier = Modifier.padding(top = 12.dp, bottom = 48.dp))
+                modifier = Modifier.padding(top = 12.dp).height(56.dp))
         }
     }
 }
