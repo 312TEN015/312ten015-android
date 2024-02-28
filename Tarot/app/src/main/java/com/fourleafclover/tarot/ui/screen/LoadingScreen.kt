@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
@@ -88,9 +89,9 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
         Text(text = "선택하신 카드의 의미를\n열심히 해석하고 있어요!",
             style = getTextStyle(
             fontSize = 22,
-            fontWeight = FontWeight.Medium
-        ),
+            fontWeight = FontWeight.Medium,),
             textAlign = TextAlign.Center,
+            lineHeight = 30.sp,
             modifier = Modifier.padding(bottom = 16.dp, top = 40.dp))
         Text(text = "잠시만 기다려주세요",
             style = getTextStyle(

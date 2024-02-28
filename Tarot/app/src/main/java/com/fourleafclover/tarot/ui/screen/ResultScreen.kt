@@ -173,7 +173,8 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                lineHeight = 30.sp
             )
 
             Image(
