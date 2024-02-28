@@ -3,8 +3,6 @@ package com.fourleafclover.tarot.ui.screen
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,27 +26,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication.Companion.tarotService
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.TarotIdsInputDto
-import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.receiveShareRequest
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
@@ -89,10 +79,11 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         .padding(horizontal = 20.dp)
         .padding(bottom = 60.dp)
         .verticalScroll(rememberScrollState())) {
-        Text(
+
+        TextH01M26(
             text = "타로 카드를 뽑고\n운세를 확인해보세요!",
-            style = getTextStyle(26, FontWeight.Bold, white),
-            modifier = Modifier.padding(top = 26.dp, bottom = 24.dp)
+            modifier = Modifier.padding(top = 26.dp, bottom = 24.dp),
+            color = white
         )
 
         Column {
@@ -103,7 +94,9 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             )
 
             Row(Modifier.padding(bottom = 32.dp)) {
-                Column(modifier = Modifier.padding(end = 4.dp).weight(1f)) {
+                Column(modifier = Modifier
+                    .padding(end = 4.dp)
+                    .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
@@ -119,7 +112,9 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     )
                 }
 
-                Column(modifier = Modifier.padding(start = 4.dp).weight(1f)) {
+                Column(modifier = Modifier
+                    .padding(start = 4.dp)
+                    .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 6.dp)
                         .clickable {

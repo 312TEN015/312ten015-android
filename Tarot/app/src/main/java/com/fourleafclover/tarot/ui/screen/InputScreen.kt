@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
@@ -135,6 +136,7 @@ fun QuestionsComponent(allFilled: Boolean = false,
                     text = "마음속에 있는 고민거리를\n입력해보세요!",
                     style = getTextStyle(22, FontWeight.Medium, white),
                     modifier = Modifier.weight(1f).padding(top = 16.dp),
+                    lineHeight = 30.sp
                 )
 
                 Image(painter = painterResource(id = when(pickedTopicNumber){
@@ -246,7 +248,8 @@ fun QuestionsComponent(allFilled: Boolean = false,
                     style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = gray_6),
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(2.dp)) },
+                        .padding(2.dp),
+                    lineHeight = 20.sp) },
             singleLine = false,
             colors = TextFieldDefaults.colors(
                 cursorColor = highlightPurple,

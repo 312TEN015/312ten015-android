@@ -182,7 +182,8 @@ fun CardSlider(
                 ),
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
-                modifier = Modifier.padding(top = 12.dp).height(56.dp))
+                modifier = Modifier.padding(top = 12.dp).height(56.dp),
+                lineHeight = 28.sp)
         }
     }
 }

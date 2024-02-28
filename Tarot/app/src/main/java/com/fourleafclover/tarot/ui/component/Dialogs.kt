@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -80,7 +81,8 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
+                    .padding(bottom = 24.dp),
+                lineHeight = 20.sp)
 
             Button(onClick = onClickOk,
                 shape = RoundedCornerShape(10.dp),
@@ -125,7 +127,8 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
+                    .padding(bottom = 24.dp),
+                lineHeight = 28.sp)
 
             Row {
                 Button(onClick = onClickNo,

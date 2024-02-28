@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
@@ -147,7 +148,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (firstCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
+                                textAlign = TextAlign.Center,
+                                lineHeight = 20.sp)
 
                         }
 
