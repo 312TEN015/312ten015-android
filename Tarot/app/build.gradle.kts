@@ -59,7 +59,7 @@ android {
         // 개발용
         create("dev") {
             dimension = "server"
-            buildConfigField("String", "BASE_URL", "\"http://52.78.64.39:3000\"")
+            buildConfigField("String", "BASE_URL", "\"https://dev.tarot-for-u.shop\"")
             buildConfigField("String", "SERVER", "\"dev\"")
             versionNameSuffix = "-dev"
         }
@@ -67,7 +67,7 @@ android {
         // 배포용
         create("live") {
             dimension = "server"
-            buildConfigField("String", "BASE_URL", "\"http://52.78.64.39:3000\"")
+            buildConfigField("String", "BASE_URL", "\"https://prod.tarot-for-u.shop\"")
             buildConfigField("String", "SERVER", "\"live\"")
             versionNameSuffix = "-live"
         }

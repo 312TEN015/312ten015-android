@@ -116,7 +116,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     .padding(start = 4.dp)
                     .weight(1f)) {
                     Image(modifier = Modifier
-                        .padding(bottom = 6.dp)
+                        .padding(bottom = 8.dp)
                         .clickable {
                             pickedTopicNumber = 1
                             navigateSaveState(navController, ScreenEnum.InputScreen.name)

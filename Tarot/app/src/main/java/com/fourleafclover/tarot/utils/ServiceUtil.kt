@@ -95,7 +95,7 @@ fun getSharedTarotRequest(
 
 /* 타로 결과 요청 POST */
 fun sendRequest(localContext: Context, navController: NavHostController) {
-
+    Log.d("", tarotInputDto.toString())
     MyApplication.tarotService.postTarotResult(tarotInputDto, getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
@@ -123,6 +123,10 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                 Log.d("", "${t.cause}--------!")
                 Log.d("", "${t.message}--------!")
                 Log.d("", "${t.stackTrace}--------!")
+
+                navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+
             }
         })
 
