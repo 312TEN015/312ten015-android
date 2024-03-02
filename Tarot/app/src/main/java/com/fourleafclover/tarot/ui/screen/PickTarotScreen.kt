@@ -176,7 +176,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (secondCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
+                                textAlign = TextAlign.Center,
+                                lineHeight = 20.sp)
 
                         }
 
@@ -202,7 +203,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (thirdCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
+                                textAlign = TextAlign.Center,
+                                lineHeight = 20.sp)
 
                         }
                     }
