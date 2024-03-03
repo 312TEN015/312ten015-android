@@ -50,6 +50,11 @@ import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.theme.TextB01M18
+import com.fourleafclover.tarot.ui.theme.TextB02M16
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
+import com.fourleafclover.tarot.ui.theme.TextH01M26
+import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -120,9 +125,9 @@ fun ResultScreen(navController: NavHostController){
 
         ) {
 
-            Text(
+            TextH02M22(
                 text = "선택하신 카드는\n이런 의미를 담고 있어요.",
-                style = getTextStyle(22, FontWeight.Medium, white),
+                color = white,
                 modifier = Modifier
                     .background(color = gray_8)
                     .padding(horizontal = 20.dp, vertical = 32.dp)
@@ -167,14 +172,13 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
                 .padding(top = 10.dp, bottom = 10.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
+            TextButtonM16(
                 text = getPickedTopic(pickedTopicNumber).majorTopic,
-                style = getTextStyle(16, FontWeight.Medium, white),
+                color = white,
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center),
-                textAlign = TextAlign.Center,
-                lineHeight = 30.sp
+                textAlign = TextAlign.Center
             )
 
             Image(
@@ -193,20 +197,14 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
 
         ) {
 
-            Text(
+            TextH02M22(
                 text = "선택하신 카드는\n이런 의미를 담고 있어요.",
-                style = getTextStyle(22, FontWeight.Medium, white),
+                color = white,
                 modifier = Modifier
                     .background(color = gray_8)
                     .padding(horizontal = 20.dp, vertical = 32.dp)
                     .fillMaxWidth()
             )
-
-
-            val tmpList = arrayListOf<Int>()
-            for (i in tarotOutputDto.cards) {
-                tmpList.add(getCardImageId(localContext, i.toString()))
-            }
 
             CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
 
@@ -229,37 +227,21 @@ fun OverallResult(){
     ) {
         val localContext = LocalContext.current
 
-        Text(
+        TextH01M26(
             text = "타로 카드 종합 리딩",
-            style = getTextStyle(
-                fontSize = 26,
-                fontWeight = FontWeight.Medium,
-                color = highlightPurple
-            ),
-            modifier = Modifier.padding(top = 48.dp).fillMaxWidth(),
-            textAlign = TextAlign.Left
+            color = highlightPurple,
+            modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
         )
 
-        Text(
+        TextB01M18(
             text = tarotOutputDto.overallResult?.summary.toString(),
-            style = getTextStyle(
-                fontSize = 18,
-                fontWeight = FontWeight.Medium,
-                color = white
-            ),
-            lineHeight = 28.sp,
-            modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
-            textAlign = TextAlign.Left
+            color = white,
+            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
         )
 
-        Text(
+        TextB02M16(
             text = tarotOutputDto.overallResult?.full.toString(),
-            style = getTextStyle(
-                fontSize = 16,
-                fontWeight = FontWeight.Medium,
-                color = gray_3
-            ),
-            lineHeight = 28.sp,
+            color = gray_3,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 64.dp)
                 .wrapContentHeight()
@@ -290,19 +272,15 @@ fun OverallResult(){
             if (saveState.value){
                 Image(painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp).padding(end = 4.dp),
+                    modifier = Modifier.size(22.dp).padding(end = 4.dp),
                     alignment = Alignment.Center
                 )
             }
 
-            Text(
+            TextButtonM16(
                 text = if (saveState.value) "저장 완료!" else "타로 저장하기",
                 modifier = Modifier.padding(vertical = 8.dp),
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = if (!saveState.value) white else gray_5
-                ),
+                color = if (!saveState.value) white else gray_5,
             )
         }
 
@@ -319,12 +297,10 @@ fun OverallResult(){
                 disabledContentColor = gray_6
             )
         ) {
-            Text(text = "홈으로 돌아가기", modifier = Modifier.padding(vertical = 8.dp),
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = white
-                )
+            TextButtonM16(
+                text = "홈으로 돌아가기",
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = gray_1
                 )
         }
 
@@ -339,13 +315,9 @@ fun OverallResult(){
             Image(painter = painterResource(id = R.drawable.share),
                 contentDescription = null,
                 modifier = Modifier.padding(end = 3.dp))
-            Text(
+            TextButtonM16(
                 text = "공유하기",
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = gray_3
-                )
+                color = gray_3
             )
         }
     }
