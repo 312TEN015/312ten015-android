@@ -24,6 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.ui.theme.TextB02M16
+import com.fourleafclover.tarot.ui.theme.TextB03M14
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_6
@@ -69,20 +72,19 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                 contentDescription = "",
                 modifier = Modifier.size(32.dp))
 
-            Text(text = "타로 결과가 저장되었습니다!",
-                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
+            TextButtonM16(text = "타로 결과가 저장되었습니다!",
+                color = gray_8,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(vertical = 8.dp))
 
-            Text(text = "저장된 타로는 마이페이지에서\n다시 볼 수 있어요.",
-                style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = gray_6),
+            TextB03M14(text = "저장된 타로는 마이페이지에서\n다시 볼 수 있어요.",
+                color = gray_6,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp),
-                lineHeight = 20.sp)
+                    .padding(bottom = 24.dp))
 
             Button(onClick = onClickOk,
                 shape = RoundedCornerShape(10.dp),
@@ -95,10 +97,10 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                     contentColor = white
                 )
             ) {
-                Text(
+                TextButtonM16(
                     text = "확인",
                     modifier = Modifier.padding(vertical = 8.dp),
-                    style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = white)
+                    color = white
                 )
             }
 
@@ -122,13 +124,12 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
             .height(180.dp)
             .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
 
-            Text(text = content,
-                style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8),
+            TextB02M16(text = content,
+                color = gray_8,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp),
-                lineHeight = 28.sp)
+                    .padding(bottom = 24.dp))
 
             Row {
                 Button(onClick = onClickNo,
@@ -141,10 +142,10 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                         contentColor = gray_8
                     )
                 ) {
-                    Text(
+                    TextButtonM16(
                         text = "아니요",
                         modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_8)
+                        color = gray_8
                     )
                 }
 
@@ -158,10 +159,10 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                         contentColor = gray_2
                     )
                 ) {
-                    Text(
+                    TextButtonM16(
                         text = "네",
                         modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = gray_2)
+                        color = gray_2
                     )
                 }
             }

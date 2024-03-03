@@ -50,6 +50,12 @@ import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.TextB03M14
+import com.fourleafclover.tarot.ui.theme.TextB04M12
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
+import com.fourleafclover.tarot.ui.theme.TextCaptionM12
+import com.fourleafclover.tarot.ui.theme.TextH02M22
+import com.fourleafclover.tarot.ui.theme.TextH03SB18
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -132,11 +138,10 @@ fun QuestionsComponent(allFilled: Boolean = false,
 
             Row(modifier = Modifier.fillMaxWidth().padding(top = 24.dp, bottom = 12.dp).padding(horizontal = 20.dp)) {
 
-                Text(
+                TextH02M22(
                     text = "마음속에 있는 고민거리를\n입력해보세요!",
-                    style = getTextStyle(22, FontWeight.Medium, white),
-                    modifier = Modifier.weight(1f).padding(top = 16.dp),
-                    lineHeight = 30.sp
+                    color = white,
+                    modifier = Modifier.weight(1f).padding(top = 16.dp)
                 )
 
                 Image(painter = painterResource(id = when(pickedTopicNumber){
@@ -153,16 +158,16 @@ fun QuestionsComponent(allFilled: Boolean = false,
             }
 
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 20.dp)) {
-                Text(
+                TextCaptionM12(
                     text = "TIP!",
-                    style = getTextStyle(12, FontWeight.Normal, highlightPurple),
+                    color = highlightPurple,
                     modifier = Modifier
                         .padding(horizontal = 4.dp, vertical = 2.dp)
                 )
 
-                Text(
+                TextCaptionM12(
                     text = "구체적으로 입력할수록 더욱 상세한 결과를 받아볼 수 있어요.",
-                    style = getTextStyle(12, FontWeight.Normal, gray_5),
+                    color = gray_5,
                     modifier = Modifier.padding(start = 8.dp)
                 )
             }
@@ -191,13 +196,9 @@ fun QuestionsComponent(allFilled: Boolean = false,
                 disabledContentColor = gray_5),
             enabled = allFilled
         ) {
-            Text(text = "다음",
+            TextButtonM16(text = "다음",
                 modifier = Modifier.padding(vertical = 8.dp),
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = if (allFilled) white else gray_5
-                ))
+                color = if (allFilled) gray_1 else gray_5)
         }
 
         return
@@ -212,15 +213,14 @@ fun QuestionsComponent(allFilled: Boolean = false,
 
         Column(modifier = Modifier
             .padding(top = 8.dp, bottom = 8.dp)) {
-            Text(
+            TextB04M12(
                 text = "0${idx}",
-                style = getTextStyle(12, FontWeight.Bold, gray_9),
+                color = gray_9,
                 modifier = questionNumberModifier
-
             )
-            Text(
+            TextH03SB18(
                 text = pickedTopicTemplate.subQuestions[idx-1],
-                style = getTextStyle(18, FontWeight.SemiBold, gray_3),
+                color = gray_3,
                 modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
             )
         }
@@ -243,13 +243,12 @@ fun QuestionsComponent(allFilled: Boolean = false,
                             },
             value = getNowTextField(idx).value,
             placeholder = {
-                Text(
+                TextB03M14(
                     text = pickedTopicTemplate.placeHolders[idx-1],
-                    style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = gray_6),
+                    color = gray_6,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(2.dp),
-                    lineHeight = 20.sp) },
+                        .padding(2.dp)) },
             singleLine = false,
             colors = TextFieldDefaults.colors(
                 cursorColor = highlightPurple,

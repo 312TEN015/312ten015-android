@@ -50,6 +50,9 @@ import com.fourleafclover.tarot.ui.component.DeleteTarotResultDialog
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.TextB03M14
+import com.fourleafclover.tarot.ui.theme.TextB04M12
+import com.fourleafclover.tarot.ui.theme.TextH03SB18
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -123,15 +126,10 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                         contentDescription = "아직 저장된 타로 기록이 없어요!",
                         modifier = Modifier.padding(bottom = 24.dp)
                     )
-                    Text(
+                    TextB03M14(
                         text = "아직 저장된\n타로 기록이 없어요!",
-                        style = getTextStyle(
-                            fontSize = 14,
-                            fontWeight = FontWeight.Medium,
-                            color = gray_5
-                        ),
-                        textAlign = TextAlign.Center,
-                        lineHeight = 20.sp
+                        color = gray_5,
+                        textAlign = TextAlign.Center
                     )
                 }
 
@@ -190,36 +188,24 @@ fun MyTarotItemComponent(
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
-                    Text(
+                    TextH03SB18(
                         text = getPickedTopic(myTarotResults[idx].tarotType).majorTopic,
-                        style = getTextStyle(
-                            fontSize = 14,
-                            fontWeight = FontWeight.Medium,
-                            color = white
-                        ),
+                        color = white,
                         modifier = Modifier.padding(end = 8.dp)
                     )
 
-                    Text(
+                    TextB04M12(
                         text = getPickedTopic(myTarotResults[idx].tarotType).majorQuestion,
-                        style = getTextStyle(
-                            fontSize = 12,
-                            fontWeight = FontWeight.Normal,
-                            color = gray_2,
-                        ),
+                        color = gray_2,
                         modifier = Modifier
                     )
 
 
                 }
 
-                Text(
+                TextB04M12(
                     text = myTarotResults[idx].createdAt,
-                    style = getTextStyle(
-                        fontSize = 12,
-                        fontWeight = FontWeight.Normal,
-                        color = gray_4
-                    ),
+                    color = gray_5,
                     modifier = Modifier,
                     textAlign = TextAlign.End
                 )

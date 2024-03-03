@@ -11,6 +11,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,95 +43,140 @@ fun getTextStyle(fontSize: Int, fontWeight: FontWeight, color: Color = white): T
 @Composable
 fun TextH01M26(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 34.sp,
-        style = getTextStyle(fontSize = 26, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 34.dp),
+        style = getTextStyle(fontSize = 26, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextH02M22(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 30.sp,
-        style = getTextStyle(fontSize = 22, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 30.dp),
+        style = getTextStyle(fontSize = 22, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextH03SB18(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+                textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 24.sp,
-        style = getTextStyle(fontSize = 18, fontWeight = FontWeight.SemiBold, color = color)
+        lineHeight = toSp(dp = 24.dp),
+        style = getTextStyle(fontSize = 18, fontWeight = FontWeight.SemiBold, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextB01M18(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 28.sp,
-        style = getTextStyle(fontSize = 18, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 28.dp),
+        style = getTextStyle(fontSize = 18, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextB02M16(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left,
+               overflow: TextOverflow = TextOverflow.Visible){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 28.sp,
-        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 28.dp),
+        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign,
+        overflow = overflow
     )
 }
 
 @Composable
 fun TextB03M14(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 20.sp,
-        style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 20.dp),
+        style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextB04M12(text: String,
                modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+               color: Color = gray_9,
+               textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 16.sp,
-        style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Medium, color = color)
+        lineHeight = toSp(dp = 16.dp),
+        style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }
 
 @Composable
 fun TextCaptionM12(text: String,
-               modifier: Modifier = Modifier,
-               color: Color = gray_9, ){
+                   modifier: Modifier = Modifier,
+                   color: Color = gray_9,
+                   textAlign: TextAlign = TextAlign.Left){
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = 20.sp,
-        style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = color)
+        lineHeight = toSp(dp = 20.dp),
+        style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextButtonM16(text: String,
+                  modifier: Modifier = Modifier,
+                  color: Color = gray_9,
+                  textAlign: TextAlign = TextAlign.Left){
+    return Text(
+        text = text,
+        modifier = modifier,
+        lineHeight = toSp(dp = 26.dp),
+        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextButtonM18(text: String,
+                  modifier: Modifier = Modifier,
+                  color: Color = gray_9,
+                  textAlign: TextAlign = TextAlign.Left){
+    return Text(
+        text = text,
+        modifier = modifier,
+        style = getTextStyle(fontSize = 18, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
     )
 }

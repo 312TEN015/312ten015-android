@@ -33,6 +33,7 @@ import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -87,9 +88,9 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         )
 
         Column {
-            Text(
+            TextB02M16(
                 text = "주제별 운세",
-                style = getTextStyle(16, FontWeight.Medium, gray_3),
+                color = gray_3,
                 modifier = Modifier.padding(bottom = 6.dp)
             )
 
@@ -134,9 +135,9 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             }
 
             Column(modifier = Modifier.padding(bottom = 42.dp)) {
-                Text(
+                TextB02M16(
                     text = "오늘의 운세",
-                    style = getTextStyle(16, FontWeight.Medium, gray_3),
+                    color = gray_3,
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 

@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
@@ -33,6 +32,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.ui.component.DotsIndicator
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -40,6 +40,7 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
+import com.fourleafclover.tarot.ui.theme.toSp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -97,12 +98,9 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
             ),
             enabled = pagerState.currentPage == onboardPagesList.size-1
         ) {
-            Text(text = "시작하기",
+            TextButtonM16(text = "시작하기",
                 modifier = Modifier.padding(vertical = 8.dp),
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium
-                ))
+                color = gray_1)
         }
 
 
@@ -124,14 +122,14 @@ fun OnBoardPage(page: Int = 0){
             text = onboardPagesList[page].title,
             style = getTextStyle(fontSize = 26, fontWeight = FontWeight.Medium),
             textAlign = TextAlign.Center,
-            lineHeight = 36.sp
+            lineHeight = toSp(36.dp)
         )
         Text(
             modifier = Modifier.padding(bottom = 48.dp),
             text = onboardPagesList[page].description,
             style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Normal, color = gray_3),
             textAlign = TextAlign.Center,
-            lineHeight = 24.sp
+            lineHeight = toSp(24.dp)
         )
 
         Image(

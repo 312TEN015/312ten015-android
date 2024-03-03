@@ -58,6 +58,9 @@ import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
+import com.fourleafclover.tarot.ui.theme.TextCaptionM12
+import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -107,11 +110,11 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
             val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
 
 
-            Text(
+            TextH02M22(
                 text = if (cardNumber == 1) "첫 번째 카드를 골라주세요."
                 else if(cardNumber == 2) "두 번째 카드를 골라주세요."
                 else "세 번째 카드를 골라주세요.",
-                style = getTextStyle(22, FontWeight.Medium, white),
+                color = white,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 32.dp)
@@ -142,14 +145,13 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                 contentDescription = null,
                                 modifier = Modifier,
                                 alpha = if(firstCardPicked) 1f else 0f)
-                            Text(text = "첫번째\n 카드",
-                                style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
+                            TextCaptionM12(text = "첫번째\n 카드",
+                                color = gray_4,
                                 modifier = Modifier
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (firstCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center,
-                                lineHeight = 20.sp)
+                                textAlign = TextAlign.Center)
 
                         }
 
@@ -170,14 +172,13 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                 contentDescription = null,
                                 modifier = Modifier,
                                 alpha = if(secondCardPicked) 1f else 0f)
-                            Text(text = "두번째\n 카드",
-                                style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
+                            TextCaptionM12(text = "두번째\n 카드",
+                                color = gray_4,
                                 modifier = Modifier
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (secondCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center,
-                                lineHeight = 20.sp)
+                                textAlign = TextAlign.Center)
 
                         }
 
@@ -197,14 +198,13 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                 contentDescription = null,
                                 modifier = Modifier,
                                 alpha = if(thirdCardPicked) 1f else 0f)
-                            Text(text = "세번째\n 카드",
-                                style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Normal, color = gray_4),
+                            TextCaptionM12(text = "세번째\n 카드",
+                                color = gray_4,
                                 modifier = Modifier
                                     .wrapContentSize()
                                     .align(Alignment.Center)
                                     .alpha(if (thirdCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center,
-                                lineHeight = 20.sp)
+                                textAlign = TextAlign.Center)
 
                         }
                     }
@@ -309,16 +309,15 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     colors = ButtonDefaults.buttonColors(
                         containerColor = highlightPurple,
                         contentColor = gray_1,
-                        disabledContainerColor = gray_5,
-                        disabledContentColor = gray_6
+                        disabledContainerColor = gray_6,
+                        disabledContentColor = gray_5
                     ),
                     enabled = cardSelected
                 ) {
-                    Text(text = "선택완료", modifier = Modifier.padding(vertical = 8.dp),
-                        style = getTextStyle(
-                            fontSize = 16,
-                            fontWeight = FontWeight.Medium
-                        ))
+                    TextButtonM16(
+                        text = "선택완료",
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        color = if (cardSelected) gray_1 else gray_5)
                 }
             }
         }

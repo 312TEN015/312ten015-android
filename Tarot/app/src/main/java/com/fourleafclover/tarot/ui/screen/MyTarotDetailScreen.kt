@@ -32,6 +32,12 @@ import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.theme.TextB01M18
+import com.fourleafclover.tarot.ui.theme.TextB02M16
+import com.fourleafclover.tarot.ui.theme.TextB03M14
+import com.fourleafclover.tarot.ui.theme.TextButtonM16
+import com.fourleafclover.tarot.ui.theme.TextH01M26
+import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -68,9 +74,9 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
+                TextB02M16(
                     text = tarotSubjectData.majorTopic,
-                    style = getTextStyle(16, FontWeight.Medium, gray_2),
+                    color = gray_2,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
@@ -78,18 +84,18 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
-                Text(
+                TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
-                    style = getTextStyle(22, FontWeight.Bold, gray_2),
+                    color = gray_2,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     textAlign = TextAlign.Center
                 )
 
-                Text(
+                TextB03M14(
                     text = selectedTarotResult.createdAt,
-                    style = getTextStyle(14, FontWeight.Medium, gray_4),
+                    color = gray_4,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 32.dp),
@@ -108,37 +114,21 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Text(
+                TextH01M26(
                     text = "타로 카드 종합 리딩",
-                    style = getTextStyle(
-                        fontSize = 26,
-                        fontWeight = FontWeight.Medium,
-                        color = highlightPurple
-                    ),
-                    modifier = Modifier.padding(top = 48.dp).fillMaxWidth(),
-                    textAlign = TextAlign.Left
+                    color = highlightPurple,
+                    modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
                 )
 
-                Text(
+                TextB01M18(
                     text = selectedTarotResult.overallResult?.summary.toString(),
-                    style = getTextStyle(
-                        fontSize = 18,
-                        fontWeight = FontWeight.Medium,
-                        color = white
-                    ),
-                    lineHeight = 28.sp,
-                    modifier = Modifier.padding(top = 24.dp).fillMaxWidth(),
-                    textAlign = TextAlign.Left
+                    color = white,
+                    modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
                 )
 
-                Text(
+                TextB02M16(
                     text = selectedTarotResult.overallResult?.full.toString(),
-                    style = getTextStyle(
-                        fontSize = 16,
-                        fontWeight = FontWeight.Medium,
-                        color = gray_3
-                    ),
-                    lineHeight = 28.sp,
+                    color = gray_3,
                     modifier = Modifier
                         .padding(top = 12.dp, bottom = 64.dp)
                         .wrapContentHeight()
@@ -155,13 +145,9 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     Image(painter = painterResource(id = R.drawable.share),
                         contentDescription = null,
                         modifier = Modifier.padding(end = 3.dp))
-                    Text(
+                    TextButtonM16(
                         text = "공유하기",
-                        style = getTextStyle(
-                            fontSize = 16,
-                            fontWeight = FontWeight.Medium,
-                            color = gray_3
-                        )
+                        color = gray_3
                     )
                 }
             }

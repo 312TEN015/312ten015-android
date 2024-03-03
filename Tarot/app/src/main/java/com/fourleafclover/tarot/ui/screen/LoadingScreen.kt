@@ -33,9 +33,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
+import com.fourleafclover.tarot.ui.theme.TextB03M14
+import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.sendRequest
 
 
@@ -86,18 +89,12 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
                 .wrapContentSize()
                 .rotate(rotation.value)
         )
-        Text(text = "선택하신 카드의 의미를\n열심히 해석하고 있어요!",
-            style = getTextStyle(
-            fontSize = 22,
-            fontWeight = FontWeight.Medium,),
-            textAlign = TextAlign.Center,
-            lineHeight = 30.sp,
-            modifier = Modifier.padding(bottom = 16.dp, top = 40.dp))
-        Text(text = "잠시만 기다려주세요",
-            style = getTextStyle(
-            fontSize = 14,
-            fontWeight = FontWeight.Medium,
+        TextH02M22(text = "선택하신 카드의 의미를\n열심히 해석하고 있어요!",
+            color = white,
+            modifier = Modifier.padding(bottom = 16.dp, top = 40.dp),
+            textAlign = TextAlign.Center)
+        TextB03M14(text = "잠시만 기다려주세요",
             color = gray_5
-        ))
+        )
     }
 }

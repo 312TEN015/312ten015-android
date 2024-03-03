@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.ui.theme.TextB02M16
+import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -141,15 +143,10 @@ fun CardSlider(
             .padding(bottom = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally)
         {
-            Text(text = if (pagerState.currentPage == 0) "첫번째 카드"
+            TextB02M16(text = if (pagerState.currentPage == 0) "첫번째 카드"
             else if(pagerState.currentPage == 1) "두번째 카드"
             else "세번째 카드",
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = highlightPurple
-                ),
-                lineHeight = 28.sp,
+                color = highlightPurple,
                 modifier = Modifier.padding(bottom = 12.dp))
 
 
@@ -158,13 +155,9 @@ fun CardSlider(
 
                 items(3) {
 
-                    Text(
+                    TextB04M12(
                         text = "# ${tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(it)}",
-                        style = getTextStyle(
-                            fontSize = 12,
-                            fontWeight = FontWeight.Medium,
-                            color = gray_2
-                        ),
+                        color = gray_2,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .background(color = gray_8, shape = RoundedCornerShape(6.dp))
@@ -174,16 +167,11 @@ fun CardSlider(
                 }
             }
 
-            Text(text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description }",
-                style = getTextStyle(
-                    fontSize = 16,
-                    fontWeight = FontWeight.Medium,
-                    color = gray_3
-                ),
+            TextB02M16(text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description }",
+                color = gray_3,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
-                modifier = Modifier.padding(top = 12.dp).height(56.dp),
-                lineHeight = 28.sp)
+                modifier = Modifier.padding(top = 12.dp).height(56.dp))
         }
     }
 }
