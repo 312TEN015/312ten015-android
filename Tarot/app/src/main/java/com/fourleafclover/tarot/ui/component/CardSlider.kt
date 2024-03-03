@@ -195,7 +195,7 @@ fun DotsIndicator(
             Box(
                 modifier = modifier
                     .width(if (index == selectedIndex) 18.dp else dotSize)
-                    .height(6.dp)
+                    .height(dotSize)
                     .background(
                         color = if (index == selectedIndex) selectedColor else unSelectedColor,
                         shape = RoundedCornerShape(4.dp)

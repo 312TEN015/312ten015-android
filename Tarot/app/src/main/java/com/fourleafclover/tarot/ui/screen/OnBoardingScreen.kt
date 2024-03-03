@@ -3,7 +3,9 @@ package com.fourleafclover.tarot.ui.screen
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -67,6 +69,145 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
             beyondBoundsPageCount = 0,
             pageSize = PageSize.Fill,
             key = null,
+            contentPadding = PaddingValues(0.dp),
+            pageContent = { page ->
+
+                OnBoardPage(page)
+
+            }
+        )
+
+        DotsIndicator(
+            totalDots = onboardPagesList.size,
+            selectedIndex = pagerState.currentPage
+        )
+
+        Button(
+            onClick = {
+                navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                MyApplication.prefs.setOnBoardingComplete()
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(bottom = 49.dp, end = 20.dp, start = 20.dp)
+                .alpha(if (pagerState.currentPage == onboardPagesList.size - 1) 1f else 0f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = highlightPurple,
+                contentColor = gray_1,
+                disabledContainerColor = gray_5,
+                disabledContentColor = gray_6
+            ),
+            enabled = pagerState.currentPage == onboardPagesList.size-1
+        ) {
+            TextButtonM16(text = "시작하기",
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = gray_1)
+        }
+
+
+
+    }
+
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+@Preview
+fun PagerOnBoarding2(navController: NavHostController = rememberNavController()) {
+    val pagerState = rememberPagerState(
+        initialPage = 1,
+        initialPageOffsetFraction = 0f
+    ) { 3 }
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(color = gray_9),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            state = pagerState,
+            pageSpacing = 0.dp,
+            userScrollEnabled = true,
+            reverseLayout = false,
+            beyondBoundsPageCount = 0,
+            pageSize = PageSize.Fill,
+            key = null,
+            contentPadding = PaddingValues(0.dp),
+            pageContent = { page ->
+
+                OnBoardPage(page)
+
+            }
+        )
+
+        DotsIndicator(
+            totalDots = onboardPagesList.size,
+            selectedIndex = pagerState.currentPage
+        )
+
+        Button(
+            onClick = {
+                navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                MyApplication.prefs.setOnBoardingComplete()
+            },
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(bottom = 49.dp, end = 20.dp, start = 20.dp)
+                .alpha(if (pagerState.currentPage == onboardPagesList.size - 1) 1f else 0f),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = highlightPurple,
+                contentColor = gray_1,
+                disabledContainerColor = gray_5,
+                disabledContentColor = gray_6
+            ),
+            enabled = pagerState.currentPage == onboardPagesList.size-1
+        ) {
+            TextButtonM16(text = "시작하기",
+                modifier = Modifier.padding(vertical = 8.dp),
+                color = gray_1)
+        }
+
+
+
+    }
+
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+@Preview
+fun PagerOnBoarding3(navController: NavHostController = rememberNavController()) {
+    val pagerState = rememberPagerState(
+        initialPage = 2,
+        initialPageOffsetFraction = 0f
+    ) { 3 }
+
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(color = gray_9),
+        horizontalAlignment = Alignment.CenterHorizontally) {
+
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            state = pagerState,
+            pageSpacing = 0.dp,
+            userScrollEnabled = true,
+            reverseLayout = false,
+            beyondBoundsPageCount = 0,
+            pageSize = PageSize.Fill,
+            key = null,
+            contentPadding = PaddingValues(0.dp),
             pageContent = { page ->
 
                 OnBoardPage(page)
@@ -113,12 +254,11 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
 @Composable
 fun OnBoardPage(page: Int = 0){
     Column(modifier = Modifier
-        .fillMaxWidth()
-        .background(color = gray_9)
-        .padding(horizontal = 20.dp),
+        .fillMaxSize()
+        .background(color = gray_9),
         horizontalAlignment = Alignment.CenterHorizontally){
         Text(
-            modifier = Modifier.padding(top = 80.dp, bottom = 8.dp),
+            modifier = Modifier.padding(top = 108.dp, bottom = 8.dp),
             text = onboardPagesList[page].title,
             style = getTextStyle(fontSize = 26, fontWeight = FontWeight.Medium),
             textAlign = TextAlign.Center,
@@ -134,8 +274,7 @@ fun OnBoardPage(page: Int = 0){
 
         Image(
             painter = painterResource(id = onboardPagesList[page].imageRes),
-            contentDescription = null,
-            modifier = Modifier.wrapContentSize()
+            contentDescription = null
         )
     }
 }
