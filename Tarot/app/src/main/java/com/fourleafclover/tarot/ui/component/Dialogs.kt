@@ -3,12 +3,14 @@ package com.fourleafclover.tarot.ui.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -121,7 +123,7 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
 
         Column(modifier = Modifier
             .width(288.dp)
-            .height(180.dp)
+            .wrapContentHeight()
             .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
 
             TextB02M16(text = content,

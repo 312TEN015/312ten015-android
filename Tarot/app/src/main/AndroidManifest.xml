@@ -22,7 +22,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.SplashScreen.MySplash"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
 
             <tools:validation testUrl="http://tarot-for-u.shop/share" />
 
