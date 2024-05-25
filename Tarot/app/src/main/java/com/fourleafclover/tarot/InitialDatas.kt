@@ -52,6 +52,7 @@ val SubjectToday = TarotSubjectData(
 // 2 -> 소망운
 // 3 -> 직업운
 // 4 -> 오늘의 운세
+// 5 -> 궁합 운세
 var pickedTopicNumber = 0
 
 val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))     // 타로 결과를 맏기 위해 입력한 데이터

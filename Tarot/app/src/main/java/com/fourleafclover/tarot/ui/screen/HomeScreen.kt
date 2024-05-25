@@ -150,6 +150,22 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
             }
 
+            Column(modifier = Modifier.padding(bottom = 42.dp)) {
+                TextB02M16(
+                    text = "궁합 운세",
+                    color = gray_3,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+
+                Image(painter = painterResource(id = R.drawable.category_today),
+                    contentDescription = "궁합 운세",
+                    Modifier.clickable {
+                        pickedTopicNumber = 5
+                        navigateSaveState(navController, ScreenEnum.RoomCreateScreen.name)
+                    })
+
+            }
+
 
 
 

@@ -18,6 +18,15 @@ enum class ScreenEnum {
 
     ShareDetailScreen,     // 공유하기 타로 상세 화면
 
+    RoomCreateScreen,      // 초대방 생성 페이지
+    RoomGenderScreen,      // 성별 선택 페이지
+    RoomNicknameScreen,      // 별명 입력 페이지
+    RoomShareScreen,      // 초대방 링크 공유 / 입장 페이지
+    RoomLobbyWaitingScreen,      // 대기실_상대방이 입장하지 않은 경우
+    RoomLobbyEnteringScreen,      // 대기실_상대방이 입장한 경우
+    RoomScreen,      // 궁합 보기 페이지
+    RoomResultScreen,      // 궁합 보기 결과 페이지
+
 
 
 

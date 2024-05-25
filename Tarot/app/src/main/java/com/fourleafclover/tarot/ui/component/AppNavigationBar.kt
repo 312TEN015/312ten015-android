@@ -85,7 +85,8 @@ val appBarModifier = Modifier
 fun AppBarPlain(navController: NavHostController = rememberNavController(),
                 title: String = "MY 타로",
                 backgroundColor: Color = backgroundColor_1,
-                backButtonVisible: Boolean = true
+                backButtonVisible: Boolean = true,
+                backButtonResource: Int = R.drawable.arrow_left
 ) {
     Box(
         modifier = appBarModifier
@@ -113,7 +114,7 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
                     }
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.arrow_left),
+                    painter = painterResource(id = backButtonResource),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 20.dp),
