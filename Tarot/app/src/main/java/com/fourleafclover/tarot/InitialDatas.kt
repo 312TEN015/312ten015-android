@@ -45,6 +45,10 @@ val SubjectToday = TarotSubjectData(
         arrayListOf(),
         gray_9
 )
+val SubjectHarmony = TarotSubjectData(
+        majorTopic = harmonyFortune,
+        primaryColor = gray_9
+)
 
 /* 선택한 대주제 인덱스 */
 // 0 -> 연애운

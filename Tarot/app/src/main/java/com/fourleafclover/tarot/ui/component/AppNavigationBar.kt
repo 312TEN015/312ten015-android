@@ -129,7 +129,8 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
 @Preview
 fun AppBarClose(navController: NavHostController = rememberNavController(),
                 pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
-                backgroundColor: Color = backgroundColor_1
+                backgroundColor: Color = backgroundColor_1,
+                isTitleVisible: Boolean = true
 ) {
 
     var openDialog by remember {
@@ -152,7 +153,7 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = pickedTopicTemplate.majorTopic,
+            text = if (isTitleVisible) pickedTopicTemplate.majorTopic else "",
             style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
             modifier = Modifier
                 .fillMaxWidth()

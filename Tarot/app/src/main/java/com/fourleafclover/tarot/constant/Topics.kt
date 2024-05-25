@@ -6,6 +6,7 @@ const val studyFortune = "학업운"
 const val dreamFortune = "소망운"
 const val jobFortune = "직업운"
 const val todayFortune = "오늘의 운세"
+const val harmonyFortune = "궁합 운세"
 
 const val loveMajorQuestion = "그 사람의 마음은?"
 const val studyMajorQuestion = "시험 결과가 궁금해!"

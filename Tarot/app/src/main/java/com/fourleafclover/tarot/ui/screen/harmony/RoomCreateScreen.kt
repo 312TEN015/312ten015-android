@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,14 +29,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.TextH03SB18
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
+import com.fourleafclover.tarot.ui.theme.gray_1
+import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
+import com.fourleafclover.tarot.ui.theme.gray_9
+import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 
@@ -42,11 +53,18 @@ import com.fourleafclover.tarot.ui.theme.white
 fun RoomCreateScreen(navController: NavHostController = rememberNavController()) {
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarPlain(navController, "", backgroundColor = backgroundColor_2, backButtonResource = R.drawable.arrow_left_white)
+        AppBarPlain(
+            navController,
+            "",
+            backgroundColor = backgroundColor_2,
+            backButtonResource = R.drawable.arrow_left_white
+        )
 
-        Column(modifier = getBackgroundModifier(backgroundColor_2)
-            .padding(horizontal = 20.dp)
-            .verticalScroll(rememberScrollState())) {
+        Column(
+            modifier = getBackgroundModifier(backgroundColor_2)
+                .padding(horizontal = 20.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
 
             TextH02M22(
                 text = "초대방을 만들고, 궁합을 함께 볼 상대방을 초대해보세요.",
@@ -54,33 +72,49 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                 color = white
             )
 
-            Row(modifier = Modifier
-                .background(
-                    color = white,
-                    shape = RoundedCornerShape(10.dp)
+            Button(
+                onClick = { navigateSaveState(navController, ScreenEnum.RoomGenderScreen.name) },
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .fillMaxWidth()
+                    .padding(bottom = 34.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 44.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = white,
+                    contentColor = gray_9,
+                    disabledContainerColor = gray_6,
+                    disabledContentColor = gray_5
+                ),
+                content = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+
+                        TextH03SB18(text = "초대방 생성하기", modifier = Modifier)
+
+                        Image(
+                            painter = painterResource(id = R.drawable.arrow_right_black),
+                            contentDescription = null,
+                            alignment = Alignment.CenterEnd
+                        )
+                    }
+                }
+            )
+
+            Column(
+                modifier = getOutlinedRectangleModifier(
+                    borderColor = gray_7,
+                    fillColor = transparent,
+                    cornerRadius = 10.dp
                 )
-                .padding(horizontal = 16.dp, vertical = 44.dp)
-                .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(start = 28.dp, top = 24.dp, end = 28.dp, bottom = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextH03SB18(text = "초대방 생성하기", modifier = Modifier)
-
-                Image(
-                    painter = painterResource(id = R.drawable.arrow_right_black),
-                    contentDescription = null,
-                    alignment = Alignment.CenterEnd
-                )
-            }
-
-            Column(modifier = Modifier
-                .padding(top = 32.dp)
-                .background(color = transparent)
-                .border(width = 1.dp, color = gray_7, shape = RoundedCornerShape(10.dp))
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(start = 28.dp, top = 24.dp, end = 28.dp, bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally) {
 
                 TextB03M14(
                     text = "궁합 운세 보기 3단계\uD83D\uDD2E",
@@ -94,17 +128,27 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                     color = white
                 )
 
-                DescriptionStep(number = "1", title = "초대방을 생성해주세요.", imageResourceId = R.drawable.pencil)
-                DescriptionStep(number = "2", title = "궁합을 함께 볼 상대방에게 \n초대방 링크를 전달해요.", imageResourceId = R.drawable.unlink)
-                DescriptionStep(number = "3", title = "상대방이 초대방에 입장하면 \n함께 궁합 보기를 시작해요!", imageResourceId = R.drawable.happy_outline)
+                DescriptionStep(
+                    number = "1",
+                    title = "초대방을 생성해주세요.",
+                    imageResourceId = R.drawable.pencil
+                )
+                DescriptionStep(
+                    number = "2",
+                    title = "궁합을 함께 볼 상대방에게 \n초대방 링크를 전달해요.",
+                    imageResourceId = R.drawable.unlink
+                )
+                DescriptionStep(
+                    number = "3",
+                    title = "상대방이 초대방에 입장하면 \n함께 궁합 보기를 시작해요!",
+                    imageResourceId = R.drawable.happy_outline
+                )
 
             }
 
 
-
         }
     }
-
 
 
 }
@@ -114,13 +158,14 @@ fun DescriptionStep(
     number: String,
     title: String,
     imageResourceId: Int
-){
+) {
 
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 10.dp)
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
         Row {
@@ -146,8 +191,7 @@ fun DescriptionStep(
         Image(
             painter = painterResource(id = imageResourceId),
             contentDescription = null,
-            modifier = Modifier.fillMaxWidth(),
-            alignment = Alignment.CenterEnd,
+            alignment = Alignment.Center,
         )
 
     }
