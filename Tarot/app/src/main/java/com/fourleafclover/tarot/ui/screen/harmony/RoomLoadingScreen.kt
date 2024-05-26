@@ -1,5 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -29,11 +31,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.sendRequest
 
@@ -41,11 +50,17 @@ import com.fourleafclover.tarot.utils.sendRequest
 @Composable
 @Preview
 fun RoomLoadingScreen(navController: NavHostController = rememberNavController()){
-    val localContext = LocalContext.current
 
-    var send by remember { mutableStateOf(false) }
+    if (!loadingViewModel.getIsLoading()){
+        loadingViewModel.endLoading(navController)
+    }
 
     PreventBackPressed()
+
+    Handler(Looper.getMainLooper())
+        .postDelayed({
+            loadingViewModel.updateLoadingState(false)
+        },1200)
 
     // 로딩 화면 회전
     var currentRotation by remember { mutableStateOf(0f) }
@@ -65,9 +80,7 @@ fun RoomLoadingScreen(navController: NavHostController = rememberNavController()
     }
 
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(gray_8),
+    Column(modifier = getBackgroundModifier(color = gray_9),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -78,13 +91,15 @@ fun RoomLoadingScreen(navController: NavHostController = rememberNavController()
                 .rotate(rotation.value)
         )
         TextH02M22(
-            text = "{별명}님, 이제 궁합을 확인하러 가볼까요?",
+            text = "${harmonyViewModel.getUserNickname()}님, 이제 궁합을\n확인하러 가볼까요?",
             color = white,
             modifier = Modifier.padding(bottom = 8.dp, top = 40.dp),
-            textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center
+        )
         TextB03M14(
-            text = "상대방을 초대하고 함께 실시간으로 궁합을 볼 수 있어요.",
-            color = gray_5
+            text = "상대방을 초대하고 함께\n실시간으로 궁합을 볼 수 있어요.",
+            color = gray_5,
+            textAlign = TextAlign.Center
         )
     }
 }

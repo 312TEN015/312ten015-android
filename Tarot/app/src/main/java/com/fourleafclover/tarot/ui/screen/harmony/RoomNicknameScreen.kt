@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
@@ -100,7 +102,7 @@ fun RoomNicknameScreen(
                             focusedContainerColor = transparent,
                             unfocusedContainerColor = transparent,
                             disabledContainerColor = transparent,
-                            focusedIndicatorColor = highlightPurple,
+                            focusedIndicatorColor = transparent,
                             disabledIndicatorColor = transparent,
                             unfocusedIndicatorColor = transparent
                         )
@@ -138,7 +140,11 @@ fun RoomNicknameScreen(
             }
 
             ButtonNext(
-                onClick = { navigateSaveState(navController, ScreenEnum.RoomShareScreen.name) },
+                onClick = {
+                    harmonyViewModel.setUserNickname(nicknameViewModel.getNicknameString())
+
+                    loadingViewModel.startLoading(navController, ScreenEnum.RoomShareScreen)
+                },
                 enabled = { nicknameViewModel.isCompleted() },
                 content = { ButtonText(isEnabled = nicknameViewModel.isCompleted(), text = "입력완료") }
             )
