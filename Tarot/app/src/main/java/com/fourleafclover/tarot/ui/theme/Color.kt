@@ -28,5 +28,7 @@ val primaryStudy = Color(0xFFBA84FF)
 val primaryDream = Color(0xFFFFE4A0)
 val primaryJob = Color(0xFFFFB179)
 
+val errorRed = Color(0xFFF95B4E)
+
 val backgroundColor_1 = gray_8
 val backgroundColor_2 = gray_9

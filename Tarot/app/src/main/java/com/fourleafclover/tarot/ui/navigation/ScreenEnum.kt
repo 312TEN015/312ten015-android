@@ -21,6 +21,7 @@ enum class ScreenEnum {
     RoomCreateScreen,      // 초대방 생성 페이지
     RoomGenderScreen,      // 성별 선택 페이지
     RoomNicknameScreen,      // 별명 입력 페이지
+    RoomLoadingScreen,      // 로딩 페이지
     RoomShareScreen,      // 초대방 링크 공유 / 입장 페이지
     RoomLobbyWaitingScreen,      // 대기실_상대방이 입장하지 않은 경우
     RoomLobbyEnteringScreen,      // 대기실_상대방이 입장한 경우

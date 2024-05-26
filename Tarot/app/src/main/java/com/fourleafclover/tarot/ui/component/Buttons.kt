@@ -29,7 +29,7 @@ fun ButtonNext(
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth()
-            .padding(bottom = 34.dp),
+            .padding(bottom = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = highlightPurple,
             contentColor = gray_1,
@@ -42,19 +42,10 @@ fun ButtonNext(
 }
 
 @Composable
-fun ContentComplete(boolean: Boolean){
+fun ButtonText(isEnabled: Boolean, text: String = "선택완료"){
     TextButtonM16(
-        text = "선택완료",
-        modifier = Modifier.padding(vertical = 8.dp),
-        color = if (boolean) gray_1 else gray_5
-    )
-}
-
-@Composable
-fun ContentNext(boolean: Boolean){
-    TextButtonM16(
-        text = "다음",
-        modifier = Modifier.padding(vertical = 8.dp),
-        color = if (boolean) gray_1 else gray_5
+        text = text,
+        modifier = Modifier.padding(vertical = 15.dp),
+        color = if (isEnabled) gray_1 else gray_5
     )
 }

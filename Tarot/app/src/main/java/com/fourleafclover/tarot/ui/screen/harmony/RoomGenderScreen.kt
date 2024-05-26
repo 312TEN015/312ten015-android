@@ -22,7 +22,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonNext
-import com.fourleafclover.tarot.ui.component.ContentComplete
+import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -36,7 +36,6 @@ import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
-import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
 
@@ -61,7 +60,7 @@ fun RoomGenderScreen(
         Column(
             modifier = getBackgroundModifier(backgroundColor_2)
                 .padding(horizontal = 20.dp)
-                .padding(top = 24.dp, bottom = 16.dp)
+                .padding(top = 24.dp)
                 .verticalScroll(rememberScrollState())
         ) {
 
@@ -92,7 +91,7 @@ fun RoomGenderScreen(
             ButtonNext(
                 onClick = { navigateSaveState(navController, ScreenEnum.RoomNicknameScreen.name) },
                 enabled = { genderViewModel.isCompleted() },
-                content = { ContentComplete(genderViewModel.isCompleted()) }
+                content = { ButtonText(genderViewModel.isCompleted()) }
             )
 
         }
