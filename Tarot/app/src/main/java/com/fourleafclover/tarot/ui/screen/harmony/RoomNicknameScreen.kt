@@ -143,7 +143,7 @@ fun RoomNicknameScreen(
                 onClick = {
                     harmonyViewModel.setUserNickname(nicknameViewModel.getNicknameString())
 
-                    loadingViewModel.startLoading(navController, ScreenEnum.RoomShareScreen)
+                    loadingViewModel.startLoading(navController, ScreenEnum.RoomCreateLoadingScreen, ScreenEnum.RoomShareScreen)
                 },
                 enabled = { nicknameViewModel.isCompleted() },
                 content = { ButtonText(isEnabled = nicknameViewModel.isCompleted(), text = "입력완료") }

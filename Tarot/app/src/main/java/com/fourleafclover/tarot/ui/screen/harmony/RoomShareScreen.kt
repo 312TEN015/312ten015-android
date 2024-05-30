@@ -26,12 +26,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
+import com.fourleafclover.tarot.ui.component.HowToShareButton
+import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
@@ -91,16 +96,12 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
                     textAlign = TextAlign.Center
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    HowToShareButton(modifier = Modifier.weight(1f), iconResource = R.drawable.share_g2, text = "초대 링크 공유")
-                    HowToShareButton(modifier = Modifier.weight(1f), iconResource = R.drawable.unlink_g2, text = "초대 링크 복사")
-                }
+                ShareLinkOrCopy()
 
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Image(
@@ -118,7 +119,7 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
             }
 
             ButtonNext(
-                onClick = { },
+                onClick = { loadingViewModel.startLoading(navController, ScreenEnum.RoomInviteLoadingScreen, ScreenEnum.RoomEnteringScreen) },
                 enabled = { true },
                 content = { ButtonText(true, "초대방 입장") }
             )
@@ -128,30 +129,3 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
     }
 }
 
-@Composable
-fun HowToShareButton(
-    modifier: Modifier = Modifier,
-    iconResource: Int = R.drawable.share,
-    text: String = "초대 링크 공유"
-) {
-    Box(
-        modifier = getOutlinedRectangleModifier(
-            borderColor = gray_7,
-            fillColor = gray_9,
-            cornerRadius = 10.dp
-        )
-            .padding(vertical = 15.dp)
-            .clickable {  }
-            .then(modifier),
-        contentAlignment = Alignment.Center
-    ){
-        Row(horizontalArrangement = Arrangement.Center) {
-            Image(
-                modifier = Modifier.padding(end = 4.dp).size(20.dp),
-                painter = painterResource(id = iconResource),
-                contentDescription = null
-            )
-            TextB02M16(text = text, color = gray_2)
-        }
-    }
-}

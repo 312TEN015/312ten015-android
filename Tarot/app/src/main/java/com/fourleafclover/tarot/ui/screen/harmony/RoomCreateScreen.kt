@@ -3,6 +3,7 @@ package com.fourleafclover.tarot.ui.screen.harmony
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,37 +75,29 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                 color = white
             )
 
-            Button(
-                onClick = { navigateSaveState(navController, ScreenEnum.RoomGenderScreen.name) },
-                shape = RoundedCornerShape(10.dp),
+            Box(
                 modifier = Modifier
+                    .padding(bottom = 34.dp)
+                    .background(color = white, shape = RoundedCornerShape(10.dp))
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .padding(bottom = 34.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 44.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = white,
-                    contentColor = gray_9,
-                    disabledContainerColor = gray_6,
-                    disabledContentColor = gray_5
-                ),
-                content = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
+                    .clickable { navigateSaveState(navController, ScreenEnum.RoomGenderScreen.name) }
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 44.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
 
-                        TextH03SB18(text = "초대방 생성하기", modifier = Modifier)
+                    TextH03SB18(text = "초대방 생성하기", modifier = Modifier)
 
-                        Image(
-                            painter = painterResource(id = R.drawable.arrow_right_black),
-                            contentDescription = null,
-                            alignment = Alignment.CenterEnd
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.arrow_right_black),
+                        contentDescription = null,
+                        alignment = Alignment.CenterEnd
+                    )
                 }
-            )
+            }
 
             Column(
                 modifier = getOutlinedRectangleModifier(
@@ -164,6 +157,7 @@ fun DescriptionStep(
 
     Row(
         modifier = Modifier
+            .padding(bottom = 16.dp)
             .padding(vertical = 8.dp, horizontal = 10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,

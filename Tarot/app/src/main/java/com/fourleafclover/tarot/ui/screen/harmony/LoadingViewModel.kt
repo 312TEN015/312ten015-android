@@ -18,13 +18,14 @@ class LoadingViewModel: ViewModel() {
 
     fun getIsLoading() = isLoading.value
 
-    fun startLoading(navController: NavHostController, destination: ScreenEnum){
+    fun startLoading(navController: NavHostController, loadingScreenEnum: ScreenEnum, destination: ScreenEnum){
         updateLoadingState(true)
-        navigateSaveState(navController, ScreenEnum.RoomLoadingScreen.name)
+        navigateSaveState(navController, loadingScreenEnum.name)
         this.destination = destination
     }
 
     fun endLoading(navController: NavHostController){
+        updateLoadingState(false)
         navigateInclusive(navController, destination.name)
     }
 }

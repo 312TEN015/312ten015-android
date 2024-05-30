@@ -1,10 +1,8 @@
 package com.fourleafclover.tarot.ui.navigation
 
-import android.content.Intent
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -22,7 +20,8 @@ import com.fourleafclover.tarot.ui.screen.ResultScreen
 import com.fourleafclover.tarot.ui.screen.ShareDetailScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomCreateScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomGenderScreen
-import com.fourleafclover.tarot.ui.screen.harmony.RoomLoadingScreen
+import com.fourleafclover.tarot.ui.screen.harmony.RoomCreateLoadingScreen
+import com.fourleafclover.tarot.ui.screen.harmony.RoomInviteLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
 
@@ -79,11 +78,17 @@ fun NavigationHost() {
             composable(ScreenEnum.RoomNicknameScreen.name) {
                 RoomNicknameScreen(navController)
             }
-            composable(ScreenEnum.RoomLoadingScreen.name) {
-                RoomLoadingScreen(navController)
+            composable(ScreenEnum.RoomCreateLoadingScreen.name) {
+                RoomCreateLoadingScreen(navController)
             }
             composable(ScreenEnum.RoomShareScreen.name) {
                 RoomShareScreen(navController)
+            }
+            composable(ScreenEnum.RoomInviteLoadingScreen.name) {
+                RoomInviteLoadingScreen(navController)
+            }
+            composable(ScreenEnum.RoomEnteringScreen.name) {
+
             }
         }
 
