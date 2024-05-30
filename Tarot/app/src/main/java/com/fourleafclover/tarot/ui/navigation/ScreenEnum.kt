@@ -25,7 +25,7 @@ enum class ScreenEnum {
     RoomShareScreen,      // 초대방 링크 공유 / 입장 페이지
     RoomInviteLoadingScreen,      // 대기실_상대방이 입장하지 않은 경우
     RoomEnteringScreen,      // 대기실_상대방이 입장한 경우
-    RoomScreen,      // 궁합 보기 페이지
+    RoomChatScreen,      // 궁합 보기 페이지
     RoomResultScreen,      // 궁합 보기 결과 페이지
 
 
