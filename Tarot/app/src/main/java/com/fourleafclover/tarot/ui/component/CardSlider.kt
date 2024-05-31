@@ -77,7 +77,6 @@ fun CardSlider(
 
     Column(
         modifier = Modifier
-            .background(color = gray_9)
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
@@ -137,7 +136,6 @@ fun CardSlider(
         )
 
         Column(modifier = Modifier
-            .background(color = gray_9)
             .fillMaxSize()
             .padding(horizontal = 20.dp)
             .padding(bottom = 48.dp),

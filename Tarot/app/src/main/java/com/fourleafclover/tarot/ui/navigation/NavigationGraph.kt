@@ -16,7 +16,7 @@ import com.fourleafclover.tarot.ui.screen.MyTarotDetailScreen
 import com.fourleafclover.tarot.ui.screen.MyTarotScreen
 import com.fourleafclover.tarot.ui.screen.PagerOnBoarding
 import com.fourleafclover.tarot.ui.screen.PickTarotScreen
-import com.fourleafclover.tarot.ui.screen.ResultScreen
+import com.fourleafclover.tarot.ui.screen.harmony.ResultScreen
 import com.fourleafclover.tarot.ui.screen.ShareDetailScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomChatScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomCreateScreen

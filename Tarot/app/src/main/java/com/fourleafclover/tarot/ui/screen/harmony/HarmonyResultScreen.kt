@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen
+package com.fourleafclover.tarot.ui.screen.harmony
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -41,109 +43,58 @@ import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.CloseDialog
 import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
+import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
+import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
+import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
+import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
+import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
-var openCloseDialog = mutableStateOf(false) // close dialog state
-var saveState = mutableStateOf(false)   // 타로 결과 저장했는지 여부
-var openCompleteDialog = mutableStateOf(false)  // 타로 저장 완료 dialog state
-
 @Composable
-fun ResultScreen(navController: NavHostController){
-
-    var initialize by remember { mutableStateOf(false) }
-
-    // 변수 초기화
-    if (!initialize){
-        openCloseDialog.value = false
-        saveState.value = false
-        openCompleteDialog.value = false
-        initialize = true
+fun ResultScreen(
+    navController: NavHostController,
+    resultViewModel: ResultViewModel = remember {
+        ResultViewModel()
     }
-
-    val localContext = LocalContext.current
-
-    Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
-    {
-
-        ControlDialog(navController)
-
-
-        Box(
-            modifier = appBarModifier
-                .background(color = backgroundColor_1)
-                .padding(top = 10.dp, bottom = 10.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = getPickedTopic(pickedTopicNumber).majorTopic,
-                style = getTextStyle(16, FontWeight.Medium, white),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.cancel),
-                contentDescription = "닫기버튼",
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .clickable { openCloseDialog.value = true }
-                    .padding(end = 20.dp)
-                    .size(28.dp),
-                alignment = Alignment.Center
-            )
-        }
-
-        Column(modifier = Modifier
-
-        ) {
-
-            TextH02M22(
-                text = "선택하신 카드는\n이런 의미를 담고 있어요.",
-                color = white,
-                modifier = Modifier
-                    .background(color = gray_8)
-                    .padding(horizontal = 20.dp, vertical = 32.dp)
-                    .fillMaxWidth()
-            )
-
-            CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
-
-            OverallResult()
-
-        }
-
-    }
+) {
 }
 
 @Preview
 @Composable
-fun ResultScreenPreview(navController: NavHostController = rememberNavController()){
+fun ResultScreenPreview(
+    navController: NavHostController = rememberNavController(),
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+) {
+
     val localContext = LocalContext.current
 
     tarotOutputDto = TarotOutputDto(
@@ -154,57 +105,77 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
         arrayListOf(
             CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
             CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
-            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")),
+            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")
+        ),
         OverallResultData("summary result", "full result")
     )
 
-    Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
+    Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
 
         ControlDialog(navController)
 
 
-        Box(
-            modifier = appBarModifier
-                .background(color = backgroundColor_1)
-                .padding(top = 10.dp, bottom = 10.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            TextButtonM16(
-                text = getPickedTopic(pickedTopicNumber).majorTopic,
-                color = white,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
+        AppBarCloseTarotResult(
+            navController,
+            getPickedTopic(0),
+            backgroundColor_2,
+            true,
+            resultViewModel
+        )
 
-            Image(
-                painter = painterResource(id = R.drawable.cancel),
-                contentDescription = "닫기버튼",
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .clickable { openCloseDialog.value = true }
-                    .padding(end = 20.dp)
-                    .size(28.dp),
-                alignment = Alignment.Center
-            )
-        }
-
-        Column(modifier = Modifier
-
+        Column(
+            modifier = Modifier
         ) {
 
             TextH02M22(
-                text = "선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${resultViewModel.getNickname()}님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
-                    .background(color = gray_8)
+                    .background(color = backgroundColor_2)
                     .padding(horizontal = 20.dp, vertical = 32.dp)
                     .fillMaxWidth()
             )
 
-            CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .background(color = gray_8, shape = RoundedCornerShape(10.dp))
+                    .padding(vertical = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row {
+                    TextB03M14(
+                        color = gray_7,
+                        text = "내가 선택한 카드",
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .background(
+                                shape = RoundedCornerShape(6.dp),
+                                color = gray_2
+                            )
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                            .defaultMinSize(121.dp),
+                        textAlign = TextAlign.Center
+                    )
+                    TextB03M14(
+                        color = gray_7,
+                        text = "상대방 카드",
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .background(
+                                shape = RoundedCornerShape(6.dp),
+                                color = gray_2
+                            )
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                            .defaultMinSize(121.dp),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
+            }
+
 
             OverallResult()
 
@@ -215,7 +186,7 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
 
 @Preview
 @Composable
-fun OverallResult(){
+fun OverallResult(resultViewModel: ResultViewModel = remember { ResultViewModel() }) {
     Column(
         modifier = Modifier
             .background(color = gray_8)
@@ -228,13 +199,17 @@ fun OverallResult(){
         TextH01M26(
             text = "타로 카드 종합 리딩",
             color = highlightPurple,
-            modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 48.dp)
+                .fillMaxWidth()
         )
 
         TextB01M18(
             text = tarotOutputDto.overallResult?.summary.toString(),
             color = white,
-            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth()
         )
 
         TextB02M16(
@@ -247,14 +222,14 @@ fun OverallResult(){
 
         Button(
             onClick = {
-                openCompleteDialog.value = true
+                resultViewModel.openCompleteDialog()
 
                 // 타로 결과 id 저장
                 MyApplication.prefs.addTarotResult(tarotOutputDto.tarotId)
-                saveState.value = true
+                resultViewModel.saveResult()
             },
             shape = RoundedCornerShape(10.dp),
-            enabled = !saveState.value,
+            enabled = !resultViewModel.isSaved(),
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
@@ -267,23 +242,26 @@ fun OverallResult(){
             )
         ) {
 
-            if (saveState.value){
-                Image(painter = painterResource(id = R.drawable.check_filled_disabled),
+            if (resultViewModel.isSaved()) {
+                Image(
+                    painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp).padding(end = 4.dp),
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(end = 4.dp),
                     alignment = Alignment.Center
                 )
             }
 
             TextButtonM16(
-                text = if (saveState.value) "저장 완료!" else "타로 저장하기",
+                text = if (resultViewModel.isSaved()) "저장 완료!" else "타로 저장하기",
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = if (!saveState.value) white else gray_5,
+                color = if (!resultViewModel.isSaved()) white else gray_5,
             )
         }
 
         Button(
-            onClick = { openCloseDialog.value = true },
+            onClick = { resultViewModel.openCloseDialog() },
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .wrapContentHeight()
@@ -299,68 +277,28 @@ fun OverallResult(){
                 text = "홈으로 돌아가기",
                 modifier = Modifier.padding(vertical = 8.dp),
                 color = gray_1
-                )
+            )
         }
 
-        Row(modifier = Modifier
-            .padding(vertical = 16.dp, horizontal = 16.dp)
-            .padding(bottom = 45.dp)
-            .clickable {
-                setDynamicLink(localContext, tarotOutputDto.tarotId)
-            },
-            horizontalArrangement = Arrangement.Center)
+        Row(
+            modifier = Modifier
+                .padding(vertical = 16.dp, horizontal = 16.dp)
+                .padding(bottom = 45.dp)
+                .clickable {
+                    setDynamicLink(localContext, tarotOutputDto.tarotId)
+                },
+            horizontalArrangement = Arrangement.Center
+        )
         {
-            Image(painter = painterResource(id = R.drawable.share),
+            Image(
+                painter = painterResource(id = R.drawable.share),
                 contentDescription = null,
-                modifier = Modifier.padding(end = 3.dp))
+                modifier = Modifier.padding(end = 3.dp)
+            )
             TextButtonM16(
                 text = "공유하기",
                 color = gray_3
             )
         }
     }
-}
-
-
-
-/* Dialog ------------------------------------------------------------------------------------- */
-@Composable
-fun OpenCloseDialog(navController: NavHostController){
-    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 안한 경우
-    if (openCloseDialog.value && !saveState.value){
-        Dialog(onDismissRequest = { openCloseDialog.value = false }) {
-            CloseWithoutSaveDialog(onClickNo = { openCloseDialog.value = false },
-                onClickOk = {
-                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
-                })
-        }
-    }
-    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 한 경우
-    else if(openCloseDialog.value && saveState.value){
-        Dialog(onDismissRequest = { openCloseDialog.value = false }) {
-            CloseDialog(onClickNo = { openCloseDialog.value = false },
-                onClickOk = {
-                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
-                })
-        }
-    }
-
-}
-
-@Composable
-fun OpenCompleteDialog(){
-    // 타로 결과 저장 버튼 눌렀을 때
-    if (openCompleteDialog.value){
-        Dialog(onDismissRequest = { openCompleteDialog.value = false }) {
-            SaveCompletedDialog(onClickOk = { openCompleteDialog.value = false })
-        }
-    }
-}
-
-@Composable
-fun ControlDialog(navController: NavHostController){
-    BackHandler { openCloseDialog.value = true }
-    OpenCloseDialog(navController = navController)
-    OpenCompleteDialog()
-
 }
