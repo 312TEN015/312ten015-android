@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.component
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.View
 import androidx.activity.compose.BackHandler
@@ -22,6 +23,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalContext
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +48,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.findActivity
 import com.fourleafclover.tarot.ui.screen.harmony.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -69,6 +72,16 @@ fun getBackgroundModifier(color: Color): Modifier = Modifier
 
 fun setStatusbarColor(view: View, color: Color) {
     val window = (view.context as Activity).window
+    window.statusBarColor = color.toArgb()
+    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+        (color != backgroundColor_1 && color != backgroundColor_2)
+    if (color == backgroundColor_1 || color == backgroundColor_2) {
+        window.navigationBarColor = color.toArgb()
+    }
+}
+
+fun setStatusbarColor(localContext: Context, view: View, color: Color) {
+    val window = localContext.findActivity()?.window ?: return
     window.statusBarColor = color.toArgb()
     WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
         (color != backgroundColor_1 && color != backgroundColor_2)

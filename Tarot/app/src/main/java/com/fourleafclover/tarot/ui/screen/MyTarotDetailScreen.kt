@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -44,6 +46,7 @@ import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
@@ -55,7 +58,7 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
     val tarotSubjectData = getPickedTopic(selectedTarotResult.tarotType)
-    setStatusbarColor(LocalView.current, backgroundColor_1)
+    setStatusbarColor(localContext, LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
     {
@@ -103,8 +106,9 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
             }
 
-
-            CardSlider(tarotResult = selectedTarotResult)
+            Box(modifier = Modifier.background(gray_9)) {
+                CardSlider(tarotResult = selectedTarotResult)
+            }
 
             Column(
                 modifier = Modifier

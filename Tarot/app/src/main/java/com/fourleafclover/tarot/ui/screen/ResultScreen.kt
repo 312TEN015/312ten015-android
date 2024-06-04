@@ -204,7 +204,9 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
                     .fillMaxWidth()
             )
 
-            CardSlider(tarotResult = tarotOutputDto)
+            Box(modifier = Modifier.background(gray_9)) {
+                CardSlider(tarotResult = tarotOutputDto)
+            }
 
             OverallResult()
 
@@ -228,13 +230,17 @@ fun OverallResult(){
         TextH01M26(
             text = "타로 카드 종합 리딩",
             color = highlightPurple,
-            modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 48.dp)
+                .fillMaxWidth()
         )
 
         TextB01M18(
             text = tarotOutputDto.overallResult?.summary.toString(),
             color = white,
-            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth()
         )
 
         TextB02M16(
@@ -270,7 +276,9 @@ fun OverallResult(){
             if (saveState.value){
                 Image(painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp).padding(end = 4.dp),
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(end = 4.dp),
                     alignment = Alignment.Center
                 )
             }
