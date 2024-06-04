@@ -59,7 +59,8 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.OnBoardingScreen.name) {
                 if (MyApplication.prefs.isOnBoardingComplete()){
-                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+//                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                    navigateInclusive(navController, ScreenEnum.RoomChatScreen.name)
                 }else{
                     PagerOnBoarding(navController)
                 }
