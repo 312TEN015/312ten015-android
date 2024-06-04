@@ -1,6 +1,8 @@
 package com.fourleafclover.tarot
 
 import com.fourleafclover.tarot.constant.*
+import com.fourleafclover.tarot.data.CardResultData
+import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
@@ -63,7 +65,19 @@ var pickedTopicNumber = 0
 
 val tarotInputDto = TarotInputDto("", "", "", arrayListOf(0, 0, 0))     // 타로 결과를 맏기 위해 입력한 데이터
 
-var tarotOutputDto = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)     // 서버에서 받은 새 타로 데이터
+// 서버에서 받은 새 타로 데이터
+var tarotOutputDto = TarotOutputDto(
+        "0",
+        0,
+        arrayListOf(0, 1, 2),
+        "2024-01-14T12:38:23.000Z",
+        arrayListOf(
+                CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
+                CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
+                CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")
+        ),
+        OverallResultData("summary result", "full result")
+)
 
 var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)        // 리스트에서 선택한 타로 데이터
 

@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.util.Log
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectDream
+import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.SubjectJob
 import com.fourleafclover.tarot.SubjectLove
 import com.fourleafclover.tarot.SubjectStudy
@@ -39,6 +40,7 @@ fun getPickedTopic(topicNumber: Int): TarotSubjectData {
         2 -> SubjectDream
         3 -> SubjectJob
         4 -> SubjectToday
+        5 -> SubjectHarmony
         else -> {
             Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $pickedTopicNumber selectedTarotResult: $pickedTopicNumber")
             TarotSubjectData()

@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.component
 
-import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,19 +31,22 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.fourleafclover.tarot.data.CardResultData
+import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB04M12
-import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
+import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
@@ -55,17 +55,17 @@ import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
 import kotlin.math.absoluteValue
 
+@Preview
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardSlider(
     modifier: Modifier = Modifier,
-    tarotResult: TarotOutputDto,
-    localContext: Context
+    tarotResult: TarotOutputDto = tarotOutputDto
 ) {
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
     for ((idx, value) in tarotResult.cards.withIndex()) {
-        sliderList[idx] = getCardImageId(localContext, value.toString())
+        sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
     }
 
     val pagerState = rememberPagerState(
@@ -81,7 +81,7 @@ fun CardSlider(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().padding(bottom = 32.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -135,26 +135,35 @@ fun CardSlider(
             selectedIndex = pagerState.currentPage
         )
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
-            .padding(bottom = 48.dp),
-            horizontalAlignment = Alignment.CenterHorizontally)
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 32.dp, bottom = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
         {
-            TextB02M16(text = if (pagerState.currentPage == 0) "첫번째 카드"
-            else if(pagerState.currentPage == 1) "두번째 카드"
-            else "세번째 카드",
+            TextB02M16(
+                text = if (pagerState.currentPage == 0) "첫번째 카드"
+                else if (pagerState.currentPage == 1) "두번째 카드"
+                else "세번째 카드",
                 color = highlightPurple,
-                modifier = Modifier.padding(bottom = 12.dp))
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
 
 
-            LazyRow(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center) {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
 
                 items(3) {
 
                     TextB04M12(
-                        text = "# ${tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(it)}",
+                        text = "# ${
+                            tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
+                                it
+                            )
+                        }",
                         color = gray_2,
                         modifier = Modifier
                             .padding(end = 8.dp)
@@ -165,11 +174,15 @@ fun CardSlider(
                 }
             }
 
-            TextB02M16(text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description }",
-                color = gray_3,
+            TextB02M16(
+                text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
+                color = white,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
-                modifier = Modifier.padding(top = 12.dp).height(56.dp))
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .height(56.dp)
+            )
         }
     }
 }
@@ -187,7 +200,6 @@ fun DotsIndicator(
         modifier = modifier
             .wrapContentWidth()
             .wrapContentHeight()
-            .padding(top = 32.dp, bottom = 40.dp)
     ) {
         items(totalDots) { index ->
             Box(
@@ -203,6 +215,141 @@ fun DotsIndicator(
             if (index != totalDots - 1) {
                 Spacer(modifier = Modifier.padding(horizontal = 4.dp))
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Preview
+@Composable
+fun HarmonyCardSlider(
+    modifier: Modifier = Modifier,
+    tarotResult: TarotOutputDto = tarotOutputDto,
+    outsideHorizontalPadding: Dp = 0.dp
+) {
+
+    val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
+    for ((idx, value) in tarotResult.cards.withIndex()) {
+        sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
+    }
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f
+    ) {
+        3
+    }
+
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        TextB02M16(
+            text = if (pagerState.currentPage == 0) "첫번째 카드"
+            else if (pagerState.currentPage == 1) "두번째 카드"
+            else "세번째 카드",
+            color = highlightPurple,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Row(
+            modifier = modifier.padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            val itemWidth by remember { mutableStateOf(100.dp) }
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp - (outsideHorizontalPadding * 2)
+            val horizontalPadding by remember { mutableStateOf(screenWidth / 2 - itemWidth / 2) }
+
+            HorizontalPager(
+                modifier = modifier.weight(1f),
+                state = pagerState,
+                pageSpacing = 12.dp,
+                userScrollEnabled = true,
+                reverseLayout = false,
+                contentPadding = PaddingValues(horizontal = horizontalPadding),
+                beyondBoundsPageCount = 0,
+                pageSize = PageSize.Fixed(itemWidth),
+                key = null,
+                pageContent = { page ->
+                    val pageOffset =
+                        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+
+                    val scaleFactor = 0.75f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
+
+                    Box(modifier = modifier
+                        .graphicsLayer {
+                            scaleX = scaleFactor
+                            scaleY = scaleFactor
+                        }
+                        .alpha(
+                            scaleFactor.coerceIn(0f, 1f)
+                        )) {
+
+                        val painter = painterResource(id = sliderList[page])
+                        val imageRatio = painter.intrinsicSize.width / painter.intrinsicSize.height
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(itemWidth)
+                                .aspectRatio(imageRatio)
+                        )
+                    }
+
+                }
+            )
+
+        }
+
+        DotsIndicator(
+            totalDots = sliderList.size,
+            selectedIndex = pagerState.currentPage
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+
+                items(3) {
+
+                    TextB04M12(
+                        text = "# ${
+                            tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
+                                it
+                            )
+                        }",
+                        color = gray_4,
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .background(color = gray_9, shape = RoundedCornerShape(6.dp))
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+
+                }
+            }
+
+            TextB02M16(
+                text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
+                color = gray_3,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Visible,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .height(56.dp)
+            )
         }
     }
 }

@@ -49,6 +49,7 @@ import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.CloseDialog
 import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.component.ControlDialog
+import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -74,6 +75,7 @@ import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
+import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
@@ -90,35 +92,17 @@ fun ResultScreen(
 
 @Preview
 @Composable
-fun ResultScreenPreview(
+fun HarmonyResultScreenPreview(
     navController: NavHostController = rememberNavController(),
     resultViewModel: ResultViewModel = remember { ResultViewModel() }
 ) {
-
-    val localContext = LocalContext.current
-
-    tarotOutputDto = TarotOutputDto(
-        "0",
-        0,
-        arrayListOf(0, 1, 2),
-        "2024-01-14T12:38:23.000Z",
-        arrayListOf(
-            CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
-            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
-            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")
-        ),
-        OverallResultData("summary result", "full result")
-    )
-
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
-
         ControlDialog(navController)
-
 
         AppBarCloseTarotResult(
             navController,
-            getPickedTopic(0),
+            getPickedTopic(5),
             backgroundColor_2,
             true,
             resultViewModel
@@ -137,43 +121,60 @@ fun ResultScreenPreview(
                     .fillMaxWidth()
             )
 
+            var myCard by remember { mutableStateOf(true) }
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .background(color = gray_8, shape = RoundedCornerShape(10.dp))
-                    .padding(vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(vertical = 24.dp, horizontal = 20.dp)
             ) {
-                Row {
-                    TextB03M14(
-                        color = gray_7,
-                        text = "내가 선택한 카드",
-                        modifier = Modifier
-                            .padding(end = 4.dp)
-                            .background(
-                                shape = RoundedCornerShape(6.dp),
-                                color = gray_2
-                            )
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
-                            .defaultMinSize(121.dp),
-                        textAlign = TextAlign.Center
-                    )
-                    TextB03M14(
-                        color = gray_7,
-                        text = "상대방 카드",
-                        modifier = Modifier
-                            .padding(start = 4.dp)
-                            .background(
-                                shape = RoundedCornerShape(6.dp),
-                                color = gray_2
-                            )
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
-                            .defaultMinSize(121.dp),
-                        textAlign = TextAlign.Center
-                    )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 36.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Box(modifier = Modifier
+                        .clickable {
+                            myCard = true
+                        }
+                        .padding(end = 4.dp)
+                        .background(
+                            shape = RoundedCornerShape(6.dp),
+                            color = if (myCard) gray_2 else transparent
+                        )
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                        .weight(1f),
+                        contentAlignment = Alignment.Center) {
+
+                        TextB03M14(
+                            color = if (myCard) gray_7 else gray_5,
+                            text = "내가 선택한 카드",
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Box(modifier = Modifier
+                        .clickable {
+                            myCard = false
+                        }
+                        .padding(start = 4.dp)
+                        .background(
+                            shape = RoundedCornerShape(6.dp),
+                            color = if (myCard) transparent else gray_2
+                        )
+                        .padding(vertical = 8.dp, horizontal = 16.dp)
+                        .weight(1f),
+                        contentAlignment = Alignment.Center) {
+
+                        TextB03M14(
+                            color = if (myCard) gray_5 else gray_7,
+                            text = "상대방 카드",
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
-                CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
+                HarmonyCardSlider(tarotResult = tarotOutputDto, outsideHorizontalPadding = 40.dp)
             }
 
 
@@ -189,7 +190,6 @@ fun ResultScreenPreview(
 fun OverallResult(resultViewModel: ResultViewModel = remember { ResultViewModel() }) {
     Column(
         modifier = Modifier
-            .background(color = gray_8)
             .fillMaxWidth()
             .padding(horizontal = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -216,6 +216,7 @@ fun OverallResult(resultViewModel: ResultViewModel = remember { ResultViewModel(
             text = tarotOutputDto.overallResult?.full.toString(),
             color = gray_3,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 64.dp)
                 .wrapContentHeight()
         )

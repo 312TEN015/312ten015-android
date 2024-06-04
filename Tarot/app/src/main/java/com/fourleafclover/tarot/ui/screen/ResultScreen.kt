@@ -132,7 +132,7 @@ fun ResultScreen(navController: NavHostController){
                     .fillMaxWidth()
             )
 
-            CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
+            CardSlider(tarotResult = tarotOutputDto)
 
             OverallResult()
 
@@ -204,7 +204,7 @@ fun ResultScreenPreview(navController: NavHostController = rememberNavController
                     .fillMaxWidth()
             )
 
-            CardSlider(tarotResult = tarotOutputDto, localContext = localContext)
+            CardSlider(tarotResult = tarotOutputDto)
 
             OverallResult()
 

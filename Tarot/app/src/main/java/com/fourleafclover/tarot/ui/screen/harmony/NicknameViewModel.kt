@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 
 class NicknameViewModel: ViewModel() {
 
-    private var nickname = mutableStateOf("")
+    private var nickname = mutableStateOf("사용자")
     private val maxChar = 10
     private var isCaptionVisible = mutableStateOf(false)
 

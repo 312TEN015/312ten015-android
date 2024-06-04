@@ -104,7 +104,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
             }
 
 
-            CardSlider(tarotResult = selectedTarotResult, localContext = localContext)
+            CardSlider(tarotResult = selectedTarotResult)
 
             Column(
                 modifier = Modifier
