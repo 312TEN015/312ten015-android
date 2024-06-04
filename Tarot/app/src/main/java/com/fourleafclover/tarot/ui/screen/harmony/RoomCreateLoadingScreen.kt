@@ -50,10 +50,16 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
 
     PreventBackPressed()
 
-    Handler(Looper.getMainLooper())
-        .postDelayed({
-            loadingViewModel.updateLoadingState(false)
-        }, 1500)
+    var initialize by remember { mutableStateOf(false) }
+
+    /* 한번만 실행 */
+    if (!initialize) {
+        initialize = true
+        Handler(Looper.getMainLooper())
+            .postDelayed({
+                loadingViewModel.updateLoadingState(false)
+            }, 3000)
+    }
 
     Column(modifier = getBackgroundModifier(color = gray_9),
         horizontalAlignment = Alignment.CenterHorizontally,

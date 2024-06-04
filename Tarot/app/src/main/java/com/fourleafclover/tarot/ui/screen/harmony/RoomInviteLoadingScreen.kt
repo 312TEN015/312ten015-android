@@ -59,10 +59,16 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
 
     PreventBackPressed()
 
-    Handler(Looper.getMainLooper())
-        .postDelayed({
-            loadingViewModel.updateLoadingState(false)
-        }, 1500)
+    var initialize by remember { mutableStateOf(false) }
+
+    /* 한번만 실행 */
+    if (!initialize) {
+        initialize = true
+        Handler(Looper.getMainLooper())
+            .postDelayed({
+                loadingViewModel.updateLoadingState(false)
+            }, 3000)
+    }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(

@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val highlightPurple = Color(0xFFB479FF)
+val purple50 = Color(0xFFD9BCFF)
 val transparent = Color(0x00FFFFFF)
 val white = Color(0xFFFFFFFF)
 val gray_1 = Color(0xFFF6F6F6)

@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -28,11 +32,17 @@ import com.fourleafclover.tarot.ui.theme.white
 @Preview
 fun RoomEnteringScreen(navController: NavHostController = rememberNavController()) {
 
+    var initialize by remember { mutableStateOf(false) }
 
-    Handler(Looper.getMainLooper())
-        .postDelayed({
-            navigateInclusive(navController, ScreenEnum.RoomChatScreen.name)
-        }, 1500)
+    /* 한번만 실행 */
+    if (!initialize) {
+        initialize = true
+
+        Handler(Looper.getMainLooper())
+            .postDelayed({
+                navigateInclusive(navController, ScreenEnum.RoomChatScreen.name)
+            }, 2000)
+    }
 
     Column(
         modifier = getBackgroundModifier(color = gray_9).padding(horizontal = 38.dp),
