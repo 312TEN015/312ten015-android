@@ -73,11 +73,25 @@ var tarotOutputDto = TarotOutputDto(
         "2024-01-14T12:38:23.000Z",
         arrayListOf(
                 CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
-                CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
-                CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")
+                CardResultData(arrayListOf("keyword4", "keyword5", "keyword6"), "description2"),
+                CardResultData(arrayListOf("keyword7", "keyword8", "keyword9"), "description3")
         ),
         OverallResultData("summary result", "full result")
 )
+
+var partnerTarotOutputDto = TarotOutputDto(
+        "0",
+        0,
+        arrayListOf(5, 6, 7),
+        "2024-01-14T12:38:23.000Z",
+        arrayListOf(
+                CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
+                CardResultData(arrayListOf("keyword4", "keyword5", "keyword6"), "description2"),
+                CardResultData(arrayListOf("keyword7", "keyword8", "keyword9"), "description3")
+        ),
+        OverallResultData("summary result", "full result")
+)
+
 
 var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)        // 리스트에서 선택한 타로 데이터
 

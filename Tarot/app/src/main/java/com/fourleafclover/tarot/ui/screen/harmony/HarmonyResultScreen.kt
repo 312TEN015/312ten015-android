@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,47 +25,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.partnerTarotOutputDto
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.CardResultData
-import com.fourleafclover.tarot.data.OverallResultData
-import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotOutputDto
-import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
-import com.fourleafclover.tarot.ui.component.CardSlider
-import com.fourleafclover.tarot.ui.component.CloseDialog
-import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
-import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
-import com.fourleafclover.tarot.ui.component.appBarModifier
-import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
-import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
-import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
-import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
@@ -77,7 +56,6 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
@@ -174,7 +152,7 @@ fun HarmonyResultScreenPreview(
                     }
                 }
 
-                HarmonyCardSlider(tarotResult = tarotOutputDto, outsideHorizontalPadding = 40.dp)
+                HarmonyCardSlider(tarotResult = if (myCard) tarotOutputDto else partnerTarotOutputDto, outsideHorizontalPadding = 40.dp)
             }
 
 
