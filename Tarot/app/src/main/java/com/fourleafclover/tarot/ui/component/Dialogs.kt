@@ -1,6 +1,9 @@
 package com.fourleafclover.tarot.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -55,53 +58,62 @@ fun DeleteTarotResultDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = 
 }
 
 
-
 @Preview
 @Composable
 fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
 
-    Surface(modifier = Modifier,
+    Surface(
+        modifier = Modifier,
         shape = RoundedCornerShape(size = 10.dp),
-        color = white){
+        color = white
+    ) {
 
-        Column(modifier = Modifier
-            .wrapContentHeight()
-            .width(288.dp)
-            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier
+                .wrapContentHeight()
+                .width(288.dp)
+                .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-            Image(painter = painterResource(id = R.drawable.check_filled),
+            Image(
+                painter = painterResource(id = R.drawable.check_filled),
                 contentDescription = "",
-                modifier = Modifier.size(32.dp))
+                modifier = Modifier.size(32.dp)
+            )
 
-            TextButtonM16(text = "타로 결과가 저장되었습니다!",
+            TextButtonM16(
+                text = "타로 결과가 저장되었습니다!",
                 color = gray_8,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 8.dp))
+                    .padding(vertical = 8.dp)
+            )
 
-            TextB03M14(text = "저장된 타로는 마이페이지에서\n다시 볼 수 있어요.",
+            TextB03M14(
+                text = "저장된 타로는 마이페이지에서\n다시 볼 수 있어요.",
                 color = gray_6,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
+                    .padding(bottom = 24.dp)
+            )
 
-            Button(onClick = onClickOk,
-                shape = RoundedCornerShape(10.dp),
+            Box(
                 modifier = Modifier
+                    .background(color = gray_8, shape = RoundedCornerShape(6.dp))
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(end = 4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = gray_8,
-                    contentColor = white
-                )
+                    .padding(end = 4.dp)
+                    .clickable {
+                        onClickOk()
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 TextButtonM16(
                     text = "확인",
-                    modifier = Modifier.padding(vertical = 8.dp),
+                    modifier = Modifier.padding(vertical = 9.dp),
                     color = white
                 )
             }
@@ -115,55 +127,61 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
 
 @Preview
 @Composable
-fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠습니까?", onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+fun YesNoDialog(
+    content: String = "운세 보기를 중단하고\n나가시겠습니까?",
+    onClickNo: () -> Unit = {},
+    onClickOk: () -> Unit = {}
+) {
 
-    Surface(modifier = Modifier,
+    Surface(
+        modifier = Modifier,
         shape = RoundedCornerShape(size = 10.dp),
-        color = white){
+        color = white
+    ) {
 
-        Column(modifier = Modifier
-            .width(288.dp)
-            .wrapContentHeight()
-            .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)) {
+        Column(
+            modifier = Modifier
+                .width(288.dp)
+                .wrapContentHeight()
+                .padding(start = 16.dp, top = 40.dp, end = 16.dp, bottom = 16.dp)
+        ) {
 
-            TextB02M16(text = content,
+            TextB02M16(
+                text = content,
                 color = gray_8,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
+                    .padding(bottom = 24.dp)
+            )
 
             Row {
-                Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
+                Box(
                     modifier = Modifier
+                        .padding(end = 4.dp)
+                        .background(color = gray_2, shape = RoundedCornerShape(6.dp))
                         .weight(1f)
-                        .padding(end = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_2,
-                        contentColor = gray_8
-                    )
+                        .clickable { onClickNo() },
+                    contentAlignment = Alignment.Center
                 ) {
                     TextButtonM16(
                         text = "아니요",
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 9.dp),
                         color = gray_8
                     )
                 }
 
-                Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
+                Box(
                     modifier = Modifier
+                        .padding(start = 4.dp)
+                        .background(color = gray_8, shape = RoundedCornerShape(6.dp))
                         .weight(1f)
-                        .padding(start = 4.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = gray_8,
-                        contentColor = gray_2
-                    )
+                        .clickable { onClickOk() },
+                    contentAlignment = Alignment.Center
                 ) {
                     TextButtonM16(
                         text = "네",
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 9.dp),
                         color = gray_2
                     )
                 }
