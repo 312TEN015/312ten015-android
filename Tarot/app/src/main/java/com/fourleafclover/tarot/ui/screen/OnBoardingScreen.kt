@@ -91,7 +91,7 @@ fun PagerOnBoarding(navController: NavHostController = rememberNavController()) 
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(bottom = 49.dp, end = 20.dp, start = 20.dp)
+                .padding(top = 92.dp, bottom = 49.dp, end = 20.dp, start = 20.dp)
                 .alpha(if (pagerState.currentPage == onboardPagesList.size - 1) 1f else 0f),
             colors = ButtonDefaults.buttonColors(
                 containerColor = highlightPurple,

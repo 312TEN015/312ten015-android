@@ -95,7 +95,7 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
                 )
             }
 
-            CardSlider(tarotResult = sharedTarotResult, localContext = localContext)
+            CardSlider(tarotResult = sharedTarotResult)
 
             Column(
                 modifier = Modifier

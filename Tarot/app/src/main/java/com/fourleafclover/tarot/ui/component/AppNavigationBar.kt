@@ -3,6 +3,7 @@ package com.fourleafclover.tarot.ui.component
 import android.app.Activity
 import android.util.Log
 import android.view.View
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,6 +46,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -65,10 +67,11 @@ fun getBackgroundModifier(color: Color): Modifier = Modifier
     .background(color = color)
     .fillMaxSize()
 
-fun setStatusbarColor(view: View, color: Color){
+fun setStatusbarColor(view: View, color: Color) {
     val window = (view.context as Activity).window
     window.statusBarColor = color.toArgb()
-    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = (color != backgroundColor_1 && color != backgroundColor_2)
+    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+        (color != backgroundColor_1 && color != backgroundColor_2)
     if (color == backgroundColor_1 || color == backgroundColor_2) {
         window.navigationBarColor = color.toArgb()
     }
@@ -82,11 +85,12 @@ val appBarModifier = Modifier
 
 @Composable
 @Preview
-fun AppBarPlain(navController: NavHostController = rememberNavController(),
-                title: String = "MY 타로",
-                backgroundColor: Color = backgroundColor_1,
-                backButtonVisible: Boolean = true,
-                backButtonResource: Int = R.drawable.arrow_left
+fun AppBarPlain(
+    navController: NavHostController = rememberNavController(),
+    title: String = "MY 타로",
+    backgroundColor: Color = backgroundColor_1,
+    backButtonVisible: Boolean = true,
+    backButtonResource: Int = R.drawable.arrow_left
 ) {
     Box(
         modifier = appBarModifier
@@ -96,7 +100,11 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
     ) {
         Text(
             text = title,
-            style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
+            style = getTextStyle(
+                16,
+                FontWeight.Medium,
+                if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
@@ -127,17 +135,18 @@ fun AppBarPlain(navController: NavHostController = rememberNavController(),
 
 @Composable
 @Preview
-fun AppBarClose(navController: NavHostController = rememberNavController(),
-                pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
-                backgroundColor: Color = backgroundColor_1,
-                isTitleVisible: Boolean = true
+fun AppBarClose(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true
 ) {
 
     var openDialog by remember {
         mutableStateOf(false)
     }
 
-    if (openDialog){
+    if (openDialog) {
         Dialog(onDismissRequest = { openDialog = false }) {
             CloseDialog(onClickNo = { openDialog = false },
                 onClickOk = {
@@ -154,17 +163,23 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
     ) {
         Text(
             text = if (isTitleVisible) pickedTopicTemplate.majorTopic else "",
-            style = getTextStyle(16, FontWeight.Medium, if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9),
+            style = getTextStyle(
+                16,
+                FontWeight.Medium,
+                if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
             textAlign = TextAlign.Center
         )
 
-        Box(modifier = Modifier
-            .wrapContentSize()
-            .align(Alignment.CenterEnd)
-            .padding(end = 20.dp)) {
+        Box(
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterEnd)
+                .padding(end = 20.dp)
+        ) {
             Image(
                 painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
                 contentDescription = "닫기버튼",
@@ -177,6 +192,101 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
     }
 }
 
+@Composable
+@Preview
+fun AppBarCloseTarotResult(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true,
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+) {
+
+
+    Box(
+        modifier = appBarModifier
+            .background(color = backgroundColor)
+            .padding(top = 10.dp, bottom = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = if (isTitleVisible) pickedTopicTemplate.majorTopic else "",
+            style = getTextStyle(
+                16,
+                FontWeight.Medium,
+                if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) white else gray_9
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            textAlign = TextAlign.Center
+        )
+
+        Box(
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterEnd)
+                .padding(end = 20.dp)
+        ) {
+            Image(
+                painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
+                contentDescription = "닫기버튼",
+                modifier = Modifier
+                    .clickable { resultViewModel.openCloseDialog() }
+                    .size(28.dp),
+                alignment = Alignment.Center
+            )
+        }
+    }
+}
+
+@Composable
+fun OpenCloseDialog(
+    navController: NavHostController,
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+) {
+    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 안한 경우
+    if (resultViewModel.isCloseDialogOpen() && !resultViewModel.isSaved()) {
+        Dialog(onDismissRequest = { resultViewModel.closeCloseDialog() }) {
+            CloseWithoutSaveDialog(onClickNo = { resultViewModel.closeCloseDialog() },
+                onClickOk = {
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+    // 닫기 버튼 눌렀을 때 && 타로 결과 저장 한 경우
+    else if (resultViewModel.isCloseDialogOpen() && resultViewModel.isSaved()) {
+        Dialog(onDismissRequest = { resultViewModel.closeCloseDialog() }) {
+            CloseDialog(onClickNo = { resultViewModel.closeCloseDialog() },
+                onClickOk = {
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+
+}
+
+@Composable
+fun OpenCompleteDialog(resultViewModel: ResultViewModel = remember { ResultViewModel() }) {
+    // 타로 결과 저장 버튼 눌렀을 때
+    if (resultViewModel.isCompleteDialogOpen()) {
+        Dialog(onDismissRequest = { resultViewModel.closeCompleteDialog() }) {
+            SaveCompletedDialog(onClickOk = { resultViewModel.closeCompleteDialog() })
+        }
+    }
+}
+
+@Composable
+fun ControlDialog(
+    navController: NavHostController,
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+) {
+    BackHandler { resultViewModel.closeCloseDialog() }
+    OpenCloseDialog(navController = navController)
+    OpenCompleteDialog()
+
+}
+
 
 /* BottomMenu ---------------------------------------------------------------------------------- */
 
@@ -186,8 +296,8 @@ fun AppBarClose(navController: NavHostController = rememberNavController(),
 fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
     val items = listOf<BottomNavItem>(
-            BottomNavItem.Home,
-            BottomNavItem.MyTarot
+        BottomNavItem.Home,
+        BottomNavItem.MyTarot
     )
     Column {
         Divider(
@@ -208,7 +318,8 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                         Icon(
                             painter = painterResource(
                                 id = if (currentRoute == item.screenName) item.selectedIcon
-                                else item.unselectedIcon),
+                                else item.unselectedIcon
+                            ),
                             contentDescription = item.title,
                             modifier = Modifier
                                 .width(26.dp)
@@ -217,16 +328,19 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     },
                     selectedContentColor = highlightPurple,
                     label = {
-                        Text(text = item.title, style = getTextStyle(
-                            fontSize = 12,
-                            fontWeight = FontWeight.Normal,
-                            color = if (currentRoute == item.screenName) highlightPurple else gray_6
-                        )) },
+                        Text(
+                            text = item.title, style = getTextStyle(
+                                fontSize = 12,
+                                fontWeight = FontWeight.Normal,
+                                color = if (currentRoute == item.screenName) highlightPurple else gray_6
+                            )
+                        )
+                    },
                     unselectedContentColor = gray_6,
                     selected = currentRoute == item.screenName,
                     alwaysShowLabel = true,
                     onClick = {
-                        if (item.screenName == ScreenEnum.MyTarotScreen.name){
+                        if (item.screenName == ScreenEnum.MyTarotScreen.name) {
                             val tarotResultArray = MyApplication.prefs.getTarotResultArray()
                             getTarotRequest(localContext, tarotResultArray)
                         }
@@ -241,6 +355,17 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
 sealed class BottomNavItem(
     val title: String, val selectedIcon: Int, val unselectedIcon: Int, val screenName: String
 ) {
-    object Home : BottomNavItem("홈", R.drawable.home_filled, R.drawable.home_lined, ScreenEnum.HomeScreen.name)
-    object MyTarot : BottomNavItem("MY", R.drawable.my_filled, R.drawable.my_lined, ScreenEnum.MyTarotScreen.name)
+    object Home : BottomNavItem(
+        "홈",
+        R.drawable.home_filled,
+        R.drawable.home_lined,
+        ScreenEnum.HomeScreen.name
+    )
+
+    object MyTarot : BottomNavItem(
+        "MY",
+        R.drawable.my_filled,
+        R.drawable.my_lined,
+        ScreenEnum.MyTarotScreen.name
+    )
 }

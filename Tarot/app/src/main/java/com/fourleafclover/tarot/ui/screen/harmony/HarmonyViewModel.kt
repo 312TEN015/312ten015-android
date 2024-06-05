@@ -5,10 +5,10 @@ import androidx.lifecycle.ViewModel
 
 class HarmonyViewModel: ViewModel() {
 
-    private var userNickname = mutableStateOf("")
-    private var partnerNickname = mutableStateOf("")
+    private var userNickname = mutableStateOf("")   // 사용자 닉네임
+    private var partnerNickname = mutableStateOf("")    // 상대방 닉네임
+    var roomCode = mutableStateOf("")       // 생성된 방 코드
 
-    var roomCode = mutableStateOf("")
     private var roomScenario = mutableStateOf(Scenario.Opening)
 
     fun setUserNickname(userNickname: String) {

@@ -1,15 +1,11 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import android.widget.Toast
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 
 class NicknameViewModel: ViewModel() {
 
-    private var nickname = mutableStateOf("")
+    private var nickname = mutableStateOf("사용자")
     private val maxChar = 10
     private var isCaptionVisible = mutableStateOf(false)
 
