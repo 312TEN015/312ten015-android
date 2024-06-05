@@ -98,6 +98,10 @@ class ChatViewModel : ViewModel() {
         }
     }
 
+    fun addChat(chat: Chat){
+        chatList.add(chat)
+    }
+
     fun moveToNextScenario(){
         if (scenarioSequence.indexOf(nowScenario) + 1 == scenarioSequence.size) return
 

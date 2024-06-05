@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.gray_1
@@ -44,10 +45,10 @@ fun ButtonNext(
 }
 
 @Composable
-fun ButtonText(isEnabled: Boolean, text: String = "선택완료"){
+fun ButtonText(isEnabled: Boolean, text: String = "선택완료", paddingVertical: Dp = 15.dp){
     TextButtonM16(
         text = text,
-        modifier = Modifier.padding(vertical = 15.dp),
+        modifier = Modifier.padding(vertical = paddingVertical),
         color = if (isEnabled) gray_1 else gray_5
     )
 }
