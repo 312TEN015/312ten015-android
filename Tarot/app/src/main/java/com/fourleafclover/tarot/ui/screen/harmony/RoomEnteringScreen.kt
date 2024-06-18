@@ -41,7 +41,7 @@ fun RoomEnteringScreen(navController: NavHostController = rememberNavController(
         Handler(Looper.getMainLooper())
             .postDelayed({
                 navigateInclusive(navController, ScreenEnum.RoomChatScreen.name)
-            }, 2000)
+            }, 3000)
     }
 
     Column(

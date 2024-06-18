@@ -67,7 +67,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
         Handler(Looper.getMainLooper())
             .postDelayed({
                 loadingViewModel.updateLoadingState(false)
-            }, 3000)
+            }, 4000)
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
