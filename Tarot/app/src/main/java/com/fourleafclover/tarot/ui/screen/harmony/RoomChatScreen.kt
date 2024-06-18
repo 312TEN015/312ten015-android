@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseOutQuart
@@ -10,35 +9,26 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsEndWidth
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -54,7 +44,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -74,18 +63,15 @@ import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple50
-import com.fourleafclover.tarot.ui.theme.transparent
-import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-enum class ActionStatus {
-    Unselected,
-    Selected
-}
+
+private val cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
+private var nowSelected by mutableIntStateOf(-1)
 
 
 @Composable
@@ -103,102 +89,155 @@ fun RoomChatScreen(
             isTitleVisible = false
         )
 
-        Box(modifier = Modifier) {
+        val scope = rememberCoroutineScope()
+        val scrollState = rememberLazyListState()
 
-            val scrollState = rememberLazyListState()
-            val scope = rememberCoroutineScope()
+        LazyColumn(
+            state = scrollState
+        ) {
 
-            LazyColumn(
-                modifier = Modifier,
-                state = scrollState,
-                contentPadding = PaddingValues(vertical = 0.dp),
-                content = {
+            items(chatViewModel.getChatListSize()) {
 
-                    itemsIndexed(
-                        items = chatViewModel.chatList
-                    ) { idx, chatItem ->
-                        val sec = remember { chatViewModel.getSec(chatItem) }
-                        when (chatItem.type) {
-                            ChatType.PartnerChat -> {
-                                withChatAnimation(idx = sec) {
-                                    PartnerChattingBox(
-                                        text = chatItem.text,
-                                        idx = sec
+                val chatItem = chatViewModel.getChatItem(it)
+                val sec = chatViewModel.getSec(chatItem)
+
+                withChatAnimation(idx = sec) {
+
+                    when (chatItem.type) {
+                        ChatType.PartnerChat -> {
+                            PartnerChattingBox(
+                                text = chatItem.text,
+                                idx = sec
+                            )
+                            scope.launch {
+                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
+                            }
+                        }
+
+                        ChatType.Button -> {
+                            var buttonVisibility by remember { mutableStateOf(true) }
+                            ButtonSelect(
+                                text = chatItem.text,
+                                onClick = {
+                                    buttonVisibility = false
+                                    chatViewModel.addChatItem(
+                                        Chat(
+                                            type = ChatType.MyChatText,
+                                            text = chatItem.text
+                                        )
                                     )
-                                    scope.launch {
-//                                        scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)
-                                    }
-                                }
+                                    chatViewModel.moveToNextScenario()
+                                },
+                                buttonVisibility
+                            )
+                            scope.launch {
+                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
                             }
-
-                            ChatType.Button -> {
-                                withChatAnimation(idx = sec) {
-                                    ButtonSelect(text = chatItem.text, onClick = {
-                                        chatViewModel.chatList.removeLast()
-                                        chatViewModel.insertedNum += 1
-                                        chatViewModel.addChat(Chat(ChatType.MyChat, chatItem.text, code = "inserted_${chatViewModel.insertedNum}"))
-                                        chatViewModel.moveToNextScenario()
-                                    })
-                                }
-                            }
-
-                            ChatType.GuidText -> {
-                                withChatAnimation(idx = sec) {
-                                    GuidBox(text = chatItem.text)
-                                    scope.launch {
-//                                        scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)
-                                    }
-                                }
-                            }
-
-                            ChatType.MyChat -> {
-                                withChatAnimation(idx = sec) {
-                                    MyChattingBox(text = chatItem.text, drawable = chatItem.drawable)
-                                    scope.launch {
-//                                        scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)
-                                    }
-                                }
-                            }
-
-                            ChatType.PickCard -> {
-                                CardDeck(sec, chatViewModel)
-                                scope.launch {
-//                                    scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)
-                                }
-                            }
-
-                            else -> {}
                         }
 
-                        if (idx == chatViewModel.chatList.lastIndex){
-                            Box(modifier = Modifier
-                                .fillMaxWidth()
-                                .height(150.dp)
-                                .background(color = transparent))
+                        ChatType.MyChatText -> {
+                            MyChattingBox(text = chatItem.text)
+                            scope.launch {
+                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
+                            }
                         }
+
+                        ChatType.MyChatImage -> {
+                            MyChattingBox(drawable = chatItem.drawable)
+                            scope.launch {
+                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
+                            }
+                        }
+
+                        ChatType.PickCard -> {
+                            CardDeck(chatViewModel)
+                            scope.launch {
+                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
+                            }
+                        }
+
+                        else -> {}
                     }
 
-                })
+                }
 
+
+            }
 
         }
-
-
-
-
 
     }
 
 }
 
 @Composable
-fun CardDeck(idx: Int, chatViewModel: ChatViewModel) {
+fun CardDeck(chatViewModel: ChatViewModel) {
     val localContext = LocalContext.current
-    val cards = remember { mutableStateListOf<Int>().apply { addAll(getRandomCards()) } }
-    var nowSelected by remember { mutableIntStateOf(-1) }
-    var cardSelected by remember { mutableStateOf(false) }
     val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
 
+    // 카드덱
+    Column(
+        modifier = Modifier.padding(top = 80.dp, bottom = 32.dp),
+        verticalArrangement = Arrangement.Center
+    ) {
+
+        LazyRow(
+            modifier = Modifier.wrapContentWidth(),
+            verticalAlignment = Alignment.Bottom,
+            horizontalArrangement = Arrangement.spacedBy((-46).dp)
+        ) {
+
+            items(cards.size) { index ->
+
+                val offset by animateIntOffsetAsState(
+                    targetValue = if (nowSelected == index) {
+                        IntOffset(0, pxToMove)
+                    } else {
+                        IntOffset.Zero
+                    },
+                    label = "offset"
+                )
+
+
+                Image(painter = painterResource(id = R.drawable.tarot_front),
+                    contentDescription = "$index",
+                    modifier = Modifier
+                        .width(80.dp)
+                        .offset {
+                            offset
+                        }
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            Log.d("", "nowSelected: $index")
+                            nowSelected = index
+                        })
+            }
+
+        }
+
+        ButtonSelect(
+            text = "선택 완료",
+            onClick = {
+                chatViewModel.saveCardNumber(cards[nowSelected])
+                chatViewModel.addChatItem(
+                    Chat(
+                        type = ChatType.MyChatImage,
+                        drawable = getCardImageId(localContext, cards[nowSelected].toString())
+                    )
+                )
+                cards.remove(cards[nowSelected])
+                chatViewModel.moveToNextScenario()
+                nowSelected = -1
+            }
+        )
+
+    }
+}
+
+@Composable
+fun withChatAnimation(idx: Int = 0, content: @Composable () -> Unit = {}) {
     val initialIdx = remember { idx }
 
     var visible by remember { mutableStateOf(false) }
@@ -215,99 +254,7 @@ fun CardDeck(idx: Int, chatViewModel: ChatViewModel) {
             animationSpec = tween(durationMillis = 1500, easing = EaseOutQuart),
             initialOffsetY = { it * 2 }
         ) + fadeIn(animationSpec = tween(durationMillis = 1900)),
-        exit = fadeOut(animationSpec = tween(durationMillis = 800))
-    ) {
-
-        // 카드덱
-        Column(
-            modifier = Modifier.padding(top = 80.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-
-            LazyRow(
-                modifier = Modifier.wrapContentWidth(),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.spacedBy((-46).dp)
-            ) {
-
-                items(cards.size) { index ->
-
-                    val offset by animateIntOffsetAsState(
-                        targetValue = if (nowSelected == index) {
-                            IntOffset(0, pxToMove)
-                        } else {
-                            IntOffset.Zero
-                        },
-                        label = "offset"
-                    )
-
-
-                    Image(painter = painterResource(id = R.drawable.tarot_front),
-                        contentDescription = "$index",
-                        modifier = Modifier
-                            .width(80.dp)
-                            .offset {
-                                offset
-                            }
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                Log.d("", "nowSelected: $index")
-                                cardSelected = true
-                                nowSelected = index
-                            })
-                }
-
-            }
-
-            ButtonSelect(
-                text = "선택 완료",
-                onClick = {
-                    chatViewModel.chatList.removeLast()
-                    chatViewModel.saveCardNumber(cards[nowSelected])
-                    chatViewModel.insertedNum += 1
-                    chatViewModel.addChat(
-                        Chat(
-                            ChatType.MyChat,
-                            drawable = getCardImageId(localContext, cards[nowSelected].toString()),
-                            code = "inserted_${chatViewModel.insertedNum}"
-                        )
-                    )
-                    cards.remove(cards[nowSelected])
-                    chatViewModel.moveToNextScenario()
-                    chatViewModel.isCardPick = false
-                    visible = false
-
-                    cardSelected = false
-                    nowSelected = -1
-                },
-                isVisible = cardSelected
-            )
-
-        }
-    }
-}
-
-@Composable
-fun withChatAnimation(idx: Int = 0, content: @Composable () -> Unit = {}) {
-    val initialIdx = remember { idx }
-
-    var visible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        delay(((initialIdx + 1) * 1200).toLong())
-        visible = true
-    }
-
-    Box(modifier = Modifier)
-    AnimatedVisibility(
-        visible = visible,
-        modifier = Modifier,
-        enter = slideInVertically(
-            animationSpec = tween(durationMillis = 1500, easing = EaseOutQuart),
-            initialOffsetY = { it * 2 }
-        ) + fadeIn(animationSpec = tween(durationMillis = 1900))
+        exit = fadeOut(animationSpec = tween(durationMillis = 500))
     ) {
         content()
     }
@@ -317,7 +264,7 @@ fun withChatAnimation(idx: Int = 0, content: @Composable () -> Unit = {}) {
 @Preview
 fun PartnerChattingBox(text: String = "", idx: Int = 0) {
 
-    val initialIdx = remember { idx }
+    val initialIdx by remember { mutableStateOf(idx) }
 
     Row(
         modifier = Modifier
@@ -444,29 +391,30 @@ fun ButtonSelect(
     isVisible: Boolean = true
 ) {
 
-    Box(
-        modifier = Modifier
-            .padding(top = 32.dp)
-            .fillMaxWidth()
-            .alpha(if (isVisible) 1f else 0f),
-        contentAlignment = Alignment.Center
-    ) {
+    if (isVisible) {
         Box(
             modifier = Modifier
-                .background(
-                    shape = RoundedCornerShape(10.dp),
-                    color = highlightPurple
-                )
-                .clickable {
-                    onClick()
-                }
-                .padding(horizontal = 50.dp)
-                .wrapContentHeight(),
+                .padding(top = 32.dp)
+                .fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
-            ButtonText(isEnabled = true, text = text, paddingVertical = 8.dp)
-        }
+            Box(
+                modifier = Modifier
+                    .background(
+                        shape = RoundedCornerShape(10.dp),
+                        color = highlightPurple
+                    )
+                    .clickable {
+                        onClick()
+                    }
+                    .padding(horizontal = 50.dp)
+                    .wrapContentHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                ButtonText(isEnabled = true, text = text, paddingVertical = 8.dp)
+            }
 
+        }
     }
 
 }
