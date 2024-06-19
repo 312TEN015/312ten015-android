@@ -1,7 +1,9 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
 import android.util.Log
+import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.EaseOutQuart
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
@@ -9,21 +11,26 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -64,6 +72,8 @@ import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple50
+import com.fourleafclover.tarot.ui.theme.transparent
+import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
 import com.fourleafclover.tarot.utils.getPickedTopic
 import kotlinx.coroutines.delay
@@ -73,6 +83,7 @@ import kotlin.math.roundToInt
 
 private val cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
 private var nowSelected by mutableIntStateOf(-1)
+private val toShowProfileList = mutableIntSetOf()
 
 
 @Composable
@@ -92,87 +103,111 @@ fun RoomChatScreen(
             isTitleVisible = false
         )
 
-        val scope = rememberCoroutineScope()
-        val scrollState = rememberLazyListState()
 
-        LazyColumn(
-            state = scrollState
-        ) {
 
-            items(chatViewModel.getChatListSize() + 1) {
+        Box(contentAlignment = Alignment.BottomCenter) {
 
-                if (it == chatViewModel.getChatListSize()){
-                    val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it - 1)) }
-                    val sec by remember { mutableStateOf(chatViewModel.getSec(chatItem)) }
+            val scope = rememberCoroutineScope()
+            val scrollState = rememberLazyListState()
 
-                    Box(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
-                        if (chatState.value.cardPickStatus == CardPickStatus.Spread) {
-                            withChatAnimation(idx = sec)
-                            {
-                                CardDeck(chatViewModel)
-                            }
-                            scope.launch {
-                                scrollState.scrollToItem(it)
-                            }
-                        }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = scrollState
+            ) {
 
-                        Box(modifier = Modifier.fillMaxWidth().height(100.dp))
-                    }
+                items(chatViewModel.getChatListSize() + 1) {
 
-                }else {
-                    val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it)) }
-                    val sec by remember { mutableStateOf(chatViewModel.getSec(chatItem)) }
+                    val itemSize = 20.dp    // 대략적인 사이즈
+                    val density = LocalDensity.current
+                    val itemSizePx = with(density) { itemSize.toPx() }
+                    val itemsScrollCount = chatViewModel.getChatListSize()
 
-                    withChatAnimation(
-                        idx = sec,
-                        chatItem = chatItem
-                    ) {
+                    if (it == chatViewModel.getChatListSize()) {
+                        Box(modifier = Modifier
+                            .requiredHeight(300.dp)
+                            .fillMaxWidth())
+                    } else {
+                        val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it)) }
+                        val sec by remember { mutableStateOf(chatViewModel.getSec(chatItem)) }
 
-                        when (chatItem.type) {
-                            ChatType.PartnerChat -> {
-                                PartnerChattingBox(
-                                    text = chatItem.text,
-                                    idx = sec
-                                )
-                            }
+                        withChatAnimation(
+                            idx = sec,
+                            chatItem = chatItem
+                        ) {
 
-                            ChatType.Button -> {
-                                var buttonVisibility by remember { mutableStateOf(true) }
-                                ButtonSelect(
-                                    text = chatItem.text,
-                                    onClick = {
-                                        buttonVisibility = false
-                                        chatViewModel.addChatItem(
-                                            Chat(
-                                                type = ChatType.MyChatText,
-                                                text = chatItem.text
-                                            )
+                            when (chatItem.type) {
+                                ChatType.PartnerChat -> {
+                                    if (sec == 0){
+                                        toShowProfileList.add(it)
+                                    }
+                                    PartnerChattingBox(
+                                        text = chatItem.text,
+                                        idx = it
+                                    )
+                                }
+
+                                ChatType.Button -> {
+                                    if (!chatItem.isShown) {
+                                        var buttonVisibility by remember { mutableStateOf(true) }
+                                        ButtonSelect(
+                                            text = chatItem.text,
+                                            onClick = {
+                                                buttonVisibility = false
+                                                chatViewModel.addChatItem(
+                                                    Chat(
+                                                        type = ChatType.MyChatText,
+                                                        text = chatItem.text
+                                                    )
+                                                )
+                                                chatViewModel.moveToNextScenario()
+                                            },
+                                            buttonVisibility
                                         )
-                                        chatViewModel.moveToNextScenario()
-                                    },
-                                    buttonVisibility
+                                    }
+                                }
+
+                                ChatType.MyChatText -> {
+                                    MyChattingBox(text = chatItem.text)
+                                }
+
+                                ChatType.MyChatImage -> {
+                                    MyChattingBox(drawable = chatItem.drawable)
+                                }
+
+                                ChatType.PickCard -> {
+                                    if (chatState.value.scenario != Scenario.Complete) {
+                                        LaunchedEffect(Unit) {
+                                            chatViewModel.updateCardPickStatus(CardPickStatus.Spread)
+                                        }
+                                    }
+                                }
+
+                                else -> {}
+                            }
+
+                        }
+
+                        if (!chatItem.isShown) {
+                            scope.launch {
+                                scrollState.animateScrollBy(
+                                    value = itemSizePx * itemsScrollCount,
+                                    animationSpec = tween(
+                                        durationMillis = 1500,
+                                        easing = EaseOutQuart
+                                    )
                                 )
                             }
 
-                            ChatType.MyChatText -> {
-                                MyChattingBox(text = chatItem.text)
-                            }
-
-                            ChatType.MyChatImage -> {
-                                MyChattingBox(drawable = chatItem.drawable)
-                            }
-
-                            ChatType.PickCard -> {
-                                chatViewModel.updateCardPickStatus(CardPickStatus.Spread)
-                            }
-
-                            else -> {}
                         }
-
                     }
                 }
+
             }
 
+            if (chatState.value.cardPickStatus == CardPickStatus.Spread)
+                withChatAnimation(){
+                    CardDeck(chatViewModel)
+                }
         }
 
     }
@@ -182,12 +217,12 @@ fun RoomChatScreen(
 @Composable
 fun CardDeck(chatViewModel: ChatViewModel) {
     val localContext = LocalContext.current
-    val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
+    val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
     // 카드덱
     Column(
         modifier = Modifier.padding(top = 80.dp, bottom = 32.dp),
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
 
         LazyRow(
@@ -246,19 +281,18 @@ fun CardDeck(chatViewModel: ChatViewModel) {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun withChatAnimation(
     idx: Int = 0,
     chatItem: Chat,
     content: @Composable () -> Unit = {}) {
-    val initialIdx = remember { idx }
     var visible by remember { mutableStateOf(false) }
 
     if (!visible) {
         LaunchedEffect(Unit) {
-            delay(((initialIdx + 1) * 1200).toLong())
+            delay(((idx + 1) * 1200).toLong())
             visible = true
-            chatItem.isShown = true
         }
     }
 
@@ -272,6 +306,9 @@ fun withChatAnimation(
         exit = fadeOut(animationSpec = tween(durationMillis = 500))
     ) {
         content()
+        if (this.transition.currentState == this.transition.targetState){
+            chatItem.isShown = true
+        }
     }
 }
 
@@ -279,12 +316,11 @@ fun withChatAnimation(
 fun withChatAnimation(
     idx: Int = 0,
     content: @Composable () -> Unit = {}) {
-    val initialIdx = remember { idx }
     var visible by remember { mutableStateOf(false) }
 
     if (!visible) {
         LaunchedEffect(Unit) {
-            delay(((initialIdx + 1) * 1200).toLong())
+            delay(((idx) * 1200).toLong())
             visible = true
         }
     }
@@ -306,8 +342,6 @@ fun withChatAnimation(
 @Preview
 fun PartnerChattingBox(text: String = "", idx: Int = 0) {
 
-    val initialIdx by remember { mutableStateOf(idx) }
-
     Row(
         modifier = Modifier
             .padding(start = 20.dp, end = 48.dp)
@@ -317,7 +351,7 @@ fun PartnerChattingBox(text: String = "", idx: Int = 0) {
         Image(
             modifier = Modifier
                 .padding(end = 14.dp)
-                .alpha(if (initialIdx == 0) 1f else 0f),
+                .alpha(if (idx in toShowProfileList) 1f else 0f),
             painter = painterResource(id = R.drawable.icon_love),
             contentDescription = null
         )
