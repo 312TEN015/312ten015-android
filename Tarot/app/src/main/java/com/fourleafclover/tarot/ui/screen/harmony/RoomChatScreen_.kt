@@ -115,7 +115,7 @@ fun RoomChatScreen_(
                         val sec = remember { chatViewModel.getSec(chatItem) }
                         when (chatItem.type) {
                             ChatType.PartnerChat -> {
-                                withChatAnimation(idx = sec) {
+                                withChatAnimation_(idx = sec) {
                                     PartnerChattingBox(
                                         text = chatItem.text,
                                         idx = sec
@@ -127,7 +127,7 @@ fun RoomChatScreen_(
                             }
 
                             ChatType.Button -> {
-                                withChatAnimation(idx = sec) {
+                                withChatAnimation_(idx = sec) {
                                     ButtonSelect(text = chatItem.text, onClick = {
                                         chatViewModel.chatList.removeLast()
                                         chatViewModel.insertedNum += 1
@@ -138,7 +138,7 @@ fun RoomChatScreen_(
                             }
 
                             ChatType.GuidText -> {
-                                withChatAnimation(idx = sec) {
+                                withChatAnimation_(idx = sec) {
                                     GuidBox(text = chatItem.text)
                                     scope.launch {
 //                                        scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)
@@ -147,7 +147,7 @@ fun RoomChatScreen_(
                             }
 
                             ChatType.MyChat -> {
-                                withChatAnimation(idx = sec) {
+                                withChatAnimation_(idx = sec) {
                                     MyChattingBox(text = chatItem.text, drawable = chatItem.drawable)
                                     scope.launch {
 //                                        scrollState.animateScrollToItem(index = chatViewModel.chatList.lastIndex)

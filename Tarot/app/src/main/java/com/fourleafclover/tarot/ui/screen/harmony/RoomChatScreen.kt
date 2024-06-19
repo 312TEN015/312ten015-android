@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -81,6 +82,8 @@ fun RoomChatScreen(
     chatViewModel: ChatViewModel = remember { ChatViewModel() }
 ) {
 
+    val chatState = chatViewModel.chatState.collectAsState()
+
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
             navController = navController,
@@ -96,72 +99,78 @@ fun RoomChatScreen(
             state = scrollState
         ) {
 
-            items(chatViewModel.getChatListSize()) {
+            items(chatViewModel.getChatListSize() + 1) {
 
-                val chatItem = chatViewModel.getChatItem(it)
-                val sec = chatViewModel.getSec(chatItem)
+                if (it == chatViewModel.getChatListSize()){
+                    val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it - 1)) }
+                    val sec by remember { mutableStateOf(chatViewModel.getSec(chatItem)) }
 
-                withChatAnimation(idx = sec) {
-
-                    when (chatItem.type) {
-                        ChatType.PartnerChat -> {
-                            PartnerChattingBox(
-                                text = chatItem.text,
-                                idx = sec
-                            )
+                    Box(modifier = Modifier.fillMaxWidth().wrapContentHeight()) {
+                        if (chatState.value.cardPickStatus == CardPickStatus.Spread) {
+                            withChatAnimation(idx = sec)
+                            {
+                                CardDeck(chatViewModel)
+                            }
                             scope.launch {
-                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
+                                scrollState.scrollToItem(it)
                             }
                         }
 
-                        ChatType.Button -> {
-                            var buttonVisibility by remember { mutableStateOf(true) }
-                            ButtonSelect(
-                                text = chatItem.text,
-                                onClick = {
-                                    buttonVisibility = false
-                                    chatViewModel.addChatItem(
-                                        Chat(
-                                            type = ChatType.MyChatText,
-                                            text = chatItem.text
-                                        )
-                                    )
-                                    chatViewModel.moveToNextScenario()
-                                },
-                                buttonVisibility
-                            )
-                            scope.launch {
-                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
-                            }
-                        }
-
-                        ChatType.MyChatText -> {
-                            MyChattingBox(text = chatItem.text)
-                            scope.launch {
-                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
-                            }
-                        }
-
-                        ChatType.MyChatImage -> {
-                            MyChattingBox(drawable = chatItem.drawable)
-                            scope.launch {
-                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
-                            }
-                        }
-
-                        ChatType.PickCard -> {
-                            CardDeck(chatViewModel)
-                            scope.launch {
-                                scrollState.animateScrollToItem(index = chatViewModel.getChatListSize()-1)
-                            }
-                        }
-
-                        else -> {}
+                        Box(modifier = Modifier.fillMaxWidth().height(100.dp))
                     }
 
+                }else {
+                    val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it)) }
+                    val sec by remember { mutableStateOf(chatViewModel.getSec(chatItem)) }
+
+                    withChatAnimation(
+                        idx = sec,
+                        chatItem = chatItem
+                    ) {
+
+                        when (chatItem.type) {
+                            ChatType.PartnerChat -> {
+                                PartnerChattingBox(
+                                    text = chatItem.text,
+                                    idx = sec
+                                )
+                            }
+
+                            ChatType.Button -> {
+                                var buttonVisibility by remember { mutableStateOf(true) }
+                                ButtonSelect(
+                                    text = chatItem.text,
+                                    onClick = {
+                                        buttonVisibility = false
+                                        chatViewModel.addChatItem(
+                                            Chat(
+                                                type = ChatType.MyChatText,
+                                                text = chatItem.text
+                                            )
+                                        )
+                                        chatViewModel.moveToNextScenario()
+                                    },
+                                    buttonVisibility
+                                )
+                            }
+
+                            ChatType.MyChatText -> {
+                                MyChattingBox(text = chatItem.text)
+                            }
+
+                            ChatType.MyChatImage -> {
+                                MyChattingBox(drawable = chatItem.drawable)
+                            }
+
+                            ChatType.PickCard -> {
+                                chatViewModel.updateCardPickStatus(CardPickStatus.Spread)
+                            }
+
+                            else -> {}
+                        }
+
+                    }
                 }
-
-
             }
 
         }
@@ -229,6 +238,7 @@ fun CardDeck(chatViewModel: ChatViewModel) {
                 )
                 cards.remove(cards[nowSelected])
                 chatViewModel.moveToNextScenario()
+                chatViewModel.updateCardPickStatus(CardPickStatus.Gathered)
                 nowSelected = -1
             }
         )
@@ -237,14 +247,46 @@ fun CardDeck(chatViewModel: ChatViewModel) {
 }
 
 @Composable
-fun withChatAnimation(idx: Int = 0, content: @Composable () -> Unit = {}) {
+fun withChatAnimation(
+    idx: Int = 0,
+    chatItem: Chat,
+    content: @Composable () -> Unit = {}) {
     val initialIdx = remember { idx }
-
     var visible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        delay(((initialIdx + 1) * 1200).toLong())
-        visible = true
+    if (!visible) {
+        LaunchedEffect(Unit) {
+            delay(((initialIdx + 1) * 1200).toLong())
+            visible = true
+            chatItem.isShown = true
+        }
+    }
+
+    AnimatedVisibility(
+        visible = if (chatItem.isShown) true else visible,
+        modifier = Modifier,
+        enter = slideInVertically(
+            animationSpec = tween(durationMillis = 1500, easing = EaseOutQuart),
+            initialOffsetY = { it * 2 }
+        ) + fadeIn(animationSpec = tween(durationMillis = 1900)),
+        exit = fadeOut(animationSpec = tween(durationMillis = 500))
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun withChatAnimation(
+    idx: Int = 0,
+    content: @Composable () -> Unit = {}) {
+    val initialIdx = remember { idx }
+    var visible by remember { mutableStateOf(false) }
+
+    if (!visible) {
+        LaunchedEffect(Unit) {
+            delay(((initialIdx + 1) * 1200).toLong())
+            visible = true
+        }
     }
 
     AnimatedVisibility(
