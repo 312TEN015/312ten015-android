@@ -144,11 +144,15 @@ class ChatViewModel : ViewModel() {
     fun getChatItem(idx: Int): Chat = chatList[idx]
 
     fun addChatItem(chatItem: Chat) = chatList.add(chatItem)
+
+    fun getNextScenario(nowScenario: Scenario) = scenarioSequence[scenarioSequence.indexOf(nowScenario) + 1]
     
     fun updateScenario(){
-        val nowScenario = _chatState.value.scenario
-        val nextScenario = scenarioSequence[scenarioSequence.indexOf(nowScenario) + 1]
-        _chatState.value.scenario = nextScenario
+        _chatState.value.scenario = getNextScenario(_chatState.value.scenario)
+    }
+
+    fun updatePartnerScenario(){
+        _partnerChatState.value.scenario = getNextScenario(_partnerChatState.value.scenario)
     }
 
     fun moveToNextScenario() {

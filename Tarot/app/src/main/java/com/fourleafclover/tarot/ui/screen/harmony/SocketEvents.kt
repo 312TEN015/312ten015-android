@@ -9,13 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-/*                              inviter                          invitee
-* connect               RoomCreateLoadingScreen         ShareUtil
+/*                             <inviter>                      <invitee>
+* connect               RoomCreateLoadingScreen               ShareUtil
 * emit - create         RoomCreateLoadingScreen
 * on - createComplete   RoomCreateLoadingScreen
 * emit - join           RoomInviteLoadingScreen         RoomInviteLoadingScreen
 * on - joinComplete     RoomInviteLoadingScreen         RoomInviteLoadingScreen
-*
+* on - partnerChecked       RoomChatScreen                   RoomChatScreen
 * */
 
 // 방 생성 완료
@@ -35,22 +35,22 @@ var onJoinComplete = Emitter.Listener { args ->
     }
 }
 
-// 상대방이 시작하기 누름
-var onStart = Emitter.Listener { args ->
+// 상대방이 시작하기 누름 or 카드 선택함
+var onPartnerChecked = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
-        chatViewModel.partnerChatState.value.scenario = Scenario.FirstCard
 
-        // 내가 누른 상태인 경우
-        if (chatViewModel.chatState.value.scenario == Scenario.FirstCard){
+        if (chatViewModel.chatState.value.scenario != chatViewModel.partnerChatState.value.scenario){
             chatViewModel.removeChatListLastItem()
             chatViewModel.addChatItem(
                 Chat(
                     type = ChatType.GuidText,
-                    text = "상대방이 답변을 선택했습니다️"
+                    text = "상대방이 답변을 선택했습니다.✨️"
                 )
             )
             chatViewModel.addNextScenario()
         }
-
+        
+        chatViewModel.updatePartnerScenario()
     }
 }
+
