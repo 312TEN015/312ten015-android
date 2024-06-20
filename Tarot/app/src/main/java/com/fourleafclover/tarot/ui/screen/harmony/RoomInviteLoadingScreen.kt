@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
@@ -47,6 +48,11 @@ import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
+import io.socket.emitter.Emitter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
 @Composable
@@ -64,10 +70,12 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
     /* 한번만 실행 */
     if (!initialize) {
         initialize = true
-        Handler(Looper.getMainLooper())
-            .postDelayed({
-                loadingViewModel.updateLoadingState(false)
-            }, 4000)
+
+        val jsonObject = JSONObject()
+        jsonObject.put("nickname", harmonyViewModel.getUserNickname())
+        jsonObject.put("roomCode", harmonyViewModel.roomCode.value)
+        MyApplication.socket.emit("join", jsonObject)
+        MyApplication.socket.on("joinComplete", onJoinComplete)
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {

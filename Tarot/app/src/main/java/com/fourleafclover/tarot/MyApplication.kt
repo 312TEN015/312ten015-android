@@ -1,10 +1,10 @@
 package com.fourleafclover.tarot
 
 import android.app.Application
-import android.os.Build
-import android.util.Log
 import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.utils.PreferenceUtil
+import io.socket.client.IO
+import io.socket.client.Socket
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,7 +16,7 @@ class MyApplication: Application() {
     companion object {
         lateinit var prefs: PreferenceUtil
         lateinit var tarotService: TarotService
-
+        lateinit var socket: Socket
     }
 
     override fun onCreate() {
@@ -47,6 +47,12 @@ class MyApplication: Application() {
         tarotService = retrofit.create(TarotService::class.java)
 
 //        Log.d("buildConfig", BuildConfig.BUILD_TYPE)
+
+        try {
+            socket = IO.socket(BuildConfig.BASE_URL)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
 
 

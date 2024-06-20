@@ -111,8 +111,7 @@ enum class Scenario {
 
 enum class CardPickStatus {
     Gathered,
-    Spread,
-    Selected
+    Spread
 }
 
 data class ChatState(
@@ -127,28 +126,38 @@ class ChatViewModel : ViewModel() {
     private val _chatState = MutableStateFlow(ChatState())
     val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
 
+    private val _partnerChatState = MutableStateFlow(ChatState())
+    val partnerChatState: StateFlow<ChatState> = _partnerChatState.asStateFlow()
+
     private val chatList = mutableStateListOf<Chat>()
 
     init {
         chatList.addAll(opening)
         _chatState.value = ChatState()
+        _partnerChatState.value = ChatState()
     }
+
+    fun removeChatListLastItem() = chatList.removeLast()
 
     fun getChatListSize(): Int = chatList.size
 
     fun getChatItem(idx: Int): Chat = chatList[idx]
 
     fun addChatItem(chatItem: Chat) = chatList.add(chatItem)
-
-    fun moveToNextScenario() {
+    
+    fun updateScenario(){
         val nowScenario = _chatState.value.scenario
         val nextScenario = scenarioSequence[scenarioSequence.indexOf(nowScenario) + 1]
         _chatState.value.scenario = nextScenario
-        addNextScenario(nextScenario)
     }
 
-    private fun addNextScenario(nextScenario: Scenario) {
-        when (nextScenario) {
+    fun moveToNextScenario() {
+        updateScenario()    // 다음 시나리오로 업데이트
+        addNextScenario()   // 업데이트 된 시나리오 진행
+    }
+
+    fun addNextScenario() {
+        when (_chatState.value.scenario) {
             Scenario.FirstCard -> chatList.addAll(firstCard)
             Scenario.SecondCard -> chatList.addAll(secondCard)
             Scenario.ThirdCard -> chatList.addAll(thirdCard)

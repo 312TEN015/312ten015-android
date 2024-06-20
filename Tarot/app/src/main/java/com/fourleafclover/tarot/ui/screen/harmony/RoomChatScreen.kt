@@ -57,7 +57,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
@@ -89,11 +91,11 @@ private val toShowProfileList = mutableIntSetOf()
 @Composable
 @Preview
 fun RoomChatScreen(
-    navController: NavHostController = rememberNavController(),
-    chatViewModel: ChatViewModel = remember { ChatViewModel() }
+    navController: NavHostController = rememberNavController()
 ) {
 
     val chatState = chatViewModel.chatState.collectAsState()
+    val partnerChatState = chatViewModel.partnerChatState.collectAsState()
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
@@ -102,8 +104,6 @@ fun RoomChatScreen(
             backgroundColor = backgroundColor_2,
             isTitleVisible = false
         )
-
-
 
         Box(contentAlignment = Alignment.BottomCenter) {
 
@@ -135,6 +135,8 @@ fun RoomChatScreen(
                             chatItem = chatItem
                         ) {
 
+                            MyApplication.socket.on("start", onStart)
+
                             when (chatItem.type) {
                                 ChatType.PartnerChatText -> {
                                     if (sec == 0){
@@ -159,7 +161,23 @@ fun RoomChatScreen(
                                                         text = chatItem.text
                                                     )
                                                 )
-                                                chatViewModel.moveToNextScenario()
+                                                
+                                                // 상대방이 아직 선택 안함
+                                                if (partnerChatState.value.scenario == Scenario.Opening){
+                                                    chatViewModel.updateScenario()
+                                                    chatViewModel.addChatItem(
+                                                        Chat(
+                                                            type = ChatType.GuidText,
+                                                            text = "상대방의 답변을 기다리는 중입니다...✏️"
+                                                        )
+                                                    )
+                                                    // -> onStart
+                                                }
+                                                // 상대방도 선택함
+                                                else if (partnerChatState.value.scenario == Scenario.FirstCard){
+                                                    chatViewModel.moveToNextScenario()
+                                                }
+                                                
                                             },
                                             buttonVisibility
                                         )
@@ -180,6 +198,10 @@ fun RoomChatScreen(
                                             chatViewModel.updateCardPickStatus(CardPickStatus.Spread)
                                         }
                                     }
+                                }
+
+                                ChatType.GuidText -> {
+
                                 }
 
                                 else -> {}

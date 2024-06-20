@@ -6,7 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.navigation.NavHostController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.google.firebase.Firebase
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -59,18 +63,24 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
         .addOnSuccessListener(activity) { pendingDynamicLinkData: PendingDynamicLinkData? ->
             Log.w("DynamicLink", "getDynamicLink:onSuccess")
             // Get deep link from result (may be null if no link is found)
-            if (pendingDynamicLinkData != null) {
-                val deepLink = pendingDynamicLinkData.link
-                val deppLinkString = deepLink.toString()
-                val sharedTarotId = Uri.parse(deppLinkString).getQueryParameter("tarotId")
-                Log.d("DynamicLink", deppLinkString)
-                Log.d("DynamicLink", sharedTarotId!!)
+            if (pendingDynamicLinkData == null) return@addOnSuccessListener
 
-                activity.intent = null
+            val deepLink = pendingDynamicLinkData.link ?: return@addOnSuccessListener
+
+            val deepLinkUri = Uri.parse(deepLink.toString())
+
+            if (deepLinkUri.getBooleanQueryParameter("tarotId", false)){
+                val sharedTarotId = deepLinkUri.getQueryParameter("tarotId")!!
                 getSharedTarotRequest(activity, navController, sharedTarotId)
-
             }
 
+            if (deepLinkUri.getBooleanQueryParameter("roomCode", false)){
+                harmonyViewModel.roomCode.value = deepLinkUri.getQueryParameter("roomCode")!!
+                MyApplication.socket.connect()
+                navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
+            }
+
+            activity.intent = null
 
         }
         .addOnFailureListener(activity) { e ->

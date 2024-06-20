@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
@@ -38,6 +39,7 @@ import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.white
+import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
 @Composable
@@ -55,6 +57,14 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
     /* 한번만 실행 */
     if (!initialize) {
         initialize = true
+
+        // 새로운 방 생성
+        MyApplication.socket.connect()
+        if (harmonyViewModel.roomCode.value.isEmpty()) {
+            MyApplication.socket.emit("create")
+            MyApplication.socket.on("createComplete", onCreate)
+        }
+
         Handler(Looper.getMainLooper())
             .postDelayed({
                 loadingViewModel.updateLoadingState(false)

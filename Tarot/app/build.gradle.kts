@@ -136,4 +136,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     implementation("com.google.firebase:firebase-dynamic-links-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // socket.io
+    implementation ("io.socket:socket.io-client:2.0.0")
 }

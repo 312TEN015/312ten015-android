@@ -143,7 +143,22 @@ fun RoomNicknameScreen(
                 onClick = {
                     harmonyViewModel.setUserNickname(nicknameViewModel.getNicknameString())
 
-                    loadingViewModel.startLoading(navController, ScreenEnum.RoomCreateLoadingScreen, ScreenEnum.RoomShareScreen)
+                    // 새로 방을 생성
+                    if (harmonyViewModel.roomCode.value.isEmpty()) {
+                        loadingViewModel.startLoading(
+                            navController,
+                            ScreenEnum.RoomCreateLoadingScreen,
+                            ScreenEnum.RoomShareScreen
+                        )
+                    }
+                    // 초대받아 입장
+                    else{
+                        loadingViewModel.startLoading(
+                            navController,
+                            ScreenEnum.RoomInviteLoadingScreen,
+                            ScreenEnum.RoomEnteringScreen
+                        )
+                    }
                 },
                 enabled = { nicknameViewModel.isCompleted() },
                 content = { ButtonText(isEnabled = nicknameViewModel.isCompleted(), text = "입력완료") }

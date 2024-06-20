@@ -6,6 +6,7 @@ import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.ui.screen.harmony.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.LoadingViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
@@ -104,3 +105,4 @@ fun getRandomCards(): List<Int> { return entireCards.toMutableList().shuffled() 
 
 val harmonyViewModel = HarmonyViewModel()
 val loadingViewModel = LoadingViewModel()
+val chatViewModel = ChatViewModel()
