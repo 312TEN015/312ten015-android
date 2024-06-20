@@ -136,7 +136,7 @@ fun RoomChatScreen(
                         ) {
 
                             when (chatItem.type) {
-                                ChatType.PartnerChat -> {
+                                ChatType.PartnerChatText -> {
                                     if (sec == 0){
                                         toShowProfileList.add(it)
                                     }
@@ -352,7 +352,7 @@ fun PartnerChattingBox(text: String = "", idx: Int = 0) {
             modifier = Modifier
                 .padding(end = 14.dp)
                 .alpha(if (idx in toShowProfileList) 1f else 0f),
-            painter = painterResource(id = R.drawable.icon_love),
+            painter = painterResource(id = R.drawable.default_profile),
             contentDescription = null
         )
 
