@@ -67,6 +67,7 @@ import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_5
+import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
@@ -296,7 +297,9 @@ fun CardDeck(chatViewModel: ChatViewModel) {
                 nowSelected = -1
 
                 checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
-            }
+
+            },
+            isEnable = nowSelected != -1
         )
 
     }
@@ -485,7 +488,8 @@ fun GuidBox(text: String = "상대방의 답변을 기다리는 중입니다...�
 fun ButtonSelect(
     text: String = "시작하기",
     onClick: () -> Unit,
-    isVisible: Boolean = true
+    isVisible: Boolean = true,
+    isEnable: Boolean = true
 ) {
 
     if (isVisible) {
@@ -499,16 +503,16 @@ fun ButtonSelect(
                 modifier = Modifier
                     .background(
                         shape = RoundedCornerShape(10.dp),
-                        color = highlightPurple
+                        color = if (isEnable) highlightPurple else gray_6
                     )
-                    .clickable {
+                    .clickable(enabled = isEnable) {
                         onClick()
                     }
                     .padding(horizontal = 50.dp)
                     .wrapContentHeight(),
                 contentAlignment = Alignment.Center
             ) {
-                ButtonText(isEnabled = true, text = text, paddingVertical = 8.dp)
+                ButtonText(isEnabled = isEnable, text = text, paddingVertical = 8.dp)
             }
 
         }

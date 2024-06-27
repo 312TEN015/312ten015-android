@@ -46,6 +46,8 @@ import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.ShareActionType
+import com.fourleafclover.tarot.utils.ShareLinkType
 import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.getSubjectImoji
 import com.fourleafclover.tarot.utils.setDynamicLink
@@ -138,7 +140,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     .padding(vertical = 16.dp, horizontal = 16.dp)
                     .padding(bottom = 45.dp)
                     .clickable {
-                        setDynamicLink(localContext, selectedTarotResult.tarotId)
+                        setDynamicLink(localContext, selectedTarotResult.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
                     },
                     horizontalArrangement = Arrangement.Center)
                 {

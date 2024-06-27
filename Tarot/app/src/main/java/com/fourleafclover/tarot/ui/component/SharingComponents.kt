@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,29 +11,45 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
-import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.gray_2
-import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_9
+import com.fourleafclover.tarot.utils.ShareActionType
+import com.fourleafclover.tarot.utils.ShareLinkType
+import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 @Preview
 fun ShareLinkOrCopy(){
+    val localContext = LocalContext.current
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        HowToShareButton(modifier = Modifier.weight(1f), iconResource = R.drawable.share_g2, text = "초대 링크 공유")
-        HowToShareButton(modifier = Modifier.weight(1f), iconResource = R.drawable.unlink_g2, text = "초대 링크 복사")
+        HowToShareButton(
+            modifier = Modifier.weight(1f),
+            iconResource = R.drawable.share_g2,
+            text = "초대 링크 공유",
+            onClick = {
+                setDynamicLink(localContext, harmonyViewModel.roomCode.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
+            })
+        HowToShareButton(
+            modifier = Modifier.weight(1f),
+            iconResource = R.drawable.unlink_g2,
+            text = "초대 링크 복사",
+            onClick = {
+                setDynamicLink(localContext, harmonyViewModel.roomCode.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
+            })
     }
 }
 
@@ -42,7 +57,8 @@ fun ShareLinkOrCopy(){
 fun HowToShareButton(
     modifier: Modifier = Modifier,
     iconResource: Int = R.drawable.share,
-    text: String = "초대 링크 공유"
+    text: String = "초대 링크 공유",
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = getOutlinedRectangleModifier(
@@ -51,7 +67,7 @@ fun HowToShareButton(
             cornerRadius = 10.dp
         )
             .padding(vertical = 15.dp)
-            .clickable {  }
+            .clickable { onClick() }
             .then(modifier),
         contentAlignment = Alignment.Center
     ){
