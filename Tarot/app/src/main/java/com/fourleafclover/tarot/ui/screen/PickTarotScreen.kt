@@ -51,6 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.getRandomCards
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.tarotInputDto
 import com.fourleafclover.tarot.ui.component.AppBarClose
@@ -292,7 +293,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                             tarotInputDto.cards = arrayListOf(firstCardNumber, secondCardNumber, thirdCardNumber)
 
-                            navigateInclusive(navController, ScreenEnum.LoadingScreen.name)
+                            loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
                         }
 
                         Log.d("", "${cards.size}, {${cards.joinToString (",")}}")

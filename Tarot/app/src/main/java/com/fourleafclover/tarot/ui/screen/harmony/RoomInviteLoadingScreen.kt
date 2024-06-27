@@ -73,9 +73,9 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
 
         val jsonObject = JSONObject()
         jsonObject.put("nickname", harmonyViewModel.getUserNickname())
-        jsonObject.put("roomCode", harmonyViewModel.roomCode.value)
+        jsonObject.put("roomId", harmonyViewModel.roomCode.value)
         MyApplication.socket.emit("join", jsonObject)
-        MyApplication.socket.on("joinComplete", onJoinComplete)
+        MyApplication.socket.on("onjoinComplete", onJoinComplete)
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {

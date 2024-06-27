@@ -28,4 +28,8 @@ class LoadingViewModel: ViewModel() {
         updateLoadingState(false)
         navigateInclusive(navController, destination.name)
     }
+
+    fun changeDestination(destination: ScreenEnum){
+        this.destination = destination
+    }
 }

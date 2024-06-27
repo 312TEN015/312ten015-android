@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -46,6 +47,10 @@ import com.fourleafclover.tarot.utils.sendRequest
 @Preview
 fun LoadingScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
+
+    if (!loadingViewModel.getIsLoading()) {
+        loadingViewModel.endLoading(navController)
+    }
 
     var send by remember { mutableStateOf(false) }
 

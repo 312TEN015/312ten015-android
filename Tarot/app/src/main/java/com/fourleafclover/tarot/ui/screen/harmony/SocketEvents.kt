@@ -19,7 +19,7 @@ import org.json.JSONObject
 * */
 
 // 방 생성 완료
-var onCreate = Emitter.Listener { args ->
+var onCreateComplete = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
         harmonyViewModel.roomCode.value = JSONObject(args[0].toString()).getString("roomCode")
     }
@@ -36,7 +36,7 @@ var onJoinComplete = Emitter.Listener { args ->
 }
 
 // 상대방이 시작하기 누름 or 카드 선택함
-var onPartnerChecked = Emitter.Listener { args ->
+var onNext = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
 
         if (chatViewModel.chatState.value.scenario != chatViewModel.partnerChatState.value.scenario){
@@ -53,4 +53,13 @@ var onPartnerChecked = Emitter.Listener { args ->
         chatViewModel.updatePartnerScenario()
     }
 }
+
+var onResult = Emitter.Listener { args ->
+    CoroutineScope(Dispatchers.Main).launch {
+        loadingViewModel.updateLoadingState(false)
+
+        // TODO 받은 궁합 결과 저장
+    }
+}
+
 

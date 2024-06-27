@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.tarotInputDto
@@ -115,7 +116,7 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                 Log.d("", "${tarotOutputDto.overallResult}--------")
 
 
-                navigateInclusive(navController, ScreenEnum.ResultScreen.name)
+                loadingViewModel.updateLoadingState(false)
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
@@ -124,7 +125,8 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                 Log.d("", "${t.message}--------!")
                 Log.d("", "${t.stackTrace}--------!")
 
-                navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                loadingViewModel.updateLoadingState(false)
                 Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
 
             }

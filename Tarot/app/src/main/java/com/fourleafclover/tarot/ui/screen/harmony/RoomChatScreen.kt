@@ -58,10 +58,12 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -93,6 +95,9 @@ fun RoomChatScreen(
 
     val chatState = chatViewModel.chatState.collectAsState()
     val partnerChatState = chatViewModel.partnerChatState.collectAsState()
+
+    MyApplication.socket.on("onNext", onNext)
+    MyApplication.socket.on("onResult", onResult)
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
@@ -132,10 +137,18 @@ fun RoomChatScreen(
                             chatItem = chatItem
                         ) {
 
-                            MyApplication.socket.on("start", onPartnerChecked)
-
                             when (chatItem.type) {
                                 ChatType.PartnerChatText -> {
+                                    if (sec == 0){
+                                        toShowProfileList.add(it)
+                                    }
+                                    PartnerChattingBox(
+                                        text = chatItem.text,
+                                        idx = it
+                                    )
+                                }
+
+                                ChatType.PartnerChatButton -> {
                                     if (sec == 0){
                                         toShowProfileList.add(it)
                                     }
@@ -158,7 +171,9 @@ fun RoomChatScreen(
                                                         text = chatItem.text
                                                     )
                                                 )
-
+                                                val jsonObject = JSONObject()
+                                                jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                                                MyApplication.socket.emit("start", jsonObject)
                                                 checkEachOtherScenario(chatState.value, partnerChatState.value)
 
                                             },
@@ -294,8 +309,14 @@ fun CardDeck(chatViewModel: ChatViewModel) {
                 )
                 cards.remove(cards[nowSelected])
                 chatViewModel.updateCardPickStatus(CardPickStatus.Gathered)
-                nowSelected = -1
 
+                val jsonObject = JSONObject()
+                jsonObject.put("nickname", harmonyViewModel.getUserNickname())
+                jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                jsonObject.put("cardNum", cards[nowSelected])
+                MyApplication.socket.emit("cardSelect", jsonObject)
+
+                nowSelected = -1
                 checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
 
             },
@@ -364,7 +385,12 @@ fun withChatAnimation(
 
 @Composable
 @Preview
-fun PartnerChattingBox(text: String = "", idx: Int = 0) {
+fun PartnerChattingBox(
+    text: String = "",
+    idx: Int = 0,
+    buttonText: String = "",
+    navController: NavHostController = rememberNavController()
+) {
 
     Row(
         modifier = Modifier
@@ -389,7 +415,7 @@ fun PartnerChattingBox(text: String = "", idx: Int = 0) {
                 contentDescription = null
             )
 
-            Box(
+            Column(
                 Modifier
                     .background(
                         color = gray_7,
@@ -403,6 +429,22 @@ fun PartnerChattingBox(text: String = "", idx: Int = 0) {
                     text = text,
                     color = gray_1
                 )
+
+                if (buttonText.isNotEmpty()) {
+                    ButtonSelect(
+                        onClick = {
+                            chatViewModel.moveToNextScenario()
+                            val jsonObject = JSONObject()
+                            jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                            MyApplication.socket.emit("finish", jsonObject)
+                            loadingViewModel.startLoading(
+                                navController,
+                                ScreenEnum.LoadingScreen,
+                                ScreenEnum.RoomResultScreen
+                            )
+                        }
+                    )
+                }
             }
         }
 
