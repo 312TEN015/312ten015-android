@@ -1,10 +1,8 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -16,21 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextCaptionM12

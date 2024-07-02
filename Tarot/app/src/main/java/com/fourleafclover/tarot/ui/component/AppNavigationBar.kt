@@ -1,7 +1,6 @@
 package com.fourleafclover.tarot.ui.component
 
 import android.app.Activity
-import android.util.Log
 import android.view.View
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -46,7 +45,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
-import com.fourleafclover.tarot.ui.screen.harmony.ResultViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle

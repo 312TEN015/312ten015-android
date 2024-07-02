@@ -31,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
@@ -76,6 +77,14 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
         jsonObject.put("roomId", harmonyViewModel.roomCode.value)
         MyApplication.socket.emit("join", jsonObject)
         MyApplication.socket.on("onjoinComplete", onJoinComplete)
+
+        /* 테스트 코드 */
+        Handler(Looper.getMainLooper())
+            .postDelayed({
+                harmonyViewModel.setPartnerNickname("!상대방 닉네임!")
+                chatViewModel.initScenario()
+                loadingViewModel.updateLoadingState(false)
+            }, 4000)
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {

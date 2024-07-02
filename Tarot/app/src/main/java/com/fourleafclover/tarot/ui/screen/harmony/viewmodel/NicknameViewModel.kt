@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen.harmony
+package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

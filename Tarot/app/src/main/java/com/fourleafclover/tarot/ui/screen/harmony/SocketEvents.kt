@@ -3,6 +3,8 @@ package com.fourleafclover.tarot.ui.screen.harmony
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,8 @@ import org.json.JSONObject
 // 방 생성 완료
 var onCreateComplete = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
-        harmonyViewModel.roomCode.value = JSONObject(args[0].toString()).getString("roomCode")
+        harmonyViewModel.roomCode.value = JSONObject(args[0].toString()).getString("roomId")
+        loadingViewModel.updateLoadingState(false)
     }
 }
 

@@ -20,6 +20,7 @@ import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.theme.gray_9
+import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
 @Composable
@@ -45,8 +46,10 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
             MyApplication.socket.on("onCreateComplete", onCreateComplete)
         }
 
+        /* 테스트 코드 */
         Handler(Looper.getMainLooper())
             .postDelayed({
+                harmonyViewModel.roomCode.value = "test_roomId"
                 loadingViewModel.updateLoadingState(false)
             }, 4000)
     }

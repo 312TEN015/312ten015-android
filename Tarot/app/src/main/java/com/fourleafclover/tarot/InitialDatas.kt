@@ -6,9 +6,9 @@ import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.ui.screen.harmony.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.HarmonyViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.primaryDream
 import com.fourleafclover.tarot.ui.theme.primaryJob

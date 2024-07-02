@@ -64,6 +64,12 @@ import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardPickStatus
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatState
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -158,6 +164,16 @@ fun RoomChatScreen(
                                     )
                                 }
 
+                                ChatType.PartnerChatImage -> {
+                                    if (sec == 0){
+                                        toShowProfileList.add(it)
+                                    }
+                                    PartnerChattingBox(
+                                        text = chatItem.text,
+                                        idx = it
+                                    )
+                                }
+
                                 ChatType.Button -> {
                                     if (!chatItem.isShown) {
                                         var buttonVisibility by remember { mutableStateOf(true) }
@@ -174,8 +190,10 @@ fun RoomChatScreen(
                                                 val jsonObject = JSONObject()
                                                 jsonObject.put("roomId", harmonyViewModel.roomCode.value)
                                                 MyApplication.socket.emit("start", jsonObject)
-                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
+//                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
 
+                                                /* 테스트 코드 */
+                                                chatViewModel.moveToNextScenario()
                                             },
                                             buttonVisibility
                                         )
@@ -226,7 +244,7 @@ fun RoomChatScreen(
 
             if (chatState.value.cardPickStatus == CardPickStatus.Spread)
                 withChatAnimation(){
-                    CardDeck(chatViewModel)
+                    CardDeck()
                 }
         }
 
@@ -251,7 +269,7 @@ fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
 }
 
 @Composable
-fun CardDeck(chatViewModel: ChatViewModel) {
+fun CardDeck() {
     val localContext = LocalContext.current
     val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
@@ -317,7 +335,10 @@ fun CardDeck(chatViewModel: ChatViewModel) {
                 MyApplication.socket.emit("cardSelect", jsonObject)
 
                 nowSelected = -1
-                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
+//                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
+
+                /* 테스트 코드 */
+                chatViewModel.moveToNextScenario()
 
             },
             isEnable = nowSelected != -1
@@ -389,7 +410,8 @@ fun PartnerChattingBox(
     text: String = "",
     idx: Int = 0,
     buttonText: String = "",
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    drawable: Int = 0
 ) {
 
     Row(
@@ -425,10 +447,25 @@ fun PartnerChattingBox(
 
             ) {
 
-                TextB03M14(
-                    text = text,
-                    color = gray_1
-                )
+                if (drawable != 0) {
+//                    Image(
+//                        modifier = Modifier.width(60.dp),
+//                        painter = painterResource(id = drawable),
+//                        contentDescription = null
+//                    )
+
+                    /* 테스트 코드 */
+                    Image(
+                        modifier = Modifier.width(60.dp),
+                        painter = painterResource(id = getCardImageId(LocalContext.current, drawable.toString())),
+                        contentDescription = null
+                    )
+                } else {
+                    TextB03M14(
+                        text = text,
+                        color = gray_1
+                    )
+                }
 
                 if (buttonText.isNotEmpty()) {
                     ButtonSelect(

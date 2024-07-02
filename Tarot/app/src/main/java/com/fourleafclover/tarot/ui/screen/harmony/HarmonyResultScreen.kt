@@ -38,6 +38,7 @@ import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14

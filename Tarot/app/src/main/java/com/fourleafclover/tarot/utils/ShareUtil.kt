@@ -51,7 +51,8 @@ fun setDynamicLink(
                 doShare(context, actionType, harmonyViewModel.shortLink.toUri())
             else if (harmonyViewModel.dynamicLink.isNotEmpty())
                 doShare(context, actionType, harmonyViewModel.dynamicLink.toUri())
-
+            else if (harmonyViewModel.dynamicLink.isEmpty() && harmonyViewModel.shortLink.isEmpty())
+                getDynamicLink(context, value, linkType, actionType)
             return
         }
     }

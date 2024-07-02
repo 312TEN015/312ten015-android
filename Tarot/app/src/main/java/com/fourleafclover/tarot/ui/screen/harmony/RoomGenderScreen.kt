@@ -27,6 +27,7 @@ import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.TextH03SB18
