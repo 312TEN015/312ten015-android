@@ -11,6 +11,8 @@ class ResultViewModel() : ViewModel() {
     private var saveState = mutableStateOf(false)   // 타로 결과 저장했는지 여부
     private var isMyTab = mutableStateOf(true) // 나의 탭 터치했는지 여부
 
+    var screenNickname = if (isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname()
+
     fun openCloseDialog(){
         this.openCloseDialog.value = true
     }

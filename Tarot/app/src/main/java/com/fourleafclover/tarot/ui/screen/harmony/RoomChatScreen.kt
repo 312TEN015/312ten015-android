@@ -160,7 +160,9 @@ fun RoomChatScreen(
                                     }
                                     PartnerChattingBox(
                                         text = chatItem.text,
-                                        idx = it
+                                        idx = it,
+                                        buttonText = "궁합결과 보러가기",
+                                        navController = navController
                                     )
                                 }
 
@@ -170,7 +172,8 @@ fun RoomChatScreen(
                                     }
                                     PartnerChattingBox(
                                         text = chatItem.text,
-                                        idx = it
+                                        idx = it,
+                                        drawable = chatItem.drawable
                                     )
                                 }
 
@@ -468,12 +471,14 @@ fun PartnerChattingBox(
                 }
 
                 if (buttonText.isNotEmpty()) {
-                    ButtonSelect(
+                    ButtonSelectInChat(
+                        text = buttonText,
                         onClick = {
                             chatViewModel.moveToNextScenario()
                             val jsonObject = JSONObject()
                             jsonObject.put("roomId", harmonyViewModel.roomCode.value)
                             MyApplication.socket.emit("finish", jsonObject)
+
                             loadingViewModel.startLoading(
                                 navController,
                                 ScreenEnum.LoadingScreen,
@@ -597,4 +602,29 @@ fun ButtonSelect(
         }
     }
 
+}
+
+@Preview
+@Composable
+fun ButtonSelectInChat(
+    text: String = "궁합 결과 보러가기",
+    onClick: () -> Unit = {},
+){
+    Box(
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .fillMaxWidth()
+            .background(
+                shape = RoundedCornerShape(10.dp),
+                color = highlightPurple
+            )
+            .clickable{
+                onClick()
+            }
+            .padding(horizontal = 50.dp)
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
+    ) {
+        ButtonText(isEnabled = true, text = text, paddingVertical = 9.dp)
+    }
 }

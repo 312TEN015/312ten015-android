@@ -266,7 +266,7 @@ fun HarmonyCardSlider(
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
-                pageSpacing = 12.dp,
+                pageSpacing = 8.dp,
                 userScrollEnabled = true,
                 reverseLayout = false,
                 contentPadding = PaddingValues(horizontal = horizontalPadding),

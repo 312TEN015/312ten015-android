@@ -1,5 +1,7 @@
 package com.fourleafclover.tarot.ui.screen
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -61,6 +64,12 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
     if (!send){
         sendRequest(localContext, navController)
         send = true
+
+        /* 테스트 코드 */
+        Handler(Looper.getMainLooper())
+            .postDelayed({
+                loadingViewModel.updateLoadingState(false)
+            }, 4000)
     }
 
     // 로딩 화면 회전

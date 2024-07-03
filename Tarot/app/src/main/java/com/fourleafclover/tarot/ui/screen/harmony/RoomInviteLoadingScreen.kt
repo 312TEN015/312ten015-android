@@ -76,13 +76,13 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
         jsonObject.put("nickname", harmonyViewModel.getUserNickname())
         jsonObject.put("roomId", harmonyViewModel.roomCode.value)
         MyApplication.socket.emit("join", jsonObject)
-        MyApplication.socket.on("onjoinComplete", onJoinComplete)
+        MyApplication.socket.on("onJoinComplete", onJoinComplete)
 
         /* 테스트 코드 */
         Handler(Looper.getMainLooper())
             .postDelayed({
-                harmonyViewModel.setPartnerNickname("!상대방 닉네임!")
-                chatViewModel.initScenario()
+                harmonyViewModel.setPartnerNickname("가나다")
+                chatViewModel.initOpening()
                 loadingViewModel.updateLoadingState(false)
             }, 4000)
     }

@@ -99,7 +99,7 @@ fun NavigationHost() {
                 RoomChatScreen(navController)
             }
             composable(ScreenEnum.RoomResultScreen.name) {
-                HarmonyResultScreenPreview(navController)
+                ResultScreen(navController)
             }
         }
 

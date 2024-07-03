@@ -65,10 +65,9 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 @Composable
 fun ResultScreen(
     navController: NavHostController,
-    resultViewModel: ResultViewModel = remember {
-        ResultViewModel()
-    }
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
 ) {
+    HarmonyResultScreenPreview(navController, resultViewModel)
 }
 
 @Preview
@@ -94,7 +93,7 @@ fun HarmonyResultScreenPreview(
         ) {
 
             TextH02M22(
-                text = "${resultViewModel.getNickname()}님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${resultViewModel.screenNickname}님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
                     .background(color = backgroundColor_2)
@@ -111,7 +110,10 @@ fun HarmonyResultScreenPreview(
                     .padding(vertical = 24.dp, horizontal = 20.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 36.dp),
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp)
+                        .fillMaxWidth()
+                        .padding(bottom = 36.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Box(modifier = Modifier
@@ -121,7 +123,7 @@ fun HarmonyResultScreenPreview(
                         .padding(end = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (myCard) gray_2 else transparent
+                            color = if (myCard) white else gray_7
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
@@ -141,7 +143,7 @@ fun HarmonyResultScreenPreview(
                         .padding(start = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (myCard) transparent else gray_2
+                            color = if (myCard) gray_7 else white
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
@@ -267,7 +269,12 @@ fun OverallResult(resultViewModel: ResultViewModel = remember { ResultViewModel(
                 .padding(vertical = 16.dp, horizontal = 16.dp)
                 .padding(bottom = 45.dp)
                 .clickable {
-                    setDynamicLink(localContext, tarotOutputDto.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
+                    setDynamicLink(
+                        localContext,
+                        tarotOutputDto.tarotId,
+                        ShareLinkType.MY,
+                        ShareActionType.OPEN_SHEET
+                    )
                 },
             horizontalArrangement = Arrangement.Center
         )
