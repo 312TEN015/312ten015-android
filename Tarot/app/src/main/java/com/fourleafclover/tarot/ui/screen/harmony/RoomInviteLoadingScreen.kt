@@ -2,6 +2,7 @@ package com.fourleafclover.tarot.ui.screen.harmony
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -76,6 +77,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
         jsonObject.put("nickname", harmonyViewModel.getUserNickname())
         jsonObject.put("roomId", harmonyViewModel.roomCode.value)
         MyApplication.socket.emit("join", jsonObject)
+        Log.d("socket-test", "emit join")
         MyApplication.socket.on("onJoinComplete", onJoinComplete)
 
         /* 테스트 코드 */

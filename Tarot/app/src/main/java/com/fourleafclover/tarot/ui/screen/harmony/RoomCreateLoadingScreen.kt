@@ -2,6 +2,7 @@ package com.fourleafclover.tarot.ui.screen.harmony
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -41,8 +42,13 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
 
         // 새로운 방 생성
         MyApplication.socket.connect()
+        if (MyApplication.socket.connected()) Log.d("socket-test", "socket connected for create")
+        else Log.d("socket-test", "socket connect failed")
+
         if (harmonyViewModel.roomCode.value.isEmpty()) {
             MyApplication.socket.emit("create")
+            Log.d("socket-test", "emit create")
+
             MyApplication.socket.on("onCreateComplete", onCreateComplete)
         }
 

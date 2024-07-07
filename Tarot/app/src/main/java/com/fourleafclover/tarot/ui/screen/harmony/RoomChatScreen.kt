@@ -336,6 +336,7 @@ fun CardDeck() {
                 jsonObject.put("roomId", harmonyViewModel.roomCode.value)
                 jsonObject.put("cardNum", cards[nowSelected])
                 MyApplication.socket.emit("cardSelect", jsonObject)
+                Log.d("socket-test", "emit cardSelect")
 
                 nowSelected = -1
 //                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
@@ -478,6 +479,7 @@ fun PartnerChattingBox(
                             val jsonObject = JSONObject()
                             jsonObject.put("roomId", harmonyViewModel.roomCode.value)
                             MyApplication.socket.emit("finish", jsonObject)
+                            Log.d("socket-test", "emit finish")
 
                             loadingViewModel.startLoading(
                                 navController,

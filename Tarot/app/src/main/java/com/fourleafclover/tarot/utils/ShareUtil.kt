@@ -165,6 +165,9 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
                 harmonyViewModel.roomCode.value = deepLinkUri.getQueryParameter("roomId")!!
                 MyApplication.socket.connect()
+                if (MyApplication.socket.connected()) Log.d("socket-test", "socket connected for join")
+                else Log.d("socket-test", "socket connect failed")
+
                 navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
             }
 
