@@ -37,6 +37,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
+import com.fourleafclover.tarot.ui.screen.harmony.onResult
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -68,7 +69,7 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
         /* 테스트 코드 */
         Handler(Looper.getMainLooper())
             .postDelayed({
-                loadingViewModel.updateLoadingState(false)
+                onResult()
             }, 4000)
     }
 

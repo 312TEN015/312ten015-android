@@ -21,7 +21,6 @@ import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.theme.gray_9
-import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
 @Composable
@@ -41,11 +40,7 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
         initialize = true
 
         // 새로운 방 생성
-        MyApplication.socket.connect()
-        if (MyApplication.socket.connected()) Log.d("socket-test", "socket connected for create")
-        else Log.d("socket-test", "socket connect failed")
-
-        if (harmonyViewModel.roomCode.value.isEmpty()) {
+        if (harmonyViewModel.roomId.value.isEmpty()) {
             MyApplication.socket.emit("create")
             Log.d("socket-test", "emit create")
 
@@ -55,8 +50,7 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
         /* 테스트 코드 */
         Handler(Looper.getMainLooper())
             .postDelayed({
-                harmonyViewModel.roomCode.value = "test_roomId"
-                loadingViewModel.updateLoadingState(false)
+                         onCreateComplete()
             }, 4000)
     }
 

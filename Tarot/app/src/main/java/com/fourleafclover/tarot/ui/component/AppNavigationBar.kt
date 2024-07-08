@@ -278,10 +278,10 @@ fun OpenCompleteDialog(resultViewModel: ResultViewModel = remember { ResultViewM
 @Composable
 fun ControlDialog(
     navController: NavHostController,
-    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+    resultViewModel: ResultViewModel
 ) {
     BackHandler { resultViewModel.closeCloseDialog() }
-    OpenCloseDialog(navController = navController)
+    OpenCloseDialog(navController = navController, resultViewModel)
     OpenCompleteDialog()
 
 }

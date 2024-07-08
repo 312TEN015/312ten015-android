@@ -8,7 +8,7 @@ class HarmonyViewModel: ViewModel() {
     private var userNickname = mutableStateOf("")   // 사용자 닉네임
     private var partnerNickname = mutableStateOf("")    // 상대방 닉네임
 
-    var roomCode = mutableStateOf("")       // 생성된 방 코드
+    var roomId = mutableStateOf("")       // 생성된 방 코드
     private var roomCreatedAt = "" // 방 생성된 시간
 
     var dynamicLink = ""

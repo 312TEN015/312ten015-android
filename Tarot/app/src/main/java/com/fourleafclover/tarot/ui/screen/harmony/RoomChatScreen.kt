@@ -1,5 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
@@ -191,7 +193,7 @@ fun RoomChatScreen(
                                                     )
                                                 )
                                                 val jsonObject = JSONObject()
-                                                jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                                                jsonObject.put("roomId", harmonyViewModel.roomId.value)
                                                 MyApplication.socket.emit("start", jsonObject)
 //                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
 
@@ -220,7 +222,7 @@ fun RoomChatScreen(
                                 }
 
                                 ChatType.GuidText -> {
-
+                                    GuidBox(text = chatItem.text)
                                 }
 
                                 else -> {}
@@ -333,13 +335,13 @@ fun CardDeck() {
 
                 val jsonObject = JSONObject()
                 jsonObject.put("nickname", harmonyViewModel.getUserNickname())
-                jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                jsonObject.put("roomId", harmonyViewModel.roomId.value)
                 jsonObject.put("cardNum", cards[nowSelected])
                 MyApplication.socket.emit("cardSelect", jsonObject)
                 Log.d("socket-test", "emit cardSelect")
 
                 nowSelected = -1
-//                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
+                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
 
                 /* 테스트 코드 */
                 chatViewModel.moveToNextScenario()
@@ -477,7 +479,7 @@ fun PartnerChattingBox(
                         onClick = {
                             chatViewModel.moveToNextScenario()
                             val jsonObject = JSONObject()
-                            jsonObject.put("roomId", harmonyViewModel.roomCode.value)
+                            jsonObject.put("roomId", harmonyViewModel.roomId.value)
                             MyApplication.socket.emit("finish", jsonObject)
                             Log.d("socket-test", "emit finish")
 
@@ -620,7 +622,7 @@ fun ButtonSelectInChat(
                 shape = RoundedCornerShape(10.dp),
                 color = highlightPurple
             )
-            .clickable{
+            .clickable {
                 onClick()
             }
             .padding(horizontal = 50.dp)

@@ -140,14 +140,14 @@ fun RoomNicknameScreen(
                     harmonyViewModel.setUserNickname(nicknameViewModel.getNicknameString())
 
                     // 새로 방을 생성
-                    if (harmonyViewModel.roomCode.value.isEmpty()) {
+                    if (harmonyViewModel.roomId.value.isEmpty()) {
                         loadingViewModel.startLoading(
                             navController,
                             ScreenEnum.RoomCreateLoadingScreen,
                             ScreenEnum.RoomShareScreen
                         )
                     }
-                    // 초대받아 입장
+                    // 초대받아 입장 또는 기존 방 입장
                     else{
                         loadingViewModel.startLoading(
                             navController,

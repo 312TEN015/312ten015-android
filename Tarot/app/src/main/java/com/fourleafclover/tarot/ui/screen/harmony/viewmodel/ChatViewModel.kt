@@ -19,7 +19,7 @@ val scenarioSequence = arrayListOf(
 
 data class Chat(
     val type: ChatType,
-    val text: String = "",
+    var text: String = "",
     val drawable: Int = 0,
     val code: String = "",
     var isShown: Boolean = false    // 애니메이션 재생 여부 판단을 위해
@@ -81,6 +81,14 @@ class ChatViewModel : ViewModel() {
         _partnerChatState.value = ChatState(firstCardNumber = 1, secondCardNumber = 2, thirdCardNumber = 3)
     }
 
+    fun initAllScenario() {
+        initOpening()
+        initFirst()
+        initSecond()
+        initThird()
+        initComplete()
+    }
+
     fun initOpening(){
         opening = listOf(
             Chat(ChatType.PartnerChatText, "${harmonyViewModel.getUserNickname()}님, 그 사람과의 운명이 궁금하시군요!", code = "opening_1"),
@@ -126,6 +134,10 @@ class ChatViewModel : ViewModel() {
     }
 
     fun removeChatListLastItem() = chatList.removeLast()
+
+    fun updateGuidText(text: String) {
+        chatList.last().text = text
+    }
 
     fun getChatListSize(): Int = chatList.size
 
@@ -200,5 +212,22 @@ class ChatViewModel : ViewModel() {
             _chatState.value.secondCardNumber,
             _chatState.value.thirdCardNumber
         )
+    }
+
+    fun updatePartnerCardNumber(cardNumber: Int) {
+        when (_partnerChatState.value.scenario) {
+            Scenario.FirstCard -> {
+                _partnerChatState.value.firstCardNumber = cardNumber
+            }
+            Scenario.SecondCard -> {
+                _partnerChatState.value.secondCardNumber = cardNumber
+            }
+            Scenario.ThirdCard -> {
+                _partnerChatState.value.thirdCardNumber = cardNumber
+            }
+            else -> {
+                0
+            }
+        }
     }
 }

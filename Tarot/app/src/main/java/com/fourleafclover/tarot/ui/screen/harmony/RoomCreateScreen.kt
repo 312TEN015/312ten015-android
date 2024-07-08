@@ -2,12 +2,10 @@ package com.fourleafclover.tarot.ui.screen.harmony
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,43 +15,47 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
+import com.fourleafclover.tarot.ui.component.RoomDeletedDialog
+import com.fourleafclover.tarot.ui.component.VerticalYesNoDialog
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.RoomCreateViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.TextH03SB18
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
-import com.fourleafclover.tarot.ui.theme.gray_1
-import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.ui.theme.gray_9
-import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 
 @Preview
 @Composable
 fun RoomCreateScreen(navController: NavHostController = rememberNavController()) {
+
+    val roomCreateViewModel = remember { RoomCreateViewModel() }
+
+    OpenRoomDeletedDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
+    OpenRoomExistDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarPlain(
@@ -81,10 +83,19 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                     .background(color = white, shape = RoundedCornerShape(10.dp))
                     .wrapContentHeight()
                     .fillMaxWidth()
-                    .clickable { navigateSaveState(navController, ScreenEnum.RoomGenderScreen.name) }
+                    .clickable {
+                        // 소켓 연결하기
+                        MyApplication.connectSocket()
+                        roomCreateViewModel.checkRoomExist()
+                        if (roomCreateViewModel.createNewRoom.value){
+                            navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
+                        }
+                    }
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 44.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 44.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -185,11 +196,57 @@ fun DescriptionStep(
         }
 
         Image(
-            modifier = Modifier.background(shape = CircleShape, color = gray_8).padding(14.dp),
+            modifier = Modifier
+                .background(shape = CircleShape, color = gray_8)
+                .padding(14.dp),
             painter = painterResource(id = imageResourceId),
             contentDescription = null,
             alignment = Alignment.Center,
         )
 
     }
+}
+
+
+@Composable
+fun OpenRoomExistDialog(
+    navController: NavHostController,
+    roomCreateViewModel: RoomCreateViewModel
+) {
+
+    if (roomCreateViewModel.openRoomExistDialog.value) {
+        Dialog(onDismissRequest = { roomCreateViewModel.openRoomExistDialog.value = false }) {
+            VerticalYesNoDialog(
+                onClickNo = {
+                    roomCreateViewModel.openRoomExistDialog.value = false
+                    // 기존 방으로 입장하기
+                    harmonyViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
+                    navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
+                            },
+                onClickClose = { roomCreateViewModel.openRoomExistDialog.value = false },
+                onClickOk = {
+                    roomCreateViewModel.openRoomExistDialog.value = false
+                    // 새로운 방 입장하기
+                    navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
+                })
+        }
+    }
+
+}
+
+@Composable
+fun OpenRoomDeletedDialog(
+    navController: NavHostController,
+    roomCreateViewModel: RoomCreateViewModel
+) {
+
+    if (roomCreateViewModel.openRoomDeletedDialog.value) {
+        Dialog(onDismissRequest = { roomCreateViewModel.openRoomDeletedDialog.value = false }) {
+            RoomDeletedDialog(
+                onClickClose = { roomCreateViewModel.openRoomDeletedDialog.value = false },
+                onClickOk = { roomCreateViewModel.openRoomDeletedDialog.value = false }
+            )
+        }
+    }
+
 }

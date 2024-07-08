@@ -46,7 +46,7 @@ fun setDynamicLink(
     actionType: ShareActionType
 ){
     if (linkType == ShareLinkType.HARMONY) {
-        if (harmonyViewModel.roomCode.value.isNotEmpty()){
+        if (harmonyViewModel.roomId.value.isNotEmpty()){
             if (harmonyViewModel.shortLink.isNotEmpty())
                 doShare(context, actionType, harmonyViewModel.shortLink.toUri())
             else if (harmonyViewModel.dynamicLink.isNotEmpty())
@@ -163,10 +163,8 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
 
             // 궁합 타로 결과 공유
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
-                harmonyViewModel.roomCode.value = deepLinkUri.getQueryParameter("roomId")!!
-                MyApplication.socket.connect()
-                if (MyApplication.socket.connected()) Log.d("socket-test", "socket connected for join")
-                else Log.d("socket-test", "socket connect failed")
+                harmonyViewModel.roomId.value = deepLinkUri.getQueryParameter("roomId")!!
+                MyApplication.connectSocket()
 
                 navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
             }

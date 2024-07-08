@@ -33,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.partnerTarotOutputDto
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
@@ -78,7 +79,7 @@ fun HarmonyResultScreenPreview(
 ) {
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
-        ControlDialog(navController)
+        ControlDialog(navController, resultViewModel)
 
         AppBarCloseTarotResult(
             navController,
@@ -91,9 +92,10 @@ fun HarmonyResultScreenPreview(
         Column(
             modifier = Modifier
         ) {
+            var myCard by remember { mutableStateOf(true) }
 
             TextH02M22(
-                text = "${resultViewModel.screenNickname}님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${if (myCard) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
                     .background(color = backgroundColor_2)
@@ -101,7 +103,6 @@ fun HarmonyResultScreenPreview(
                     .fillMaxWidth()
             )
 
-            var myCard by remember { mutableStateOf(true) }
 
             Column(
                 modifier = Modifier
@@ -111,7 +112,6 @@ fun HarmonyResultScreenPreview(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 15.dp)
                         .fillMaxWidth()
                         .padding(bottom = 36.dp),
                     horizontalArrangement = Arrangement.Center

@@ -15,7 +15,8 @@ const val tarotResultListKey = "savedTarotList"
 const val sharedPreferencesKey = "saved_tarots"
 const val onBoardingKey = "onBoardingCompleted"
 const val pickCardIndicateKey = "pickCardIndicateCompleted"
-
+const val roomIdKey = "roomIdKey"
+const val roomCreatedAtKey = "roomCreatedAtKey"
 class PreferenceUtil(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(sharedPreferencesKey, Context.MODE_PRIVATE)
@@ -82,4 +83,17 @@ class PreferenceUtil(context: Context) {
     fun deleteIsPickCardIndicateComplete(){
         prefs.edit().remove(pickCardIndicateKey).commit()
     }
+
+    fun saveHarmonyRoomId(roomId: String){
+        prefs.edit().putString(roomIdKey, roomId).apply()
+    }
+
+    fun saveHarmonyRoomCreatedAt(createdAt: String){
+        prefs.edit().putString(roomCreatedAtKey, createdAt).apply()
+    }
+
+    fun getHarmonyRoomId() = prefs.getString(roomIdKey, "") ?: ""
+
+    fun getHarmonyRoomCreatedAt() = prefs.getString(roomCreatedAtKey, "") ?: ""
 }
+

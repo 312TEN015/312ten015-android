@@ -157,7 +157,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier.padding(bottom = 6.dp)
                 )
 
-                Image(painter = painterResource(id = R.drawable.category_today),
+                Image(painter = painterResource(id = R.drawable.category_harmony),
                     contentDescription = "궁합 운세",
                     Modifier.clickable {
                         pickedTopicNumber = 5

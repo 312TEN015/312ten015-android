@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot
 
 import android.app.Application
+import android.util.Log
 import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.utils.PreferenceUtil
 import io.socket.client.IO
@@ -17,6 +18,13 @@ class MyApplication: Application() {
         lateinit var prefs: PreferenceUtil
         lateinit var tarotService: TarotService
         lateinit var socket: Socket
+
+        fun connectSocket(){
+            if (!socket.connected()) socket.connect()
+
+            if (socket.connected()) Log.d("socket-test", "socket connected for create")
+            else Log.d("socket-test", "socket connect failed")
+        }
     }
 
     override fun onCreate() {

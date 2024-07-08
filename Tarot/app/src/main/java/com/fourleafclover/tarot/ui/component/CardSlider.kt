@@ -241,7 +241,7 @@ fun HarmonyCardSlider(
     }
 
     Column(
-        modifier = Modifier,
+        modifier = Modifier.padding(bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -266,7 +266,7 @@ fun HarmonyCardSlider(
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
-                pageSpacing = 8.dp,
+                pageSpacing = 4.dp,
                 userScrollEnabled = true,
                 reverseLayout = false,
                 contentPadding = PaddingValues(horizontal = horizontalPadding),
@@ -277,7 +277,7 @@ fun HarmonyCardSlider(
                     val pageOffset =
                         (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
 
-                    val scaleFactor = 0.75f + (1f - 0.75f) * (1f - pageOffset.absoluteValue)
+                    val scaleFactor = 0.65f + (1f - 0.65f) * (1f - pageOffset.absoluteValue)
 
                     Box(modifier = modifier
                         .graphicsLayer {

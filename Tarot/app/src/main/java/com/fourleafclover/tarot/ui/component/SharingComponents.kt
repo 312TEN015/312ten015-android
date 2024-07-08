@@ -41,14 +41,14 @@ fun ShareLinkOrCopy(){
             iconResource = R.drawable.share_g2,
             text = "초대 링크 공유",
             onClick = {
-                setDynamicLink(localContext, harmonyViewModel.roomCode.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
+                setDynamicLink(localContext, harmonyViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
             })
         HowToShareButton(
             modifier = Modifier.weight(1f),
             iconResource = R.drawable.unlink_g2,
             text = "초대 링크 복사",
             onClick = {
-                setDynamicLink(localContext, harmonyViewModel.roomCode.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
+                setDynamicLink(localContext, harmonyViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
             })
     }
 }

@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
 import android.util.Log
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.Date
 
 /*                             <inviter>                      <invitee>
 * connect               RoomCreateLoadingScreen               ShareUtil
@@ -25,7 +27,15 @@ import org.json.JSONObject
 var onCreateComplete = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
         Log.d("socket-test", "onCreateComplete " + args[0].toString())
-        harmonyViewModel.roomCode.value = JSONObject(args[0].toString()).getString("roomId")
+
+        val roomId = JSONObject(args[0].toString()).getString("roomId")
+        harmonyViewModel.roomId.value = roomId
+        MyApplication.prefs.saveHarmonyRoomId(roomId)
+
+        val mNow = System.currentTimeMillis()
+        val mDate = Date(mNow)
+        MyApplication.prefs.saveHarmonyRoomCreatedAt(mDate.toString())
+
         loadingViewModel.updateLoadingState(false)
     }
 }
@@ -38,6 +48,7 @@ var onJoinComplete = Emitter.Listener { args ->
         val response = JSONObject(args[0].toString())
         val partnerNickname = response.getString("partnerNickname")
         harmonyViewModel.setPartnerNickname(partnerNickname)
+
         loadingViewModel.updateLoadingState(false)
     }
 }
@@ -71,6 +82,73 @@ var onResult = Emitter.Listener { args ->
 
         // TODO 받은 궁합 결과 저장
     }
+}
+
+
+/* for test ---------------------------------------------------------------------------------------- */
+
+fun onCreateComplete() {
+    val testObj = JSONObject()
+    testObj.put("roomId", "testRoomId")
+    Log.d("socket-test", "onCreateComplete " + testObj.toString())
+
+    val roomId = testObj.getString("roomId")
+    harmonyViewModel.roomId.value = roomId
+    MyApplication.prefs.saveHarmonyRoomId(roomId)
+
+    val mNow = System.currentTimeMillis()
+    val mDate = Date(mNow)
+    MyApplication.prefs.saveHarmonyRoomCreatedAt(mDate.toString())
+
+    loadingViewModel.updateLoadingState(false)
+}
+
+fun onJoinComplete() {
+    val testObj = JSONObject()
+    testObj.put("partnerNickname", "상대방닉네임")
+    Log.d("socket-test", "onJoinComplete " + testObj.toString())
+
+    val response = testObj
+    val partnerNickname = response.getString("partnerNickname")
+    harmonyViewModel.setPartnerNickname(partnerNickname)
+    chatViewModel.initAllScenario()
+
+    loadingViewModel.updateLoadingState(false)
+}
+
+fun onNext(cardNum: Int = 0) {
+    val testObj = JSONObject()
+    if (cardNum != 0) testObj.put("cardNum", cardNum.toString())
+    Log.d("socket-test", "onNext " + testObj.toString())
+
+
+    if (chatViewModel.chatState.value.scenario != chatViewModel.partnerChatState.value.scenario){
+        chatViewModel.updateGuidText("상대방이 답변을 선택했습니다.✨️")
+//        chatViewModel.removeChatListLastItem()
+//        chatViewModel.addChatItem(
+//            Chat(
+//                type = ChatType.GuidText,
+//                text = "상대방이 답변을 선택했습니다.✨️"
+//            )
+//        )
+        if (testObj.has("cardNum")){
+            chatViewModel.updatePartnerCardNumber(testObj.getString("cardNum").toInt())
+        }
+        chatViewModel.addNextScenario()
+    }
+
+    chatViewModel.updatePartnerScenario()
+
+
+}
+
+fun onResult() {
+    val testObj = JSONObject()
+    Log.d("socket-test", "onResult " + testObj.toString())
+
+    loadingViewModel.updateLoadingState(false)
+
+    // TODO 받은 궁합 결과 저장
 }
 
 

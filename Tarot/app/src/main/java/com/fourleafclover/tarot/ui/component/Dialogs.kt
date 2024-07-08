@@ -1,7 +1,12 @@
 package com.fourleafclover.tarot.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +38,7 @@ import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_8
+import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 
 @Composable
@@ -97,7 +103,8 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = gray_8,
                     contentColor = white
-                )
+                ),
+                contentPadding = PaddingValues(0.dp)
             ) {
                 TextButtonM16(
                     text = "확인",
@@ -142,7 +149,8 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                     colors = ButtonDefaults.buttonColors(
                         containerColor = gray_2,
                         contentColor = gray_8
-                    )
+                    ),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
                     TextButtonM16(
                         text = "아니요",
@@ -159,7 +167,8 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                     colors = ButtonDefaults.buttonColors(
                         containerColor = gray_8,
                         contentColor = gray_2
-                    )
+                    ),
+                    contentPadding = PaddingValues(0.dp)
                 ) {
                     TextButtonM16(
                         text = "네",
@@ -167,6 +176,154 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                         color = gray_2
                     )
                 }
+            }
+
+        }
+
+    }
+
+}
+
+
+@Preview
+@Composable
+fun VerticalYesNoDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}, onClickClose: () -> Unit = {}) {
+
+    Surface(modifier = Modifier,
+        shape = RoundedCornerShape(size = 10.dp),
+        color = white){
+
+        Box(modifier = Modifier.width(288.dp), contentAlignment = Alignment.TopEnd){
+            Image(
+                painter = painterResource(id = R.drawable.cancel_black),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 8.dp, end = 8.dp)
+                    .clickable { onClickClose() }
+            )
+        }
+
+        Column(modifier = Modifier
+            .wrapContentHeight()
+            .width(288.dp)
+            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+
+            TextButtonM16(text = "이미 생성하신 초대방이 있어요!",
+                color = gray_8,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp))
+
+            TextB03M14(text = "초대방을 새로 만들 경우, 기존 초대방은 사라져요.",
+                color = gray_6,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp))
+
+            Button(onClick = onClickOk,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(end = 4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = gray_8,
+                    contentColor = white
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                TextButtonM16(
+                    text = "새로 만들기",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = white
+                )
+            }
+
+            Button(onClick = onClickOk,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(end = 4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = gray_2,
+                    contentColor = gray_8
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                TextButtonM16(
+                    text = "기존 초대방 입장하기",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = gray_8
+                )
+            }
+
+        }
+
+    }
+
+}
+
+
+
+@Preview
+@Composable
+fun RoomDeletedDialog(onClickOk: () -> Unit = {}, onClickClose: () -> Unit = {}) {
+
+    Surface(modifier = Modifier,
+        shape = RoundedCornerShape(size = 10.dp),
+        color = white){
+
+        Box(modifier = Modifier.width(288.dp), contentAlignment = Alignment.TopEnd){
+            Image(
+                painter = painterResource(id = R.drawable.cancel_black),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 8.dp, end = 8.dp)
+                    .clickable { onClickClose() }
+            )
+        }
+
+        Column(modifier = Modifier
+            .wrapContentHeight()
+            .width(288.dp)
+            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+
+            Image(painter = painterResource(id = R.drawable.alert_red),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(bottom = 8.dp)
+            )
+
+            TextButtonM16(text = "1시간 안에 입장하지 않아서 초대방이 사라졌어요.\uD83D\uDE22",
+                color = gray_8,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp))
+
+            Button(onClick = onClickOk,
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(end = 4.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = gray_8,
+                    contentColor = white
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                TextButtonM16(
+                    text = "확인",
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = white
+                )
             }
 
         }
