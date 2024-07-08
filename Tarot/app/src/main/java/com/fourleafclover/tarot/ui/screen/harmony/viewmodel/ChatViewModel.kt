@@ -75,10 +75,8 @@ class ChatViewModel : ViewModel() {
 
     init {
         _chatState.value = ChatState()
-//        _partnerChatState.value = ChatState()
+        _partnerChatState.value = ChatState()
 
-        /* 테스트 코드 */
-        _partnerChatState.value = ChatState(firstCardNumber = 1, secondCardNumber = 2, thirdCardNumber = 3)
     }
 
     fun initAllScenario() {

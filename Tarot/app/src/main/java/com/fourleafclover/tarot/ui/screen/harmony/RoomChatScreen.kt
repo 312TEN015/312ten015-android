@@ -195,10 +195,14 @@ fun RoomChatScreen(
                                                 val jsonObject = JSONObject()
                                                 jsonObject.put("roomId", harmonyViewModel.roomId.value)
                                                 MyApplication.socket.emit("start", jsonObject)
-//                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
+                                                Log.d("socket-test", "emit start")
+                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
 
                                                 /* 테스트 코드 */
-                                                chatViewModel.moveToNextScenario()
+                                                Handler(Looper.getMainLooper())
+                                                    .postDelayed({
+                                                        onNext()
+                                                    }, 4000)
                                             },
                                             buttonVisibility
                                         )
@@ -344,7 +348,10 @@ fun CardDeck() {
                 checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
 
                 /* 테스트 코드 */
-                chatViewModel.moveToNextScenario()
+                Handler(Looper.getMainLooper())
+                    .postDelayed({
+                        onNext(2)
+                    }, 4000)
 
             },
             isEnable = nowSelected != -1
