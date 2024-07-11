@@ -1,6 +1,7 @@
 
 package com.fourleafclover.tarot.ui.screen.fortune
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.Image
@@ -47,10 +48,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.tarotInputDto
+import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
@@ -66,7 +67,6 @@ import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
-import com.fourleafclover.tarot.utils.getPickedTopic
 import kotlin.math.roundToInt
 
 
@@ -75,41 +75,26 @@ import kotlin.math.roundToInt
 fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
     var showIndicator by remember { mutableStateOf(MyApplication.prefs.isPickCardIndicateComplete()) }
+
     setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Box(modifier = backgroundModifier) {
 
         Column {
 
-            AppBarClose(navController = navController,
-                pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
-                backgroundColor_1)
+            AppBarClose(navController = navController, pickedTopicTemplate = fortuneViewModel.pickedTopicSubject, backgroundColor = backgroundColor_1)
 
-
-            val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
-            var cardNumber by remember { mutableIntStateOf(1) }
+            var pickSequence by remember { mutableIntStateOf(1) }
             var cardSelected by remember { mutableStateOf(false) }
-
-            var firstCardPicked by remember { mutableStateOf(false) }
-            var secondCardPicked by remember { mutableStateOf(false) }
-            var thirdCardPicked by remember { mutableStateOf(false) }
-
-            var firstCardNumber by remember { mutableIntStateOf(-1) }
-            var secondCardNumber by remember { mutableIntStateOf(-1) }
-            var thirdCardNumber by remember { mutableIntStateOf(-1) }
-
-            var nowSelected by remember { mutableIntStateOf(-1) }
-
+            var nowSelectedCardIdx by remember { mutableIntStateOf(-1) }
+            
             val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
-
-
+            
             val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
 
-
+            // "0번째 카드를 골라주세요."
             TextH02M22(
-                text = if (cardNumber == 1) "첫 번째 카드를 골라주세요."
-                else if(cardNumber == 2) "두 번째 카드를 골라주세요."
-                else "세 번째 카드를 골라주세요.",
+                text = pickTarotViewModel.getDirectionText(localContext, pickSequence),
                 color = white,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,89 +105,27 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                 Column(modifier = Modifier.weight(1f)) {
 
-                    Row(modifier = Modifier
-                        .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center)
+                    Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(space = 24.dp, alignment = Alignment.CenterHorizontally))
                     {
 
-                        Box(modifier = Modifier
-                            .width(54.dp)
-                            .drawBehind {
-                                drawRoundRect(
-                                    color = gray_4,
-                                    style = dash,
-                                    alpha = if (firstCardPicked) 0f else 1f
-                                )
-                            }) {
+                        // "첫번째 카드"
+                        CardBlank(
+                            context = localContext,
+                            sequence = 1
+                        )
 
-                            Image(painter = painterResource(
-                                id = if (firstCardPicked) getCardImageId(localContext, firstCardNumber.toString())
-                                else R.drawable.tarot_front),
-                                contentDescription = null,
-                                modifier = Modifier,
-                                alpha = if(firstCardPicked) 1f else 0f)
-                            TextCaptionM12(text = "첫번째\n 카드",
-                                color = gray_4,
-                                modifier = Modifier
-                                    .wrapContentSize()
-                                    .align(Alignment.Center)
-                                    .alpha(if (firstCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
+                        // "두번째 카드"
+                        CardBlank(
+                            context = localContext,
+                            sequence = 2
+                        )
 
-                        }
-
-                        Box(modifier = Modifier
-                            .padding(horizontal = 24.dp)
-                            .width(54.dp)
-                            .drawBehind {
-                                drawRoundRect(
-                                    color = gray_4,
-                                    style = dash,
-                                    alpha = if (secondCardPicked) 0f else 1f
-                                )
-                            }) {
-
-                            Image(painter = painterResource(
-                                id = if (secondCardPicked) getCardImageId(localContext, secondCardNumber.toString())
-                                else R.drawable.tarot_front),
-                                contentDescription = null,
-                                modifier = Modifier,
-                                alpha = if(secondCardPicked) 1f else 0f)
-                            TextCaptionM12(text = "두번째\n 카드",
-                                color = gray_4,
-                                modifier = Modifier
-                                    .wrapContentSize()
-                                    .align(Alignment.Center)
-                                    .alpha(if (secondCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
-
-                        }
-
-                        Box(modifier = Modifier
-                            .width(54.dp)
-                            .drawBehind {
-                                drawRoundRect(
-                                    color = gray_4,
-                                    style = dash,
-                                    alpha = if (thirdCardPicked) 0f else 1f
-                                )
-                            }) {
-
-                            Image(painter = painterResource(
-                                id = if (thirdCardPicked) getCardImageId(localContext, thirdCardNumber.toString())
-                                else R.drawable.tarot_front),
-                                contentDescription = null,
-                                modifier = Modifier,
-                                alpha = if(thirdCardPicked) 1f else 0f)
-                            TextCaptionM12(text = "세번째\n 카드",
-                                color = gray_4,
-                                modifier = Modifier
-                                    .wrapContentSize()
-                                    .align(Alignment.Center)
-                                    .alpha(if (thirdCardPicked) 0f else 1f),
-                                textAlign = TextAlign.Center)
-
-                        }
+                        // "세번째 카드"
+                        CardBlank(
+                            context = localContext,
+                            sequence = 3
+                        )
                     }
 
 
@@ -221,7 +144,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                             items(cards.size) { index ->
 
                                 val offset by animateIntOffsetAsState(
-                                    targetValue = if (nowSelected == index) {
+                                    targetValue = if (nowSelectedCardIdx == index) {
                                         IntOffset(0, pxToMove)
                                     } else {
                                         IntOffset.Zero
@@ -243,7 +166,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                                         ) {
                                             Log.d("", "nowSelected: $index")
                                             cardSelected = true
-                                            nowSelected = index
+                                            nowSelectedCardIdx = index
                                         })
                             }
 
@@ -266,34 +189,18 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                 Button(
                     onClick = {
-                        if (cardNumber == 1){
-                            firstCardPicked = true
-                            cardSelected = false
-                            firstCardNumber = cards[nowSelected]
-                            cards.remove(firstCardNumber)
-                            cardNumber = 2
-                        }
-                        else if (cardNumber == 2){
-                            secondCardPicked = true
-                            cardSelected = false
-                            secondCardNumber = cards[nowSelected]
-                            cards.remove(secondCardNumber)
-                            cardNumber = 3
-
-                        }
-                        else if (cardNumber == 3) {
-                            thirdCardNumber = cards[nowSelected]
-                            cards.remove(thirdCardNumber)
-                            thirdCardPicked = true
-
-                            tarotInputDto.cards = arrayListOf(firstCardNumber, secondCardNumber, thirdCardNumber)
-
+                        pickTarotViewModel.setPickedCard(pickSequence, cards[nowSelectedCardIdx])
+                        cardSelected = false
+                        cards.remove(cards[nowSelectedCardIdx])
+                        if (pickSequence == 3) {
                             loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
+                        }else{
+                            pickSequence++
                         }
 
                         Log.d("", "${cards.size}, {${cards.joinToString (",")}}")
-//                    Log.d("", "cardNum: $cardNumber, cardVal: ${entireCards[cards[nowSelected]]}, 1: $firstCardIndex, 2: $secondCardIndex, 3: $thirdCardIndex")
-                        nowSelected = -1
+
+                        nowSelectedCardIdx = -1
 
                     },
                     shape = RoundedCornerShape(10.dp),
@@ -325,5 +232,40 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     showIndicator = false
                     MyApplication.prefs.setPickCardIndicateComplete()
                 })
+    }
+}
+
+@Composable
+fun CardBlank(context: Context, sequence: Int){
+    val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
+    val isCardPicked = pickTarotViewModel.getIsCardPicked(sequence)
+
+    Box(modifier = Modifier
+        .width(54.dp)
+        .drawBehind {
+            drawRoundRect(
+                color = gray_4,
+                style = dash,
+                alpha = pickTarotViewModel.getAlpha(!isCardPicked)
+            )
+        }) {
+
+        Image(painter = painterResource(
+            id = if (isCardPicked) {
+                getCardImageId(context, pickTarotViewModel.getCardNumber(sequence).toString())
+            } else {
+                R.drawable.tarot_front
+            }),
+            contentDescription = null,
+            modifier = Modifier,
+            alpha = pickTarotViewModel.getAlpha(isCardPicked))
+        TextCaptionM12(text = pickTarotViewModel.getCardBlankText(context, sequence),
+            color = gray_4,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.Center)
+                .alpha(pickTarotViewModel.getAlpha(!isCardPicked)),
+            textAlign = TextAlign.Center)
+
     }
 }

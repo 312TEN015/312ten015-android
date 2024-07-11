@@ -25,7 +25,7 @@ import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 @Composable
 fun InputScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
-    val pickedTopicTemplate by remember { mutableStateOf( fortuneViewModel.pickedTopicSubject ) }
+    val pickedTopicTemplate = remember { fortuneViewModel.pickedTopicSubject }
 
     setStatusbarColor(LocalView.current, pickedTopicTemplate.primaryColor)
 

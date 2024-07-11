@@ -7,6 +7,7 @@ import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
@@ -119,3 +120,4 @@ val loadingViewModel = LoadingViewModel()
 val chatViewModel = ChatViewModel()
 val fortuneViewModel = FortuneViewModel()
 val questionInputViewModel = QuestionInputViewModel()
+val pickTarotViewModel = PickTarotViewModel()
