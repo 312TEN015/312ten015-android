@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen.harmony
+package com.fourleafclover.tarot.ui.screen.loading
 
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +20,7 @@ import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
+import com.fourleafclover.tarot.ui.screen.harmony.onCreateComplete
 import com.fourleafclover.tarot.ui.theme.gray_9
 
 // 추후 로딩 화면 컴포넌트화 하기

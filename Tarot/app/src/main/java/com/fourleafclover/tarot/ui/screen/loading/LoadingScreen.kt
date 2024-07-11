@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen
+package com.fourleafclover.tarot.ui.screen.loading
 
 import android.os.Handler
 import android.os.Looper

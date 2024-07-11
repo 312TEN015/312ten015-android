@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen.harmony
+package com.fourleafclover.tarot.ui.screen.loading
 
 import android.os.Handler
 import android.os.Looper
@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
@@ -28,6 +27,7 @@ import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
+import com.fourleafclover.tarot.ui.screen.harmony.onJoinComplete
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_5

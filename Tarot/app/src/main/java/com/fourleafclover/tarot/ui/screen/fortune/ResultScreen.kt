@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen
+package com.fourleafclover.tarot.ui.screen.fortune
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image

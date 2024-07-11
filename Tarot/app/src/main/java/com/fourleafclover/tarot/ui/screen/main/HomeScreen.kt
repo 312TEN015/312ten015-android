@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen
+package com.fourleafclover.tarot.ui.screen.main
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,10 +31,12 @@ import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.fortune.text1
+import com.fourleafclover.tarot.ui.screen.fortune.text2
+import com.fourleafclover.tarot.ui.screen.fortune.text3
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
-import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.receiveShareRequest
