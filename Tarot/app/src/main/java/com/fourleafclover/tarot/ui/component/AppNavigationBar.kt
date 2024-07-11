@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
@@ -54,7 +55,6 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.getTarotRequest
 
 
@@ -136,7 +136,7 @@ fun AppBarPlain(
 @Preview
 fun AppBarClose(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicSubject,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true
 ) {
@@ -195,7 +195,7 @@ fun AppBarClose(
 @Preview
 fun AppBarCloseTarotResult(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = getPickedTopic(0),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicSubject,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true,
     resultViewModel: ResultViewModel = remember { ResultViewModel() }

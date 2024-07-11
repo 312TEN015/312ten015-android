@@ -25,15 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
-import com.fourleafclover.tarot.ui.screen.fortune.text1
-import com.fourleafclover.tarot.ui.screen.fortune.text2
-import com.fourleafclover.tarot.ui.screen.fortune.text3
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -62,10 +61,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
             receiveShareRequest(activity, navController)
         }
 
-        // 인풋 초기화
-        text1.value = TextFieldValue("")
-        text2.value = TextFieldValue("")
-        text3.value = TextFieldValue("")
+        questionInputViewModel.initAnswers()
 
         initialize = true
     }
@@ -101,13 +97,13 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            pickedTopicNumber = 0
+                            fortuneViewModel.setPickedTopic(0)
                             navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }, painter = painterResource(id = R.drawable.category_love), contentDescription = "연애운")
                     Image(painter = painterResource(id = R.drawable.category_dream),
                         contentDescription = "소망운",
                         modifier = Modifier.clickable {
-                            pickedTopicNumber = 2
+                            fortuneViewModel.setPickedTopic(2)
                             navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
@@ -119,7 +115,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            pickedTopicNumber = 1
+                            fortuneViewModel.setPickedTopic(1)
                             navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         },
                         painter = painterResource(id = R.drawable.category_study),
@@ -127,7 +123,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                     Image(painter = painterResource(id = R.drawable.category_job),
                         contentDescription = "취업운",
                         modifier = Modifier.clickable {
-                            pickedTopicNumber = 3
+                            fortuneViewModel.setPickedTopic(3)
                             navigateSaveState(navController, ScreenEnum.InputScreen.name)
                         }
                     )
@@ -144,7 +140,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 Image(painter = painterResource(id = R.drawable.category_today),
                     contentDescription = "오늘의 운세",
                     Modifier.clickable {
-                        pickedTopicNumber = 4
+                        fortuneViewModel.setPickedTopic(4)
                         navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
                     })
 
@@ -160,7 +156,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 Image(painter = painterResource(id = R.drawable.category_harmony),
                     contentDescription = "궁합 운세",
                     Modifier.clickable {
-                        pickedTopicNumber = 5
+                        fortuneViewModel.setPickedTopic(5)
                         navigateSaveState(navController, ScreenEnum.RoomCreateScreen.name)
                     })
 

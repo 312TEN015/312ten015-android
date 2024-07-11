@@ -139,4 +139,7 @@ dependencies {
 
     // socket.io
     implementation ("io.socket:socket.io-client:2.0.0")
+
+    // system ui controller
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 }
