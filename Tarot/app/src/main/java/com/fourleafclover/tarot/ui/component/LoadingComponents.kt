@@ -39,20 +39,16 @@ fun LoadingCircle(
     loadingSubTitle: String = "1시간 안에 모두 입장하지 않으면 초대방이 사라져요!"
 ) {
     // 로딩 화면 회전
-    var currentRotation by remember { mutableStateOf(0f) }
+    val rotation = remember { Animatable(0f) }
 
-    val rotation = remember("rotate") { Animatable(currentRotation) }
-
-    LaunchedEffect("rotate") {
+    LaunchedEffect(Unit) {
         rotation.animateTo(
-            targetValue = currentRotation + 360f,
+            targetValue = 360f,
             animationSpec = infiniteRepeatable(
                 animation = tween(3000, easing = LinearEasing),
                 repeatMode = RepeatMode.Restart
             )
-        ) {
-            currentRotation = value
-        }
+        )
     }
 
     Column(

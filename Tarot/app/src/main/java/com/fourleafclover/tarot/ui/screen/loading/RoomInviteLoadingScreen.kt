@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,12 +46,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
 
     PreventBackPressed()
 
-    var initialize by remember { mutableStateOf(false) }
-
-    /* 한번만 실행 */
-    if (!initialize) {
-        initialize = true
-
+    LaunchedEffect(Unit){
         val jsonObject = JSONObject()
         jsonObject.put("nickname", harmonyViewModel.getUserNickname())
         jsonObject.put("roomId", harmonyViewModel.roomId.value)
@@ -64,6 +60,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
                 onJoinComplete()
             }, 4000)
     }
+    
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(

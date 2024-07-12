@@ -32,4 +32,6 @@ class LoadingViewModel: ViewModel() {
     fun changeDestination(destination: ScreenEnum){
         this.destination = destination
     }
+
+    fun getDestination() = destination
 }

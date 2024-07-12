@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +35,7 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
 
     PreventBackPressed()
 
-    var initialize by remember { mutableStateOf(false) }
-
-    /* 한번만 실행 */
-    if (!initialize) {
-        initialize = true
-
+    LaunchedEffect(Unit){
         // 새로운 방 생성
         if (harmonyViewModel.roomId.value.isEmpty()) {
             MyApplication.socket.emit("create")
@@ -51,7 +47,7 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
         /* 테스트 코드 */
         Handler(Looper.getMainLooper())
             .postDelayed({
-                         onCreateComplete()
+                onCreateComplete()
             }, 4000)
     }
 
