@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -55,13 +57,14 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     /* 한번만 실행 */
     if (!initialize){
 
+        pickTarotViewModel.initCardDeck()
+        questionInputViewModel.initAnswers()
+
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()
         if (activity != null && activity.intent != null) {
             receiveShareRequest(activity, navController)
         }
-
-        questionInputViewModel.initAnswers()
 
         initialize = true
     }

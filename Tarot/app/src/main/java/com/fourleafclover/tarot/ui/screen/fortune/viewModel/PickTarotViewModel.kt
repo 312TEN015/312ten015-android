@@ -17,13 +17,13 @@ data class PickedCardNumberState(
 
 class PickTarotViewModel: ViewModel() {
     private var _pickedCardNumberState = MutableStateFlow(PickedCardNumberState())
-    val pickedCardNumberState: StateFlow<PickedCardNumberState> = _pickedCardNumberState.asStateFlow()
+    val pickedCardNumberState: StateFlow<PickedCardNumberState> get() =  _pickedCardNumberState.asStateFlow()
 
     private var _nowSelectedCardIdx = mutableStateOf(-1)
-    val nowSelectedCardIdx = _nowSelectedCardIdx
+    val nowSelectedCardIdx get() = _nowSelectedCardIdx
 
     private var _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
-    val cards = _cards
+    val cards get() = _cards
 
     fun initCardDeck(){
         _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }

@@ -271,10 +271,10 @@ fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
     }
 }
 
+@Preview
 @Composable
 fun ChatCardDeck() {
     val localContext = LocalContext.current
-    val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
     var pickSequence by remember { mutableIntStateOf(1) }
 

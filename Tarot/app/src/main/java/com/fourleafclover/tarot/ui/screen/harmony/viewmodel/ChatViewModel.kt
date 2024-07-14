@@ -58,8 +58,9 @@ data class ChatState(
 )
 
 class ChatViewModel : ViewModel() {
-    private val _chatState = MutableStateFlow(ChatState())
-    val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
+    private var _chatState = MutableStateFlow(ChatState())
+    val chatState: StateFlow<ChatState>
+        get() = _chatState.asStateFlow()
 
     private val _partnerChatState = MutableStateFlow(ChatState())
     val partnerChatState: StateFlow<ChatState> = _partnerChatState.asStateFlow()
@@ -191,7 +192,11 @@ class ChatViewModel : ViewModel() {
     }
 
     fun updateCardDeckStatus(newStatus: CardDeckStatus) {
-        _chatState.value.cardDeckStatus = newStatus
+        _chatState.value = ChatState(
+            _chatState.value.scenario,
+            newStatus,
+            _chatState.value.pickedCardNumberState
+        )
     }
 
     fun updatePickedCardNumberState(){
