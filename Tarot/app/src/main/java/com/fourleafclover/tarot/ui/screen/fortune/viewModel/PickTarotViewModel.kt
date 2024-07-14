@@ -1,8 +1,11 @@
 package com.fourleafclover.tarot.ui.screen.fortune.viewModel
 
 import android.content.Context
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.getRandomCards
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,13 +20,31 @@ class PickTarotViewModel: ViewModel() {
     private val _pickCardState = MutableStateFlow(PickCardState())
     val pickCardState: StateFlow<PickCardState> = _pickCardState.asStateFlow()
 
-    fun setPickedCard(sequence: Int, cardNumber: Int){
+    private var _nowSelectedCardIdx = mutableStateOf(-1)
+    val nowSelectedCardIdx = _nowSelectedCardIdx
+
+    private val _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
+    val cards = _cards
+
+    fun setNowSelectedCardIdx(idx: Int) {
+        _nowSelectedCardIdx.value = idx
+    }
+
+    fun resetNowSelectedCardIdx() {
+        _nowSelectedCardIdx.value = -1
+    }
+
+    fun isCompleteButtonEnabled(): Boolean = _nowSelectedCardIdx.value != -1
+
+    fun setPickedCard(sequence: Int){
+        val pickedCard = _cards[_nowSelectedCardIdx.value]
         when(sequence){
-            1 -> _pickCardState.value.firstCardNumber = cardNumber
-            2 -> _pickCardState.value.secondCardNumber = cardNumber
-            3 -> _pickCardState.value.thirdCardNumber = cardNumber
+            1 -> _pickCardState.value.firstCardNumber = pickedCard
+            2 -> _pickCardState.value.secondCardNumber = pickedCard
+            3 -> _pickCardState.value.thirdCardNumber = pickedCard
         }
-        fortuneViewModel.addPickedCard(cardNumber)
+        fortuneViewModel.addPickedCard(pickedCard)
+        _cards.remove(pickedCard)
     }
 
     private fun firstCardPicked(): Boolean = _pickCardState.value.firstCardNumber != -1

@@ -70,7 +70,6 @@ import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardPickStatus
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
@@ -253,7 +252,7 @@ fun RoomChatScreen(
 
             if (chatState.value.cardPickStatus == CardPickStatus.Spread)
                 withChatAnimation(){
-                    CardDeck()
+                    ChatCardDeck()
                 }
         }
 
@@ -278,14 +277,14 @@ fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
 }
 
 @Composable
-fun CardDeck() {
+fun ChatCardDeck() {
     val localContext = LocalContext.current
     val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
     // 카드덱
     Column(
         modifier = Modifier.padding(top = 80.dp, bottom = 32.dp),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Bottom,
     ) {
 
         LazyRow(

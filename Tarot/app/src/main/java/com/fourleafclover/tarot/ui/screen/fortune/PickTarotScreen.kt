@@ -85,12 +85,6 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
             AppBarClose(navController = navController, pickedTopicTemplate = fortuneViewModel.pickedTopicSubject, backgroundColor = backgroundColor_1)
 
             var pickSequence by remember { mutableIntStateOf(1) }
-            var cardSelected by remember { mutableStateOf(false) }
-            var nowSelectedCardIdx by remember { mutableIntStateOf(-1) }
-            
-            val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
-            
-            val cards = remember { mutableStateListOf<Int>().apply{ addAll(getRandomCards()) } }
 
             // "0번째 카드를 골라주세요."
             TextH02M22(
@@ -131,46 +125,9 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                     // 카드덱
                     Column(modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.Center) {
+                        verticalArrangement = Arrangement.Bottom) {
 
-                        LazyRow(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .weight(1f),
-                            verticalAlignment = Alignment.Bottom,
-                            horizontalArrangement = Arrangement.spacedBy((-46).dp)
-                        ) {
-
-                            items(cards.size) { index ->
-
-                                val offset by animateIntOffsetAsState(
-                                    targetValue = if (nowSelectedCardIdx == index) {
-                                        IntOffset(0, pxToMove)
-                                    } else {
-                                        IntOffset.Zero
-                                    },
-                                    label = "offset"
-                                )
-
-
-                                Image(painter = painterResource(id = R.drawable.tarot_front),
-                                    contentDescription = "$index",
-                                    modifier = Modifier
-                                        .width(80.dp)
-                                        .offset {
-                                            offset
-                                        }
-                                        .clickable(
-                                            interactionSource = remember { MutableInteractionSource() },
-                                            indication = null
-                                        ) {
-                                            Log.d("", "nowSelected: $index")
-                                            cardSelected = true
-                                            nowSelectedCardIdx = index
-                                        })
-                            }
-
-                        }
+                        CardDeck()
 
                         // 인디케이터
                         Image(painter = painterResource(id = R.drawable.tarot_pick_indicator),
@@ -189,18 +146,14 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                 Button(
                     onClick = {
-                        pickTarotViewModel.setPickedCard(pickSequence, cards[nowSelectedCardIdx])
-                        cardSelected = false
-                        cards.remove(cards[nowSelectedCardIdx])
+                        pickTarotViewModel.setPickedCard(pickSequence)
                         if (pickSequence == 3) {
                             loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
                         }else{
                             pickSequence++
                         }
 
-                        Log.d("", "${cards.size}, {${cards.joinToString (",")}}")
-
-                        nowSelectedCardIdx = -1
+                        pickTarotViewModel.resetNowSelectedCardIdx()
 
                     },
                     shape = RoundedCornerShape(10.dp),
@@ -215,12 +168,12 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                         disabledContainerColor = gray_6,
                         disabledContentColor = gray_5
                     ),
-                    enabled = cardSelected
+                    enabled = pickTarotViewModel.isCompleteButtonEnabled()
                 ) {
                     TextButtonM16(
                         text = "선택완료",
                         modifier = Modifier.padding(vertical = 8.dp),
-                        color = if (cardSelected) gray_1 else gray_5)
+                        color = if (pickTarotViewModel.isCompleteButtonEnabled()) gray_1 else gray_5)
                 }
             }
         }
@@ -266,6 +219,47 @@ fun CardBlank(context: Context, sequence: Int){
                 .align(Alignment.Center)
                 .alpha(pickTarotViewModel.getAlpha(!isCardPicked)),
             textAlign = TextAlign.Center)
+
+    }
+}
+
+@Composable
+fun CardDeck(){
+    val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
+
+    LazyRow(
+        modifier = Modifier.wrapContentWidth(),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy((-46).dp)
+    ) {
+
+        items(pickTarotViewModel.cards.size) { index ->
+
+            val offset by animateIntOffsetAsState(
+                targetValue = if (pickTarotViewModel.nowSelectedCardIdx.value == index) {
+                    IntOffset(0, pxToMove)
+                } else {
+                    IntOffset.Zero
+                },
+                label = "offset"
+            )
+
+
+            Image(painter = painterResource(id = R.drawable.tarot_front),
+                contentDescription = "$index",
+                modifier = Modifier
+                    .width(80.dp)
+                    .offset {
+                        offset
+                    }
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        Log.d("", "nowSelected: $index")
+                        pickTarotViewModel.setNowSelectedCardIdx(index)
+                    })
+        }
 
     }
 }
