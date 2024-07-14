@@ -37,6 +37,8 @@ class MyApplication: Application() {
 //        prefs.addTarotResult("1PWkCVrc3DZBuD8nkAcM7")
 //        prefs.addTarotResult("303R-CSMhBq6VZc9ICH_3")
 //        prefs.addTarotResult("jwWT2Fk6B4A705eZTo73T")
+//        prefs.addTarotResult("DhJ-FVbKI8veaO3NAJSiH")
+//        prefs.addTarotResult("Dv1w5s0yOGtBbzoWvpxI8")
 //        prefs.deleteIsPickCardIndicateComplete()
 
         // 서버 초기화

@@ -19,10 +19,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,14 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.data.CardResultData
-import com.fourleafclover.tarot.data.OverallResultData
-import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
-import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.CloseDialog
 import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
@@ -76,17 +70,12 @@ var openCompleteDialog = mutableStateOf(false)  // 타로 저장 완료 dialog s
 @Composable
 fun ResultScreen(navController: NavHostController){
 
-    var initialize by remember { mutableStateOf(false) }
-
     // 변수 초기화
-    if (!initialize){
+    LaunchedEffect(Unit){
         openCloseDialog.value = false
         saveState.value = false
         openCompleteDialog.value = false
-        initialize = true
     }
-
-    val localContext = LocalContext.current
 
     Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
     {
@@ -134,79 +123,7 @@ fun ResultScreen(navController: NavHostController){
                     .fillMaxWidth()
             )
 
-            CardSlider(tarotResult = tarotOutputDto)
-
-            OverallResult()
-
-        }
-
-    }
-}
-
-@Preview
-@Composable
-fun ResultScreenPreview(navController: NavHostController = rememberNavController()){
-    val localContext = LocalContext.current
-
-    tarotOutputDto = TarotOutputDto(
-        "0",
-        0,
-        arrayListOf(0, 1, 2),
-        "2024-01-14T12:38:23.000Z",
-        arrayListOf(
-            CardResultData(arrayListOf("keyword1", "keyword2", "keyword3"), "description1"),
-            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1"),
-            CardResultData(arrayListOf("keyword", "keyword2", "keyword3"), "description1")),
-        OverallResultData("summary result", "full result")
-    )
-
-    Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
-    {
-
-        ControlDialog(navController)
-
-
-        Box(
-            modifier = appBarModifier
-                .background(color = backgroundColor_1)
-                .padding(top = 10.dp, bottom = 10.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            TextButtonM16(
-                text = getPickedTopic(pickedTopicNumber).majorTopic,
-                color = white,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Center),
-                textAlign = TextAlign.Center
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.cancel),
-                contentDescription = "닫기버튼",
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .clickable { openCloseDialog.value = true }
-                    .padding(end = 20.dp)
-                    .size(28.dp),
-                alignment = Alignment.Center
-            )
-        }
-
-        Column(modifier = Modifier
-
-        ) {
-
-            TextH02M22(
-                text = "선택하신 카드는\n이런 의미를 담고 있어요.",
-                color = white,
-                modifier = Modifier
-                    .background(color = gray_8)
-                    .padding(horizontal = 20.dp, vertical = 32.dp)
-                    .fillMaxWidth()
-            )
-
-            CardSlider(tarotResult = tarotOutputDto)
+            CardSlider()
 
             OverallResult()
 
@@ -230,17 +147,21 @@ fun OverallResult(){
         TextH01M26(
             text = "타로 카드 종합 리딩",
             color = highlightPurple,
-            modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 48.dp)
+                .fillMaxWidth()
         )
 
         TextB01M18(
-            text = tarotOutputDto.overallResult?.summary.toString(),
+            text = fortuneViewModel.tarotResult.overallResult?.summary.toString(),
             color = white,
-            modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth()
         )
 
         TextB02M16(
-            text = tarotOutputDto.overallResult?.full.toString(),
+            text = fortuneViewModel.tarotResult.overallResult?.full.toString(),
             color = gray_3,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 64.dp)
@@ -252,7 +173,7 @@ fun OverallResult(){
                 openCompleteDialog.value = true
 
                 // 타로 결과 id 저장
-                MyApplication.prefs.addTarotResult(tarotOutputDto.tarotId)
+                MyApplication.prefs.addTarotResult(fortuneViewModel.tarotResult.tarotId)
                 saveState.value = true
             },
             shape = RoundedCornerShape(10.dp),
@@ -272,7 +193,9 @@ fun OverallResult(){
             if (saveState.value){
                 Image(painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp).padding(end = 4.dp),
+                    modifier = Modifier
+                        .size(22.dp)
+                        .padding(end = 4.dp),
                     alignment = Alignment.Center
                 )
             }
@@ -308,7 +231,12 @@ fun OverallResult(){
             .padding(vertical = 16.dp, horizontal = 16.dp)
             .padding(bottom = 45.dp)
             .clickable {
-                setDynamicLink(localContext, tarotOutputDto.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
+                setDynamicLink(
+                    localContext,
+                    fortuneViewModel.tarotResult.tarotId,
+                    ShareLinkType.MY,
+                    ShareActionType.OPEN_SHEET
+                )
             },
             horizontalArrangement = Arrangement.Center)
         {

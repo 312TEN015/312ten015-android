@@ -26,7 +26,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,7 +48,6 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarClose
@@ -148,6 +146,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     onClick = {
                         pickTarotViewModel.setPickedCard(pickSequence)
                         if (pickSequence == 3) {
+                            fortuneViewModel.setFortunePickedCards()
                             loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
                         }else{
                             pickSequence++

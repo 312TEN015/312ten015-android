@@ -31,14 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.partnerTarotOutputDto
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.harmonyViewModel
-import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.partnerTarotOutputDto
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -48,7 +48,6 @@ import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_1
-import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
@@ -56,7 +55,6 @@ import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
-import com.fourleafclover.tarot.ui.theme.transparent
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
 import com.fourleafclover.tarot.utils.ShareLinkType
@@ -64,7 +62,7 @@ import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
-fun ResultScreen(
+fun HarmonyResultScreen(
     navController: NavHostController,
     resultViewModel: ResultViewModel = remember { ResultViewModel() }
 ) {
@@ -157,6 +155,7 @@ fun HarmonyResultScreenPreview(
                     }
                 }
 
+                 /* TODO 이부분 아직 미정(결과 DTO 미정으로 임시 코드 삽입) */
                 HarmonyCardSlider(tarotResult = if (myCard) tarotOutputDto else partnerTarotOutputDto, outsideHorizontalPadding = 40.dp)
             }
 

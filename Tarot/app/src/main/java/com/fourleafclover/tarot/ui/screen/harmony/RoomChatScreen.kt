@@ -7,7 +7,6 @@ import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.EaseOutQuart
-import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,21 +15,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -38,7 +33,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,22 +45,22 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
-import com.fourleafclover.tarot.getRandomCards
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardPickStatus
+import com.fourleafclover.tarot.ui.screen.fortune.CardDeck
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardDeckStatus
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
@@ -88,9 +82,6 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.math.roundToInt
 
-
-private val cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
-private var nowSelected by mutableIntStateOf(-1)
 private val toShowProfileList = mutableIntSetOf()
 
 
@@ -105,6 +96,10 @@ fun RoomChatScreen(
 
     MyApplication.socket.on("onNext", onNext)
     MyApplication.socket.on("onResult", onResult)
+
+    LaunchedEffect(Unit){
+        pickTarotViewModel.initCardDeck()
+    }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
@@ -219,7 +214,7 @@ fun RoomChatScreen(
                                 ChatType.PickCard -> {
                                     if (chatState.value.scenario != Scenario.Complete) {
                                         LaunchedEffect(Unit) {
-                                            chatViewModel.updateCardPickStatus(CardPickStatus.Spread)
+                                            chatViewModel.updateCardDeckStatus(CardDeckStatus.Spread)
                                         }
                                     }
                                 }
@@ -250,7 +245,7 @@ fun RoomChatScreen(
 
             }
 
-            if (chatState.value.cardPickStatus == CardPickStatus.Spread)
+            if (chatState.value.cardDeckStatus == CardDeckStatus.Spread)
                 withChatAnimation(){
                     ChatCardDeck()
                 }
@@ -281,69 +276,39 @@ fun ChatCardDeck() {
     val localContext = LocalContext.current
     val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
+    var pickSequence by remember { mutableIntStateOf(1) }
+
+
     // 카드덱
     Column(
         modifier = Modifier.padding(top = 80.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.Bottom,
     ) {
 
-        LazyRow(
-            modifier = Modifier.wrapContentWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy((-46).dp)
-        ) {
-
-            items(cards.size) { index ->
-
-                val offset by animateIntOffsetAsState(
-                    targetValue = if (nowSelected == index) {
-                        IntOffset(0, pxToMove)
-                    } else {
-                        IntOffset.Zero
-                    },
-                    label = "offset"
-                )
-
-
-                Image(painter = painterResource(id = R.drawable.tarot_front),
-                    contentDescription = "$index",
-                    modifier = Modifier
-                        .width(80.dp)
-                        .offset {
-                            offset
-                        }
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ) {
-                            Log.d("", "nowSelected: $index")
-                            nowSelected = index
-                        })
-            }
-
-        }
+        CardDeck()
 
         ButtonSelect(
             text = "선택 완료",
             onClick = {
-                chatViewModel.saveCardNumber(cards[nowSelected])
+                pickTarotViewModel.setPickedCard(pickSequence)
                 chatViewModel.addChatItem(
                     Chat(
                         type = ChatType.MyChatImage,
-                        drawable = getCardImageId(localContext, cards[nowSelected].toString())
+                        drawable = getCardImageId(localContext, pickTarotViewModel.getCardNumber(pickSequence).toString())
                     )
                 )
-                cards.remove(cards[nowSelected])
-                chatViewModel.updateCardPickStatus(CardPickStatus.Gathered)
 
                 val jsonObject = JSONObject()
                 jsonObject.put("nickname", harmonyViewModel.getUserNickname())
                 jsonObject.put("roomId", harmonyViewModel.roomId.value)
-                jsonObject.put("cardNum", cards[nowSelected])
+                jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence))
                 MyApplication.socket.emit("cardSelect", jsonObject)
                 Log.d("socket-test", "emit cardSelect")
 
-                nowSelected = -1
+                pickSequence++
+                chatViewModel.updateCardDeckStatus(CardDeckStatus.Gathered)
+
+                pickTarotViewModel.resetNowSelectedCardIdx()
                 checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
 
                 /* 테스트 코드 */
@@ -353,7 +318,7 @@ fun ChatCardDeck() {
                     }, 4000)
 
             },
-            isEnable = nowSelected != -1
+            isEnable = pickTarotViewModel.isCompleteButtonEnabled()
         )
 
     }
@@ -484,6 +449,8 @@ fun PartnerChattingBox(
                         text = buttonText,
                         onClick = {
                             chatViewModel.moveToNextScenario()
+                            chatViewModel.updatePickedCardNumberState()
+
                             val jsonObject = JSONObject()
                             jsonObject.put("roomId", harmonyViewModel.roomId.value)
                             MyApplication.socket.emit("finish", jsonObject)

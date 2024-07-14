@@ -213,6 +213,7 @@ fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, context: C
 fun QuestionViewFooter(navController: NavHostController){
     Button(
         onClick = {
+            fortuneViewModel.setFortuneAnswers()
             navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
         },
         shape = RoundedCornerShape(10.dp),

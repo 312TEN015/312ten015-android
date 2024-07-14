@@ -16,8 +16,9 @@ import com.fourleafclover.tarot.ui.screen.fortune.MyTarotDetailScreen
 import com.fourleafclover.tarot.ui.screen.fortune.MyTarotScreen
 import com.fourleafclover.tarot.ui.screen.main.PagerOnBoarding
 import com.fourleafclover.tarot.ui.screen.fortune.PickTarotScreen
-import com.fourleafclover.tarot.ui.screen.harmony.ResultScreen
+import com.fourleafclover.tarot.ui.screen.fortune.ResultScreen
 import com.fourleafclover.tarot.ui.screen.fortune.ShareDetailScreen
+import com.fourleafclover.tarot.ui.screen.harmony.HarmonyResultScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomChatScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomCreateScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomGenderScreen
@@ -97,7 +98,7 @@ fun NavigationHost() {
                 RoomChatScreen(navController)
             }
             composable(ScreenEnum.RoomResultScreen.name) {
-                ResultScreen(navController)
+                HarmonyResultScreen(navController)
             }
         }
 

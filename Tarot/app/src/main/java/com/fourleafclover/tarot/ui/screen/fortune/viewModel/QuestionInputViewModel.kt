@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModel
 
 class QuestionInputViewModel: ViewModel() {
     private var _answer1 = mutableStateOf(TextFieldValue(""))
+    val answer1 = _answer1
 
     private var _answer2 = mutableStateOf(TextFieldValue(""))
+    val answer2 = _answer2
 
     private var _answer3 = mutableStateOf(TextFieldValue(""))
+    val answer3 = _answer3
 
     private var _maxChar = 50
     val maxChar

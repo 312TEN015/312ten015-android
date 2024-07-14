@@ -7,11 +7,12 @@ import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotResults
+import com.fourleafclover.tarot.pickTarotViewModel
+import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.sharedTarotResult
-import com.fourleafclover.tarot.tarotInputDto
-import com.fourleafclover.tarot.tarotOutputDto
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import retrofit2.Call
@@ -77,7 +78,6 @@ fun getSharedTarotRequest(
                 }
 
                 Log.d("", response.body()!!.toString())
-                Log.d("", response.body()!!.toString())
 
                 sharedTarotResult = response.body()!![0]
                 navigateInclusive(navController, ScreenEnum.ShareDetailScreen.name)
@@ -96,8 +96,8 @@ fun getSharedTarotRequest(
 
 /* 타로 결과 요청 POST */
 fun sendRequest(localContext: Context, navController: NavHostController) {
-    Log.d("", tarotInputDto.toString())
-    MyApplication.tarotService.postTarotResult(tarotInputDto, getPath())
+    Log.d("", fortuneViewModel.getTarotInputDto().toString())
+    MyApplication.tarotService.postTarotResult(fortuneViewModel.getTarotInputDto(), getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
                 call: Call<TarotOutputDto>,
@@ -110,11 +110,10 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                     return
                 }
 
-                tarotOutputDto = response.body()!!
-
-                Log.d("", "${tarotOutputDto.cardResults}--------")
-                Log.d("", "${tarotOutputDto.overallResult}--------")
-
+                fortuneViewModel.setTarotResult(response.body()!!)
+                pickTarotViewModel.initCardDeck()
+                questionInputViewModel.initAnswers()
+                Log.d("", "${fortuneViewModel.tarotResult}--------")
 
                 loadingViewModel.updateLoadingState(false)
             }

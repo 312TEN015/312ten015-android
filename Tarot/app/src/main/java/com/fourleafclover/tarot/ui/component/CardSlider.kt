@@ -38,10 +38,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.fourleafclover.tarot.data.CardResultData
-import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.tarotOutputDto
+import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.gray_2
@@ -64,7 +63,7 @@ fun CardSlider(
 ) {
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
-    for ((idx, value) in tarotResult.cards.withIndex()) {
+    for ((idx, value) in fortuneViewModel.tarotResult.cards.withIndex()) {
         sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
     }
 
@@ -81,7 +80,9 @@ fun CardSlider(
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Row(
-            modifier = modifier.fillMaxWidth().padding(bottom = 32.dp),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -160,7 +161,7 @@ fun CardSlider(
 
                     TextB04M12(
                         text = "# ${
-                            tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
+                            fortuneViewModel.tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
                                 it
                             )
                         }",
@@ -175,7 +176,7 @@ fun CardSlider(
             }
 
             TextB02M16(
-                text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
+                text = "${fortuneViewModel.tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
                 color = white,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
