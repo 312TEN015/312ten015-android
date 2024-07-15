@@ -108,7 +108,7 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
             ) {
                 TextButtonM16(
                     text = "확인",
-                    modifier = Modifier.padding(vertical = 8.dp),
+                    modifier = Modifier.padding(vertical = 9.dp),
                     color = white
                 )
             }
@@ -154,7 +154,7 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                 ) {
                     TextButtonM16(
                         text = "아니요",
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 9.dp),
                         color = gray_8
                     )
                 }
@@ -172,7 +172,7 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                 ) {
                     TextButtonM16(
                         text = "네",
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier.padding(vertical = 9.dp),
                         color = gray_2
                     )
                 }
@@ -206,60 +206,66 @@ fun VerticalYesNoDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}, 
         Column(modifier = Modifier
             .wrapContentHeight()
             .width(288.dp)
-            .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 16.dp),
+            .padding(top = 24.dp, bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally) {
 
-            TextButtonM16(text = "이미 생성하신 초대방이 있어요!",
-                color = gray_8,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 8.dp))
-
-            TextB03M14(text = "초대방을 새로 만들 경우, 기존 초대방은 사라져요.",
-                color = gray_6,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 24.dp))
-
-            Button(onClick = onClickOk,
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(end = 4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = gray_8,
-                    contentColor = white
-                ),
-                contentPadding = PaddingValues(0.dp)
+            Column(
+                modifier = Modifier.padding(start = 13.dp, end = 13.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextButtonM16(
-                    text = "새로 만들기",
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    color = white
-                )
+
+                TextButtonM16(text = "이미 생성하신 초대방이 있어요!",
+                    color = gray_8,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 8.dp))
+
+                TextB03M14(text = "초대방을 새로 만들 경우, 기존 초대방은 사라져요.",
+                    color = gray_6,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 24.dp))
             }
 
-            Button(onClick = onClickOk,
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(end = 4.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = gray_2,
-                    contentColor = gray_8
-                ),
-                contentPadding = PaddingValues(0.dp)
-            ) {
-                TextButtonM16(
-                    text = "기존 초대방 입장하기",
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    color = gray_8
-                )
+            Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
+
+                Button(onClick = onClickOk,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(end = 4.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = gray_8,
+                        contentColor = white
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    TextButtonM16(
+                        text = "새로 만들기",
+                        modifier = Modifier.padding(vertical = 9.dp),
+                        color = white
+                    )
+                }
+
+                Button(onClick = onClickOk,
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(end = 4.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = gray_2,
+                        contentColor = gray_8
+                    ),
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    TextButtonM16(
+                        text = "기존 초대방 입장하기",
+                        modifier = Modifier.padding(vertical = 9.dp),
+                        color = gray_8
+                    )
+                }
             }
+
 
         }
 
@@ -300,7 +306,7 @@ fun RoomDeletedDialog(onClickOk: () -> Unit = {}, onClickClose: () -> Unit = {})
                     .padding(bottom = 8.dp)
             )
 
-            TextButtonM16(text = "1시간 안에 입장하지 않아서 초대방이 사라졌어요.\uD83D\uDE22",
+            TextButtonM16(text = "1시간 안에 입장하지 않아서\n초대방이 사라졌어요.\uD83D\uDE22",
                 color = gray_8,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -321,7 +327,7 @@ fun RoomDeletedDialog(onClickOk: () -> Unit = {}, onClickClose: () -> Unit = {})
             ) {
                 TextButtonM16(
                     text = "확인",
-                    modifier = Modifier.padding(vertical = 8.dp),
+                    modifier = Modifier.padding(vertical = 9.dp),
                     color = white
                 )
             }

@@ -65,6 +65,7 @@ import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getCardImageId
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 
@@ -90,7 +91,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                 color = white,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp, vertical = 32.dp)
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 32.dp, bottom = 28.dp)
             )
 
             Column(modifier = Modifier.fillMaxSize()) {
@@ -224,7 +226,7 @@ fun CardBlank(context: Context, sequence: Int){
 
 @Composable
 fun CardDeck(){
-    val pxToMove = with(LocalDensity.current) { -32.dp.toPx().roundToInt() }
+    val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
     LazyRow(
         modifier = Modifier.wrapContentWidth(),

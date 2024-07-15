@@ -128,7 +128,7 @@ fun RoomChatScreen(
 
                     if (it == chatViewModel.getChatListSize()) {
                         Box(modifier = Modifier
-                            .requiredHeight(300.dp)
+                            .requiredHeight(310.dp)
                             .fillMaxWidth())
                     } else {
                         val chatItem by remember { mutableStateOf(chatViewModel.getChatItem(it)) }
@@ -288,7 +288,7 @@ fun ChatCardDeck() {
         CardDeck()
 
         ButtonSelect(
-            text = "선택 완료",
+            text = "선택완료",
             onClick = {
                 pickTarotViewModel.setPickedCard(pickSequence)
                 chatViewModel.addChatItem(
@@ -573,7 +573,7 @@ fun ButtonSelect(
                     .wrapContentHeight(),
                 contentAlignment = Alignment.Center
             ) {
-                ButtonText(isEnabled = isEnable, text = text, paddingVertical = 8.dp)
+                ButtonText(isEnabled = isEnable, text = text, paddingVertical = 9.dp)
             }
 
         }

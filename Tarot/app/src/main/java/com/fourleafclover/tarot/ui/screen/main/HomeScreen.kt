@@ -95,7 +95,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
             Row(Modifier.padding(bottom = 32.dp)) {
                 Column(modifier = Modifier
-                    .padding(end = 4.dp)
+                    .padding(end = 8.dp)
                     .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
@@ -113,7 +113,6 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 }
 
                 Column(modifier = Modifier
-                    .padding(start = 4.dp)
                     .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)

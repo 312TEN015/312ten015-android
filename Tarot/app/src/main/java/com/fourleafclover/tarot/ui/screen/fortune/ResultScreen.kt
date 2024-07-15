@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
@@ -49,6 +50,7 @@ import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
 import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_3
@@ -68,7 +70,8 @@ var saveState = mutableStateOf(false)   // 타로 결과 저장했는지 여부
 var openCompleteDialog = mutableStateOf(false)  // 타로 저장 완료 dialog state
 
 @Composable
-fun ResultScreen(navController: NavHostController){
+@Preview
+fun ResultScreen(navController: NavHostController = rememberNavController()){
 
     // 변수 초기화
     LaunchedEffect(Unit){
@@ -123,7 +126,10 @@ fun ResultScreen(navController: NavHostController){
                     .fillMaxWidth()
             )
 
-            CardSlider()
+            Box(modifier = Modifier.background(color = backgroundColor_2)){
+                CardSlider()
+            }
+
 
             OverallResult()
 

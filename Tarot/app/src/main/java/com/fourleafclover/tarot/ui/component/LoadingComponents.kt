@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
+import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.white
@@ -52,9 +53,7 @@ fun LoadingCircle(
     }
 
     Column(
-        modifier = Modifier
-            .background(color = backgroundColor_2)
-            .then(modifier),
+        modifier = Modifier.then(modifier),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

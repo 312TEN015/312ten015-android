@@ -1,9 +1,13 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -37,6 +41,8 @@ import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
+import com.fourleafclover.tarot.ui.theme.purple400
+import com.fourleafclover.tarot.ui.theme.purple50
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.getPickedTopic
 
@@ -103,45 +109,47 @@ fun RoomGenderScreen(
 
 @Composable
 fun GenderButton(modifier: Modifier, genderViewModel: GenderViewModel, gender: Int) {
-    Button(
+
+    Box(
         modifier = getOutlinedRectangleModifier(
-            borderColor = gray_7,
+            borderColor = if (genderViewModel.isSelected(gender)) {
+                purple400
+            } else {
+                gray_7
+            },
             fillColor = gray_9,
             cornerRadius = 10.dp
         )
             .padding(vertical = 16.dp)
-            .then(modifier),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = gray_9,
-            contentColor = highlightPurple,
-            disabledContainerColor = gray_9,
-            disabledContentColor = gray_2
-        ),
-        onClick = { genderViewModel.updatePickedGender(gender) },
-        content = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    painter = painterResource(
-                        id =
-                        if (genderViewModel.isSelected(gender)) {
-                            if (gender == WOMAN) R.drawable.woman_selected
-                            else R.drawable.man_selected
-                        } else {
-                            if (gender == WOMAN) R.drawable.woman_unselected
-                            else R.drawable.man_unselected
-                        }
-                    ),
-                    contentDescription = null,
-                    alignment = Alignment.Center,
-                )
-
-                TextH03SB18(
-                    text = if (gender == WOMAN) "여자" else "남자",
-                    color = if (genderViewModel.isSelected(gender)) highlightPurple else gray_2,
-                    modifier = Modifier.padding(top = 33.dp)
-                )
+            .clickable {
+                genderViewModel.updatePickedGender(gender)
             }
+            .then(modifier),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(
+                    id =
+                    if (genderViewModel.isSelected(gender)) {
+                        if (gender == WOMAN) R.drawable.woman_selected
+                        else R.drawable.man_selected
+                    } else {
+                        if (gender == WOMAN) R.drawable.woman_unselected
+                        else R.drawable.man_unselected
+                    }
+                ),
+                contentDescription = null,
+                alignment = Alignment.Center,
+            )
 
+            TextH03SB18(
+                text = if (gender == WOMAN) "여자" else "남자",
+                color = if (genderViewModel.isSelected(gender)) highlightPurple else gray_2,
+                modifier = Modifier.padding(top = 33.dp)
+            )
         }
-    )
+    }
 }

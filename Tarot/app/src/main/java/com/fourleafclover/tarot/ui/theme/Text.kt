@@ -62,7 +62,7 @@ fun TextH02M22(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 30.dp),
+        lineHeight = toSp(dp = 34.dp),
         style = getTextStyle(fontSize = 22, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -122,7 +122,8 @@ fun TextB03M14(text: String,
         modifier = modifier,
         lineHeight = toSp(dp = 20.dp),
         style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = color),
-        textAlign = textAlign
+        textAlign = textAlign,
+        letterSpacing = toSp(dp = (-0.2).dp)
     )
 }
 
@@ -164,6 +165,20 @@ fun TextButtonM16(text: String,
         modifier = modifier,
         lineHeight = toSp(dp = 26.dp),
         style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color),
+        textAlign = textAlign
+    )
+}
+
+@Composable
+fun TextButtonSB16(text: String,
+                  modifier: Modifier = Modifier,
+                  color: Color = gray_9,
+                  textAlign: TextAlign = TextAlign.Left){
+    return Text(
+        text = text,
+        modifier = modifier,
+        lineHeight = toSp(dp = 26.dp),
+        style = getTextStyle(fontSize = 16, fontWeight = FontWeight.SemiBold, color = color),
         textAlign = textAlign
     )
 }

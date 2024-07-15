@@ -94,7 +94,7 @@ fun CardSlider(
             HorizontalPager(
                 modifier = modifier.weight(1f),
                 state = pagerState,
-                pageSpacing = 12.dp,
+                pageSpacing = 24.dp,
                 userScrollEnabled = true,
                 reverseLayout = false,
                 contentPadding = PaddingValues(horizontal = horizontalPadding),
@@ -165,7 +165,7 @@ fun CardSlider(
                                 it
                             )
                         }",
-                        color = gray_2,
+                        color = gray_4,
                         modifier = Modifier
                             .padding(end = 8.dp)
                             .background(color = gray_8, shape = RoundedCornerShape(6.dp))
@@ -177,7 +177,7 @@ fun CardSlider(
 
             TextB02M16(
                 text = "${fortuneViewModel.tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
-                color = white,
+                color = gray_3,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
                 modifier = Modifier
