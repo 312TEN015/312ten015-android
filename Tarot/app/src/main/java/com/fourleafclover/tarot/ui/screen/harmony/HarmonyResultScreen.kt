@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
@@ -58,7 +59,6 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
 import com.fourleafclover.tarot.utils.ShareLinkType
-import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
@@ -81,7 +81,7 @@ fun HarmonyResultScreenPreview(
 
         AppBarCloseTarotResult(
             navController,
-            getPickedTopic(5),
+            SubjectHarmony,
             backgroundColor_2,
             true,
             resultViewModel

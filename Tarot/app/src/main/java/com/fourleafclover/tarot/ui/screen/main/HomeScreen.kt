@@ -28,8 +28,8 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.questionInputViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
@@ -57,8 +57,10 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     /* 한번만 실행 */
     if (!initialize){
 
+        fortuneViewModel.initValues()
         pickTarotViewModel.initCardDeck()
         questionInputViewModel.initAnswers()
+        resultViewModel.initResult()
 
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()
@@ -95,7 +97,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
 
             Row(Modifier.padding(bottom = 32.dp)) {
                 Column(modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(end = 4.dp)
                     .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)
@@ -113,6 +115,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
                 }
 
                 Column(modifier = Modifier
+                    .padding(start = 4.dp)
                     .weight(1f)) {
                     Image(modifier = Modifier
                         .padding(bottom = 8.dp)

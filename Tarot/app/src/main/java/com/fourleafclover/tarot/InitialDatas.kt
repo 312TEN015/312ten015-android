@@ -12,6 +12,7 @@ import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewMod
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.primaryDream
 import com.fourleafclover.tarot.ui.theme.primaryJob
@@ -58,17 +59,6 @@ val SubjectHarmony = TarotSubjectData(
         primaryColor = gray_9
 )
 
-/* 선택한 대주제 인덱스 */
-// 0 -> 연애운
-// 1 -> 학업운
-// 2 -> 소망운
-// 3 -> 직업운
-// 4 -> 오늘의 운세
-// 5 -> 궁합 운세
-var pickedTopicNumber = 0
-
-
-
 var selectedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)        // 리스트에서 선택한 타로 데이터
 
 var sharedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null)          // 공유하기로 받은 타로 데이터
@@ -84,3 +74,4 @@ val chatViewModel = ChatViewModel()
 val fortuneViewModel = FortuneViewModel()
 val questionInputViewModel = QuestionInputViewModel()
 val pickTarotViewModel = PickTarotViewModel()
+val resultViewModel = ResultViewModel()

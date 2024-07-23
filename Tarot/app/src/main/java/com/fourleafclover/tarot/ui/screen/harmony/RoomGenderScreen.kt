@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.pickedTopicNumber
+import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
@@ -44,7 +44,6 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple400
 import com.fourleafclover.tarot.ui.theme.purple50
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getPickedTopic
 
 const val WOMAN = 0
 const val MAN = 1
@@ -59,7 +58,7 @@ fun RoomGenderScreen(
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
             navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
+            pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false
         )

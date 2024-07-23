@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
@@ -32,7 +32,6 @@ import com.fourleafclover.tarot.ui.screen.harmony.onJoinComplete
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_5
-import com.fourleafclover.tarot.utils.getPickedTopic
 import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
@@ -65,7 +64,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
             navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
+            pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false
         )

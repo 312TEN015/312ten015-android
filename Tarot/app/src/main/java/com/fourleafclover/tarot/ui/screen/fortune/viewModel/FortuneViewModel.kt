@@ -86,6 +86,16 @@ class FortuneViewModel : ViewModel() {
 
     // ---------------------------------------------------------------------------------------------
 
+    fun initValues(){
+        _pickedTopicNumber = null
+        _pickedTopicSubject = null
+        firstAnswer = ""
+        secondAnswer = ""
+        thirdAnswer = ""
+        pickedCards = arrayListOf()
+        _tarotResult = tarotOutputDto
+    }
+
     fun setPickedTopic(topicNumber: Int) {
         _pickedTopicNumber = topicNumber
         _pickedTopicSubject = when (topicNumber) {
@@ -98,7 +108,7 @@ class FortuneViewModel : ViewModel() {
             else -> {
                 Log.e(
                     "tarotError",
-                    "error getPickedTopic(). pickedTopicNumber: ${com.fourleafclover.tarot.pickedTopicNumber} selectedTarotResult: ${com.fourleafclover.tarot.pickedTopicNumber}"
+                    "error getPickedTopic(). pickedTopicNumber: $_pickedTopicNumber selectedTarotResult: $_pickedTopicNumber"
                 )
                 TarotSubjectData()
             }
@@ -114,7 +124,7 @@ class FortuneViewModel : ViewModel() {
             2 -> resources.getString(R.string.imoji_dream)
             3 -> resources.getString(R.string.imoji_job)
             else -> {
-                Log.e("tarotError", "error getPath(). pickedTopicNumber: ${com.fourleafclover.tarot.pickedTopicNumber}")
+                Log.e("tarotError", "error getPath(). pickedTopicNumber: $_pickedTopicNumber")
                 ""
             }
         }

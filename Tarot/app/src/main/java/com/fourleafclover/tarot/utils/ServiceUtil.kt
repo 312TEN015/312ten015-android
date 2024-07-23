@@ -12,6 +12,7 @@ import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotResults
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
@@ -72,15 +73,17 @@ fun getSharedTarotRequest(
             ) {
 
                 Log.d("", "onResponse--------")
-                if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
+                if (response.body() == null || response.body()!![0] == null){
+                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                    loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                    loadingViewModel.endLoading(navController)
                     return
                 }
 
                 Log.d("", response.body()!!.toString())
 
                 sharedTarotResult = response.body()!![0]
-                navigateInclusive(navController, ScreenEnum.ShareDetailScreen.name)
+                loadingViewModel.endLoading(navController)
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
@@ -131,4 +134,19 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
             }
         })
 
+}
+
+
+fun getPath() : String {
+    return when(fortuneViewModel.pickedTopicNumber){
+        0 -> "love"
+        1 -> "study"
+        2 -> "dream"
+        3 -> "job"
+        4 -> "today"
+        else -> {
+            Log.e("tarotError", "error getPath(). pickedTopicNumber: ${fortuneViewModel.pickedTopicNumber}")
+            ""
+        }
+    }
 }

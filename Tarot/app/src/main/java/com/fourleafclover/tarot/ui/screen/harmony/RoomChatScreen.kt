@@ -50,11 +50,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.pickedTopicNumber
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -76,7 +76,6 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple50
 import com.fourleafclover.tarot.utils.getCardImageId
-import com.fourleafclover.tarot.utils.getPickedTopic
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -104,7 +103,7 @@ fun RoomChatScreen(
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarClose(
             navController = navController,
-            pickedTopicTemplate = getPickedTopic(pickedTopicNumber),
+            pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false
         )

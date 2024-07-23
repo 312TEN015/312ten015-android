@@ -11,7 +11,6 @@ import com.fourleafclover.tarot.SubjectLove
 import com.fourleafclover.tarot.SubjectStudy
 import com.fourleafclover.tarot.SubjectToday
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.pickedTopicNumber
 
 
 fun getCardImageId(localContext: Context, cardNumber: String): Int {
@@ -27,7 +26,7 @@ fun getSubjectImoji(localContext: Context, number: Int):String {
         2 -> resources.getString(R.string.imoji_dream)
         3 -> resources.getString(R.string.imoji_job)
         else -> {
-            Log.e("tarotError", "error getPath(). pickedTopicNumber: $pickedTopicNumber")
+            Log.e("tarotError", "error getPath(). pickedTopicNumber: $number")
             ""
         }
     }
@@ -42,7 +41,7 @@ fun getPickedTopic(topicNumber: Int): TarotSubjectData {
         4 -> SubjectToday
         5 -> SubjectHarmony
         else -> {
-            Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $pickedTopicNumber selectedTarotResult: $pickedTopicNumber")
+            Log.e("tarotError", "error getPickedTopic(). pickedTopicNumber: $topicNumber selectedTarotResult: $topicNumber")
             TarotSubjectData()
         }
     }

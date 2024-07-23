@@ -13,6 +13,12 @@ class ResultViewModel() : ViewModel() {
 
     var screenNickname = if (isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname()
 
+    fun initResult(){
+        openCloseDialog.value = false
+        openCompleteDialog.value = false
+        saveState.value = false
+    }
+
     fun openCloseDialog(){
         this.openCloseDialog.value = true
     }

@@ -63,7 +63,7 @@ fun CardSlider(
 ) {
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
-    for ((idx, value) in fortuneViewModel.tarotResult.cards.withIndex()) {
+    for ((idx, value) in tarotResult.cards.withIndex()) {
         sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
     }
 
@@ -161,7 +161,7 @@ fun CardSlider(
 
                     TextB04M12(
                         text = "# ${
-                            fortuneViewModel.tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
+                            tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
                                 it
                             )
                         }",
@@ -176,7 +176,7 @@ fun CardSlider(
             }
 
             TextB02M16(
-                text = "${fortuneViewModel.tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
+                text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
                 color = gray_3,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,
