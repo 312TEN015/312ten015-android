@@ -1,5 +1,5 @@
 
-package com.fourleafclover.tarot.ui.screen.fortune
+package com.fourleafclover.tarot.ui.screen.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,8 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.myTarotResults
-import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.DeleteTarotResultDialog
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
@@ -86,7 +85,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
             // 갯수 표시
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Text(
-                    text = "${myTarotResults.size}", style = getTextStyle(
+                    text = "${myTarotViewModel.myTarotResults.size}", style = getTextStyle(
                         fontSize = 14,
                         fontWeight = FontWeight.Medium,
                         color = highlightPurple,
@@ -113,7 +112,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(bottom = 60.dp)
-                        .alpha(if (myTarotResults.size == 0) 1f else 0f)
+                        .alpha(if (myTarotViewModel.myTarotResults.size == 0) 1f else 0f)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.illust_crystalball),
@@ -132,7 +131,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                     Modifier.padding(bottom = 50.dp),
                     contentPadding = PaddingValues(vertical = 10.dp),
                     content = {
-                        items(myTarotResults.size) {
+                        items(myTarotViewModel.myTarotResults.size) {
                             MyTarotItemComponent(navController, it)
                         }
 
@@ -150,7 +149,7 @@ fun MyTarotItemComponent(
     Box(modifier = Modifier
         .padding(bottom = 16.dp)
         .clickable {
-            selectedTarotResult = myTarotResults[idx]
+            myTarotViewModel.selectItem(idx)
             navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
         })
     {
@@ -163,7 +162,7 @@ fun MyTarotItemComponent(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Image(painter = painterResource(id = when (myTarotResults[idx].tarotType) {
+            Image(painter = painterResource(id = when (myTarotViewModel.myTarotResults[idx].tarotType) {
                 0 -> R.drawable.icon_love
                 1 -> R.drawable.icon_study
                 2 -> R.drawable.icon_dream
@@ -183,13 +182,13 @@ fun MyTarotItemComponent(
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
                     TextH03SB18(
-                        text = getPickedTopic(myTarotResults[idx].tarotType).majorTopic,
+                        text = getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorTopic,
                         color = white,
                         modifier = Modifier.padding(end = 8.dp)
                     )
 
                     TextB04M12(
-                        text = getPickedTopic(myTarotResults[idx].tarotType).majorQuestion,
+                        text = getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorQuestion,
                         color = gray_2,
                         modifier = Modifier
                     )
@@ -198,7 +197,7 @@ fun MyTarotItemComponent(
                 }
 
                 TextB04M12(
-                    text = myTarotResults[idx].createdAt,
+                    text = myTarotViewModel.myTarotResults[idx].createdAt,
                     color = gray_5,
                     modifier = Modifier,
                     textAlign = TextAlign.End
@@ -213,7 +212,7 @@ fun MyTarotItemComponent(
                     .fillMaxHeight()
                     .align(Alignment.Top)
                     .clickable {
-                        selectedTarotResult = myTarotResults[idx]
+                        myTarotViewModel.selectItem(idx)
                         showSheet.value = true
                     },
                 contentDescription = ""

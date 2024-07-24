@@ -1,9 +1,10 @@
-package com.fourleafclover.tarot.ui.screen.fortune
+package com.fourleafclover.tarot.ui.screen.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.selectedTarotResult
+import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -36,6 +37,7 @@ import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
@@ -52,7 +54,7 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 @Preview
 fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
-    val tarotSubjectData = getPickedTopic(selectedTarotResult.tarotType)
+    val tarotSubjectData = getPickedTopic(myTarotViewModel.selectedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
@@ -81,7 +83,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = getSubjectImoji(localContext, selectedTarotResult.tarotType)
+                val imoji = getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
                 TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     color = gray_2,
@@ -92,7 +94,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 TextB03M14(
-                    text = selectedTarotResult.createdAt,
+                    text = myTarotViewModel.selectedTarotResult.createdAt,
                     color = gray_4,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,7 +104,9 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
             }
 
 
-            CardSlider(tarotResult = selectedTarotResult)
+            Box(modifier = Modifier.background(color = backgroundColor_2)) {
+                CardSlider(tarotResult = myTarotViewModel.selectedTarotResult)
+            }
 
             Column(
                 modifier = Modifier
@@ -119,13 +123,13 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 )
 
                 TextB01M18(
-                    text = selectedTarotResult.overallResult?.summary.toString(),
+                    text = myTarotViewModel.selectedTarotResult.overallResult?.summary.toString(),
                     color = white,
                     modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
                 )
 
                 TextB02M16(
-                    text = selectedTarotResult.overallResult?.full.toString(),
+                    text = myTarotViewModel.selectedTarotResult.overallResult?.full.toString(),
                     color = gray_3,
                     modifier = Modifier
                         .padding(top = 12.dp, bottom = 64.dp)
@@ -136,7 +140,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     .padding(vertical = 16.dp, horizontal = 16.dp)
                     .padding(bottom = 45.dp)
                     .clickable {
-                        setDynamicLink(localContext, selectedTarotResult.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
+                        setDynamicLink(localContext, myTarotViewModel.selectedTarotResult.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
                     },
                     horizontalArrangement = Arrangement.Center)
                 {

@@ -12,12 +12,12 @@ import com.fourleafclover.tarot.ui.component.BottomNavigationBar
 import com.fourleafclover.tarot.ui.screen.main.HomeScreen
 import com.fourleafclover.tarot.ui.screen.fortune.InputScreen
 import com.fourleafclover.tarot.ui.screen.loading.LoadingScreen
-import com.fourleafclover.tarot.ui.screen.fortune.MyTarotDetailScreen
-import com.fourleafclover.tarot.ui.screen.fortune.MyTarotScreen
+import com.fourleafclover.tarot.ui.screen.my.MyTarotDetailScreen
+import com.fourleafclover.tarot.ui.screen.my.MyTarotScreen
 import com.fourleafclover.tarot.ui.screen.main.PagerOnBoarding
 import com.fourleafclover.tarot.ui.screen.fortune.PickTarotScreen
 import com.fourleafclover.tarot.ui.screen.fortune.ResultScreen
-import com.fourleafclover.tarot.ui.screen.fortune.ShareDetailScreen
+import com.fourleafclover.tarot.ui.screen.my.ShareDetailScreen
 import com.fourleafclover.tarot.ui.screen.harmony.HarmonyResultScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomChatScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomCreateScreen
@@ -26,7 +26,7 @@ import com.fourleafclover.tarot.ui.screen.loading.RoomCreateLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomEnteringScreen
 import com.fourleafclover.tarot.ui.screen.loading.RoomInviteLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
-import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
+import com.fourleafclover.tarot.ui.screen.my.RoomShareScreen
 
 @Composable
 fun NavigationHost() {

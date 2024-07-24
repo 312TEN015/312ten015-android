@@ -166,8 +166,6 @@ fun OverallResult(){
 
         Button(
             onClick = {
-                resultViewModel.openCloseDialog()
-
                 // 타로 결과 id 저장
                 MyApplication.prefs.addTarotResult(fortuneViewModel.tarotResult.tarotId)
                 resultViewModel.saveResult()

@@ -9,13 +9,11 @@ import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.myTarotResults
+import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.sharedTarotResult
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,13 +36,8 @@ fun getTarotRequest(
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
                 }
-//                Log.d("", response.body().toString())
-                myTarotResults = arrayListOf()
 
-                for (item in response.body()!!){
-                    myTarotResults.add(item)
-                    Log.d("", "${item.toString()}--------")
-                }
+                myTarotViewModel.setMyTarotResults(response.body()!!)
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {

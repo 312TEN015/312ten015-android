@@ -1,6 +1,7 @@
-package com.fourleafclover.tarot.ui.screen.fortune
+package com.fourleafclover.tarot.ui.screen.my
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,7 @@ import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
+import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
@@ -91,7 +93,9 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
                 )
             }
 
-            CardSlider(tarotResult = sharedTarotResult)
+            Box(modifier = Modifier.background(color = backgroundColor_2)) {
+                CardSlider(tarotResult = sharedTarotResult)
+            }
 
             Column(
                 modifier = Modifier
