@@ -39,6 +39,7 @@ import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.white
+import com.fourleafclover.tarot.utils.getMatchResult
 import com.fourleafclover.tarot.utils.sendRequest
 
 
@@ -59,10 +60,10 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
         }
         else if (loadingViewModel.getDestination() == ScreenEnum.RoomResultScreen){
             /* 테스트 코드 */
-            Handler(Looper.getMainLooper())
-                .postDelayed({
-                    onResult()
-                }, 4000)
+//            Handler(Looper.getMainLooper())
+//                .postDelayed({
+//                    onResult(localContext, navController)
+//                }, 4000)
         }
     }
 

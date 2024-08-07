@@ -2,6 +2,9 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.fourleafclover.tarot.chatViewModel
+import com.fourleafclover.tarot.data.CardResultData
+import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.harmonyViewModel
 
 class ResultViewModel() : ViewModel() {
@@ -11,12 +14,29 @@ class ResultViewModel() : ViewModel() {
     private var saveState = mutableStateOf(false)   // 타로 결과 저장했는지 여부
     private var isMyTab = mutableStateOf(true) // 나의 탭 터치했는지 여부
 
-    var screenNickname = if (isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname()
+    var myCardResults : List<CardResultData> = arrayListOf(CardResultData(), CardResultData(), CardResultData())
+    var myCardNumbers : List<Int> = arrayListOf(0, 0, 0)
+    var partnerCardResults : List<CardResultData> = arrayListOf(CardResultData(), CardResultData(), CardResultData())
+    var partnerCardNumbers : List<Int> = arrayListOf(0, 0, 0)
 
     fun initResult(){
         openCloseDialog.value = false
         openCompleteDialog.value = false
         saveState.value = false
+    }
+
+    fun distinguishCardResult(tarotResult: TarotOutputDto){
+        if (tarotResult.cards[0] == chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber){
+            myCardResults = tarotResult.cardResults!!.slice(0..2)
+            myCardNumbers = tarotResult.cards.slice(0..2)
+            partnerCardResults = tarotResult.cardResults!!.slice(3..5)
+            partnerCardNumbers = tarotResult.cards.slice(3..5)
+        } else {
+            myCardResults = tarotResult.cardResults!!.slice(3..5)
+            myCardNumbers = tarotResult.cards.slice(3..5)
+            partnerCardResults = tarotResult.cardResults!!.slice(0..2)
+            partnerCardNumbers = tarotResult.cards.slice(0..2)
+        }
     }
 
     fun openCloseDialog(){

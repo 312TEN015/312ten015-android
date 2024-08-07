@@ -38,8 +38,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.fourleafclover.tarot.chatViewModel
+import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB04M12
@@ -230,9 +233,16 @@ fun HarmonyCardSlider(
 ) {
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
-    for ((idx, value) in tarotResult.cards.withIndex()) {
-        sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
+    if (resultViewModel.isMyTab()) {
+        sliderList[0] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[0].toString())
+        sliderList[1] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[1].toString())
+        sliderList[2] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[2].toString())
+    }else {
+        sliderList[0] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[0].toString())
+        sliderList[1] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[1].toString())
+        sliderList[2] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[2].toString())
     }
+
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -328,9 +338,11 @@ fun HarmonyCardSlider(
 
                     TextB04M12(
                         text = "# ${
-                            tarotResult.cardResults?.get(pagerState.currentPage)?.keywords?.get(
-                                it
-                            )
+                            if (resultViewModel.isMyTab()) {
+                                resultViewModel.myCardResults[pagerState.currentPage].keywords[it]
+                            } else {
+                                resultViewModel.partnerCardResults[pagerState.currentPage].keywords[it]
+                            }
                         }",
                         color = gray_4,
                         modifier = Modifier
@@ -343,7 +355,11 @@ fun HarmonyCardSlider(
             }
 
             TextB02M16(
-                text = "${tarotResult.cardResults?.get(pagerState.currentPage)?.description}",
+                text = if (resultViewModel.isMyTab()) {
+                    resultViewModel.myCardResults[pagerState.currentPage].description
+                } else {
+                    resultViewModel.partnerCardResults[pagerState.currentPage].description
+                },
                 color = gray_3,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible,

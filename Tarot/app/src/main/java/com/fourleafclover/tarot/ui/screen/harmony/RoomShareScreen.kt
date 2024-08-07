@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen.my
+package com.fourleafclover.tarot.ui.screen.harmony
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

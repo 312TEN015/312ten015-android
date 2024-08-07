@@ -150,7 +150,11 @@ fun MyTarotItemComponent(
         .padding(bottom = 16.dp)
         .clickable {
             myTarotViewModel.selectItem(idx)
-            navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
+            if (myTarotViewModel.selectedTarotResult.tarotType == 5){
+                navigateSaveState(navController, ScreenEnum.RoomShareScreen.name)
+            }else{
+                navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
+            }
         })
     {
 

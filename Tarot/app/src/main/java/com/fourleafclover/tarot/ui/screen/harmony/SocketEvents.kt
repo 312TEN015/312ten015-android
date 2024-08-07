@@ -1,12 +1,21 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.content.Context
 import android.util.Log
+import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.chatViewModel
+import com.fourleafclover.tarot.data.OverallResultData
+import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
+import com.fourleafclover.tarot.utils.getCertainTarotRequest
+import com.fourleafclover.tarot.utils.getMatchResult
+import com.fourleafclover.tarot.utils.getSharedTarotRequest
+import com.google.gson.Gson
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,9 +87,14 @@ var onResult = Emitter.Listener { args ->
     CoroutineScope(Dispatchers.Main).launch {
         Log.d("socket-test", "onResult " + args[0].toString())
 
-        loadingViewModel.updateLoadingState(false)
 
         // TODO 받은 궁합 결과 저장
+        val response = JSONObject(args[0].toString())
+        val gson = Gson()
+        tarotOutputDto = gson.fromJson(response.toString(), TarotOutputDto::class.java)
+
+
+        loadingViewModel.updateLoadingState(false)
     }
 }
 
@@ -142,13 +156,12 @@ fun onNext(cardNum: Int = 0) {
 
 }
 
-fun onResult() {
+fun onResult(localContext: Context,
+             navController: NavHostController) {
     val testObj = JSONObject()
     Log.d("socket-test", "onResult " + testObj.toString())
-
-    loadingViewModel.updateLoadingState(false)
-
     // TODO 받은 궁합 결과 저장
+    getCertainTarotRequest(localContext, navController, "xY_dTJvxSvjbJ_KN2-sTh")
 }
 
 

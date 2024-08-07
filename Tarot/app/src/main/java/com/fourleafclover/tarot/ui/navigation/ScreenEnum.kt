@@ -5,6 +5,7 @@ enum class ScreenEnum {
     HomeScreen,     // 메인 화면
     MyTarotScreen,  // MY 타로 화면
     MyTarotDetailScreen,  // MY 타로 상세 화면
+    MyTarotHarmonyDetailScreen,  // MY 타로 궁합 상세 화면
 
     /* 메인 메뉴 */
     InputScreen,

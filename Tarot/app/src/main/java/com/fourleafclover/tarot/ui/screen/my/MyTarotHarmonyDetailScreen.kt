@@ -1,4 +1,4 @@
-package com.fourleafclover.tarot.ui.screen.harmony
+package com.fourleafclover.tarot.ui.screen.my
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,11 +34,11 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.partnerTarotOutputDto
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
@@ -62,16 +62,18 @@ import com.fourleafclover.tarot.utils.ShareLinkType
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
-fun HarmonyResultScreen(
-    navController: NavHostController
+fun MyTarotHarmonyDetail(
+    navController: NavHostController,
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
 ) {
-    HarmonyResultScreenPreview(navController)
+    MyTarotHarmonyDetailPreview(navController, resultViewModel)
 }
 
 @Preview
 @Composable
-fun HarmonyResultScreenPreview(
-    navController: NavHostController = rememberNavController()
+fun MyTarotHarmonyDetailPreview(
+    navController: NavHostController = rememberNavController(),
+    resultViewModel: ResultViewModel = remember { ResultViewModel() }
 ) {
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
@@ -88,9 +90,10 @@ fun HarmonyResultScreenPreview(
         Column(
             modifier = Modifier
         ) {
+            var myCard by remember { mutableStateOf(true) }
 
             TextH02M22(
-                text = "${if (resultViewModel.isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${if (myCard) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
                     .background(color = backgroundColor_2)
@@ -113,19 +116,19 @@ fun HarmonyResultScreenPreview(
                 ) {
                     Box(modifier = Modifier
                         .clickable {
-                            resultViewModel.myTab()
+                            myCard = true
                         }
                         .padding(end = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (resultViewModel.isMyTab()) white else gray_7
+                            color = if (myCard) white else gray_7
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
                         contentAlignment = Alignment.Center) {
 
                         TextB03M14(
-                            color = if (resultViewModel.isMyTab()) gray_7 else gray_5,
+                            color = if (myCard) gray_7 else gray_5,
                             text = "내가 선택한 카드",
                             textAlign = TextAlign.Center
                         )
@@ -133,26 +136,31 @@ fun HarmonyResultScreenPreview(
 
                     Box(modifier = Modifier
                         .clickable {
-                            resultViewModel.partnerTab()
+                            myCard = false
                         }
                         .padding(start = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (resultViewModel.isMyTab()) gray_7 else white
+                            color = if (myCard) gray_7 else white
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
                         contentAlignment = Alignment.Center) {
 
                         TextB03M14(
-                            color = if (resultViewModel.isMyTab()) gray_5 else gray_7,
+                            color = if (myCard) gray_5 else gray_7,
                             text = "상대방 카드",
                             textAlign = TextAlign.Center
                         )
                     }
                 }
 
-                HarmonyCardSlider(tarotResult = tarotOutputDto, outsideHorizontalPadding = 40.dp)
+                 /* TODO 이부분 아직 미정(결과 DTO 미정으로 임시 코드 삽입) */
+                if (myCard) {
+                    HarmonyCardSlider(tarotResult = tarotOutputDto, outsideHorizontalPadding = 40.dp)
+                } else {
+                    HarmonyCardSlider(tarotResult = partnerTarotOutputDto, outsideHorizontalPadding = 40.dp)
+                }
             }
 
 

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.BottomNavigationBar
 import com.fourleafclover.tarot.ui.screen.main.HomeScreen
 import com.fourleafclover.tarot.ui.screen.fortune.InputScreen
@@ -26,7 +27,8 @@ import com.fourleafclover.tarot.ui.screen.loading.RoomCreateLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomEnteringScreen
 import com.fourleafclover.tarot.ui.screen.loading.RoomInviteLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
-import com.fourleafclover.tarot.ui.screen.my.RoomShareScreen
+import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
+import com.fourleafclover.tarot.ui.screen.my.MyTarotHarmonyDetail
 
 @Composable
 fun NavigationHost() {
@@ -59,7 +61,6 @@ fun NavigationHost() {
             composable(ScreenEnum.OnBoardingScreen.name) {
                 if (MyApplication.prefs.isOnBoardingComplete()){
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
-//                    navigateInclusive(navController, ScreenEnum.RoomChatScreen.name)
                 }else{
                     PagerOnBoarding(navController)
                 }
@@ -99,6 +100,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.RoomResultScreen.name) {
                 HarmonyResultScreen(navController)
+            }
+            composable(ScreenEnum.MyTarotHarmonyDetailScreen.name) {
+                MyTarotHarmonyDetail(navController)
             }
         }
 

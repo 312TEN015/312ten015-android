@@ -36,8 +36,8 @@ data class TarotOutputDto(
 
 // 뽑은 카드 세장에 대한 키워드, 설명
 data class CardResultData(
-    val keywords: ArrayList<String>,
-    val description: String,
+    val keywords: ArrayList<String> = arrayListOf("", "", ""),
+    val description: String = "",
 )
 
 // 뽑은 타로 결과에 대한 요약문, 전문

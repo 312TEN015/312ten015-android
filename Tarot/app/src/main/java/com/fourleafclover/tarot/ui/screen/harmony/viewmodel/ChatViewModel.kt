@@ -59,8 +59,7 @@ data class ChatState(
 
 class ChatViewModel : ViewModel() {
     private var _chatState = MutableStateFlow(ChatState())
-    val chatState: StateFlow<ChatState>
-        get() = _chatState.asStateFlow()
+    val chatState: StateFlow<ChatState> get() = _chatState.asStateFlow()
 
     private val _partnerChatState = MutableStateFlow(ChatState())
     val partnerChatState: StateFlow<ChatState> = _partnerChatState.asStateFlow()
