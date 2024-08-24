@@ -36,6 +36,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,6 +84,7 @@ import kotlin.math.roundToInt
 
 private val toShowProfileList = mutableIntSetOf()
 
+var initialComposition = true
 
 @Composable
 @Preview
@@ -93,11 +95,16 @@ fun RoomChatScreen(
     val chatState = chatViewModel.chatState.collectAsState()
     val partnerChatState = chatViewModel.partnerChatState.collectAsState()
 
-    MyApplication.socket.on("onNext", onNext)
-    MyApplication.socket.on("onResult", onResult)
 
     LaunchedEffect(Unit){
-        pickTarotViewModel.initCardDeck()
+        if (initialComposition) {
+            MyApplication.socket.on("next", onNext)
+            MyApplication.socket.on("result", onResult)
+            Log.d("socket-test", "set onNext")
+
+            pickTarotViewModel.initCardDeck()
+            initialComposition = false
+        }
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
@@ -179,23 +186,27 @@ fun RoomChatScreen(
                                             text = chatItem.text,
                                             onClick = {
                                                 buttonVisibility = false
+
                                                 chatViewModel.addChatItem(
                                                     Chat(
                                                         type = ChatType.MyChatText,
                                                         text = chatItem.text
                                                     )
                                                 )
+
                                                 val jsonObject = JSONObject()
+                                                jsonObject.put("nickname", harmonyViewModel.getUserNickname())
                                                 jsonObject.put("roomId", harmonyViewModel.roomId.value)
                                                 MyApplication.socket.emit("start", jsonObject)
                                                 Log.d("socket-test", "emit start")
+
                                                 checkEachOtherScenario(chatState.value, partnerChatState.value)
 
                                                 /* 테스트 코드 */
-                                                Handler(Looper.getMainLooper())
-                                                    .postDelayed({
-                                                        onNext()
-                                                    }, 4000)
+//                                                Handler(Looper.getMainLooper())
+//                                                    .postDelayed({
+//                                                        onNext()
+//                                                    }, 4000)
                                             },
                                             buttonVisibility
                                         )
@@ -255,8 +266,21 @@ fun RoomChatScreen(
 }
 
 fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
-    if (chatState.scenario == partnerChatState.scenario){
+
+    Log.d("socket-test", "emit my: " + chatViewModel.chatState.value.scenario.name)
+    Log.d("socket-test", "emit partner: " + chatViewModel.partnerChatState.value.scenario.name)
+
+    // 상대방이랑 다름 = 내가 뒤처짐
+    if (chatState.scenario != partnerChatState.scenario){
+        confirmSelectedCard(chatState)
+        chatViewModel.moveToNextScenario()
+    }
+    // 상대방이랑 같음 = 내가 먼저함
+    else {
+        confirmSelectedCard(chatState)
+
         chatViewModel.updateScenario()
+
         chatViewModel.addChatItem(
             Chat(
                 type = ChatType.GuidText,
@@ -265,18 +289,32 @@ fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
         )
         // -> onPartnerChecked
     }
-    else {
-        chatViewModel.moveToNextScenario()
+}
+
+fun confirmSelectedCard(chatState: ChatState) {
+    if (chatState.scenario != Scenario.Opening) {
+        if (chatState.pickedCardNumberState.thirdCardNumber != -1){
+            chatViewModel.addChatItem(
+                Chat(ChatType.PartnerChatText, "세번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+            )
+        } else if (chatState.pickedCardNumberState.secondCardNumber != -1){
+            chatViewModel.addChatItem(
+                Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+            )
+        } else{
+            chatViewModel.addChatItem(
+                Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+            )
+        }
     }
+
 }
 
 @Preview
 @Composable
 fun ChatCardDeck() {
     val localContext = LocalContext.current
-
-    var pickSequence by remember { mutableIntStateOf(1) }
-
+    val pickSequence = chatViewModel.pickSequence.collectAsState()
 
     // 카드덱
     Column(
@@ -289,32 +327,33 @@ fun ChatCardDeck() {
         ButtonSelect(
             text = "선택완료",
             onClick = {
-                pickTarotViewModel.setPickedCard(pickSequence)
+                pickTarotViewModel.setPickedCard(pickSequence.value)
+                chatViewModel.updatePickedCardNumberState()
                 chatViewModel.addChatItem(
                     Chat(
                         type = ChatType.MyChatImage,
-                        drawable = getCardImageId(localContext, pickTarotViewModel.getCardNumber(pickSequence).toString())
+                        drawable = getCardImageId(localContext, pickTarotViewModel.getCardNumber(pickSequence.value).toString())
                     )
                 )
 
                 val jsonObject = JSONObject()
                 jsonObject.put("nickname", harmonyViewModel.getUserNickname())
                 jsonObject.put("roomId", harmonyViewModel.roomId.value)
-                jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence))
+                jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence.value))
                 MyApplication.socket.emit("cardSelect", jsonObject)
                 Log.d("socket-test", "emit cardSelect")
 
-                pickSequence++
+                chatViewModel.updatePickSequence()
                 chatViewModel.updateCardDeckStatus(CardDeckStatus.Gathered)
 
                 pickTarotViewModel.resetNowSelectedCardIdx()
                 checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
 
                 /* 테스트 코드 */
-                Handler(Looper.getMainLooper())
-                    .postDelayed({
-                        onNext(2)
-                    }, 4000)
+//                Handler(Looper.getMainLooper())
+//                    .postDelayed({
+//                        onNext(2)
+//                    }, 4000)
 
             },
             isEnable = pickTarotViewModel.isCompleteButtonEnabled()
@@ -390,6 +429,8 @@ fun PartnerChattingBox(
     drawable: Int = 0
 ) {
 
+    val context = LocalContext.current.applicationContext as MyApplication
+
     Row(
         modifier = Modifier
             .padding(start = 20.dp, end = 48.dp)
@@ -423,7 +464,7 @@ fun PartnerChattingBox(
 
             ) {
 
-                if (drawable != 0) {
+                if (drawable != 0 && drawable != -1) {
 //                    Image(
 //                        modifier = Modifier.width(60.dp),
 //                        painter = painterResource(id = drawable),

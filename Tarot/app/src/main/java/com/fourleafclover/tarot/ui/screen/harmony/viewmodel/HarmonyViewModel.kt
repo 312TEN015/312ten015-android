@@ -16,6 +16,15 @@ class HarmonyViewModel: ViewModel() {
 
     private var roomScenario = mutableStateOf(Scenario.Opening)
 
+    fun resetHarmonyData() {
+        setUserNickname("")
+        setPartnerNickname("")
+        roomId.value = ""
+        roomCreatedAt = ""
+        dynamicLink = ""
+        shortLink = ""
+    }
+
     fun setUserNickname(userNickname: String) {
         this.userNickname.value = userNickname
     }

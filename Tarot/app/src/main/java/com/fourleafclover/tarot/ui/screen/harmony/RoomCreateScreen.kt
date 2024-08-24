@@ -1,5 +1,8 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,10 +90,7 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                     .clickable {
                         // 소켓 연결하기
                         MyApplication.connectSocket()
-                        roomCreateViewModel.checkRoomExist()
-                        if (roomCreateViewModel.createNewRoom.value){
-                            navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
-                        }
+                        roomCreateViewModel.checkRoomExist(navController)
                     }
             ) {
                 Row(

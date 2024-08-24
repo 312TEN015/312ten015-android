@@ -40,7 +40,9 @@ enum class ChatType {
 enum class Scenario {
     Opening,
     FirstCard,
+    FirstCardSelected,
     SecondCard,
+    SecondCardSelected,
     ThirdCard,
     Complete,
     End
@@ -59,31 +61,49 @@ data class ChatState(
 
 class ChatViewModel : ViewModel() {
     private var _chatState = MutableStateFlow(ChatState())
-    val chatState: StateFlow<ChatState> get() = _chatState.asStateFlow()
+    val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
 
     private val _partnerChatState = MutableStateFlow(ChatState())
     val partnerChatState: StateFlow<ChatState> = _partnerChatState.asStateFlow()
+
+    private val _pickSequence = MutableStateFlow(1)
+    val pickSequence: StateFlow<Int> = _pickSequence.asStateFlow()
 
     private val chatList = mutableStateListOf<Chat>()
 
     private lateinit var opening: List<Chat>
     private lateinit var firstCard: List<Chat>
+    private lateinit var firstCardSelected: List<Chat>
     private lateinit var secondCard: List<Chat>
+    private lateinit var secondCardSelected: List<Chat>
     private lateinit var thirdCard: List<Chat>
     private lateinit var complete: List<Chat>
 
-    init {
-        _chatState.value = ChatState()
-        _partnerChatState.value = ChatState()
-
+    fun resetChatData() {
+        initChatStates()
+        chatList.clear()
+        opening = listOf()
+        firstCard = listOf()
+        firstCardSelected = listOf()
+        secondCard = listOf()
+        secondCardSelected = listOf()
+        thirdCard = listOf()
+        complete = listOf()
     }
 
     fun initAllScenario() {
         initOpening()
         initFirst()
+        initFirstCardSelected()
         initSecond()
+        initSecondCardSelected()
         initThird()
         initComplete()
+    }
+
+    fun initChatStates(){
+        _chatState.value = ChatState()
+        _partnerChatState.value = ChatState()
     }
 
     fun initOpening(){
@@ -104,9 +124,14 @@ class ChatViewModel : ViewModel() {
         )
     }
 
+    private fun initFirstCardSelected() {
+        firstCardSelected = listOf(
+            Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+        )
+    }
+
     private fun initSecond(){
         secondCard = listOf(
-            Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1"),
             Chat(ChatType.PartnerChatText, "${harmonyViewModel.getPartnerNickname()}님은 이 카드를 선택하셨어요.", code = "secondCard_2"),
             Chat(type = ChatType.PartnerChatImage, drawable = _partnerChatState.value.pickedCardNumberState.firstCardNumber, code = "secondCard_2"),
             Chat(ChatType.PartnerChatText, "이제 두번째 카드를 골라봐요!", code = "secondCard_3"),
@@ -114,9 +139,14 @@ class ChatViewModel : ViewModel() {
         )
     }
 
+    private fun initSecondCardSelected() {
+        secondCardSelected = listOf(
+            Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+        )
+    }
+
     private fun initThird(){
         thirdCard = listOf(
-            Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "thirdCard_1"),
             Chat(ChatType.PartnerChatText, "${harmonyViewModel.getPartnerNickname()}님은 이 카드를 선택하셨어요.", code = "thirdCard_2"),
             Chat(type = ChatType.PartnerChatImage, drawable = _partnerChatState.value.pickedCardNumberState.secondCardNumber, code = "secondCard_2"),
             Chat(ChatType.PartnerChatText, "이제 세번째 카드를 골라봐요!", code = "thirdCard_3"),
@@ -142,8 +172,14 @@ class ChatViewModel : ViewModel() {
 
     fun addChatItem(chatItem: Chat) = chatList.add(chatItem)
 
+    fun updatePickSequence() {
+        _pickSequence.value += 1
+    }
+
     fun getNextScenario(nowScenario: Scenario) = scenarioSequence[scenarioSequence.indexOf(nowScenario) + 1]
-    
+
+    fun getBeforeScenario(nowScenario: Scenario) = scenarioSequence[scenarioSequence.indexOf(nowScenario) - 1]
+
     fun updateScenario(){
         _chatState.value.scenario = getNextScenario(_chatState.value.scenario)
     }
@@ -163,9 +199,17 @@ class ChatViewModel : ViewModel() {
                 initFirst()
                 chatList.addAll(firstCard)
             }
+            Scenario.FirstCardSelected -> {
+                initFirstCardSelected()
+                chatList.addAll(firstCardSelected)
+            }
             Scenario.SecondCard -> {
                 initSecond()
                 chatList.addAll(secondCard)
+            }
+            Scenario.SecondCardSelected -> {
+                initSecondCardSelected()
+                chatList.addAll(secondCardSelected)
             }
             Scenario.ThirdCard -> {
                 initThird()
@@ -204,8 +248,8 @@ class ChatViewModel : ViewModel() {
         _chatState.value.pickedCardNumberState.thirdCardNumber = pickTarotViewModel.pickedCardNumberState.value.thirdCardNumber
     }
 
-    fun updatePartnerCardNumber(cardNumber: Int) {
-        when (_partnerChatState.value.scenario) {
+    fun updatePartnerCardNumber(partnerScenario: Scenario, cardNumber: Int) {
+        when (partnerScenario) {
             Scenario.FirstCard -> {
                 _partnerChatState.value.pickedCardNumberState.firstCardNumber = cardNumber
             }

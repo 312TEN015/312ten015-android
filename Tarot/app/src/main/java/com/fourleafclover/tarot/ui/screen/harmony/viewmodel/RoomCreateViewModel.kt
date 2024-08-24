@@ -2,18 +2,20 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import java.util.Date
 
 class RoomCreateViewModel: ViewModel() {
 
     var openRoomDeletedDialog = mutableStateOf(false)
     var openRoomExistDialog = mutableStateOf(false)
-    var createNewRoom = mutableStateOf(false)
 
 
-    fun checkRoomExist() {
+    fun checkRoomExist(navController: NavHostController) {
 
         val roomId = MyApplication.prefs.getHarmonyRoomId()
         val createdAtString = MyApplication.prefs.getHarmonyRoomCreatedAt()
@@ -31,11 +33,10 @@ class RoomCreateViewModel: ViewModel() {
             } else {
                 // 이미 생성하신 초대방이 있어요
                 openRoomExistDialog.value = true
-                harmonyViewModel.roomId.value = roomId
             }
         } else {
             // 새로 초대방 만들기
-            createNewRoom.value = true
+            navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
         }
     }
 

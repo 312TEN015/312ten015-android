@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -33,22 +34,22 @@ fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavContro
         loadingViewModel.endLoading(navController)
     }
 
+    val context = LocalContext.current.applicationContext as MyApplication
+
     PreventBackPressed()
 
     LaunchedEffect(Unit){
         // 새로운 방 생성
-        if (harmonyViewModel.roomId.value.isEmpty()) {
-            MyApplication.socket.emit("create")
-            Log.d("socket-test", "emit create")
+        MyApplication.socket.on("createComplete", onCreateComplete)
+        MyApplication.socket.emit("create")
+        Log.d("socket-test", "emit create")
 
-            MyApplication.socket.on("onCreateComplete", onCreateComplete)
-        }
 
         /* 테스트 코드 */
-        Handler(Looper.getMainLooper())
-            .postDelayed({
-                onCreateComplete()
-            }, 4000)
+//        Handler(Looper.getMainLooper())
+//            .postDelayed({
+//                onCreateComplete()
+//            }, 4000)
     }
 
     Column(modifier = getBackgroundModifier(color = gray_9),

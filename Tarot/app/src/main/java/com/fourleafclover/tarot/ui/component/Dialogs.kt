@@ -246,7 +246,7 @@ fun VerticalYesNoDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}, 
                     )
                 }
 
-                Button(onClick = onClickOk,
+                Button(onClick = onClickNo,
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
                         .fillMaxWidth()
