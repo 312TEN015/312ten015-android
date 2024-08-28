@@ -57,6 +57,7 @@ val SubjectToday = TarotSubjectData(
 )
 val SubjectHarmony = TarotSubjectData(
         majorTopic = harmonyFortune,
+        majorQuestion = harmonyMajorQuestion,
         primaryColor = gray_9
 )
 

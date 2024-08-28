@@ -228,7 +228,6 @@ fun DotsIndicator(
 @Composable
 fun HarmonyCardSlider(
     modifier: Modifier = Modifier,
-    tarotResult: TarotOutputDto = tarotOutputDto,
     outsideHorizontalPadding: Dp = 0.dp
 ) {
 

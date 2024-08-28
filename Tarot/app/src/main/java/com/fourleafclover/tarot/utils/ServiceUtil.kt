@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.chatViewModel
+import com.fourleafclover.tarot.data.MatchCards
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
@@ -173,46 +174,55 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
 }
 
 
-// 테스트용
-fun getMatchResult(){
-    val cardArray = arrayListOf(
-        chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber,
-        chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber,
-        chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
-    )
 
-    MyApplication.tarotService.getMatchResult(cardArray)
+fun getMatchResult(reconnectCount: Int = 0){
+//    val cardArray = arrayListOf(
+//        chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber,
+//        chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber,
+//        chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber,
+//        chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber,
+//        chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber,
+//        chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
+//    )
+
+    val cardArray = arrayListOf(1,2,3,4,5,6)
+
+    MyApplication.tarotService.getMatchResult(MatchCards(cardArray))
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
                 call: Call<TarotOutputDto>,
                 response: Response<TarotOutputDto>
             ) {
 
-                Log.d("", "onResponse--------")
+                Log.d("api", "onResponse--------")
                 if (response.body() == null){
-                    Log.d("", "onResponse null")
+                    Log.d("api", "onResponse null")
                     return
                 }
 
                 tarotOutputDto = response.body()!!
+                resultViewModel.tmpDistinguishCardResult(tarotOutputDto)
+                Log.d("api", "onResponse $tarotOutputDto")
                 loadingViewModel.updateLoadingState(false)
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
+                Log.d("api", "onFailure--------!")
+                Log.d("api", "${t.cause}--------!")
+                Log.d("api", "${t.message}--------!")
+                Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
-                loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
-                loadingViewModel.updateLoadingState(false)
+                if (reconnectCount == 3) {
+                    loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                    loadingViewModel.updateLoadingState(false)
+                }else{
+                    getMatchResult(reconnectCount+1)
+                }
 
             }
         })
 }
+
 
 
 fun getPath() : String {

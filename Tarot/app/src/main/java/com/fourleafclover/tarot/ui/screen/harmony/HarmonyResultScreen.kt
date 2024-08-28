@@ -152,7 +152,7 @@ fun HarmonyResultScreenPreview(
                     }
                 }
 
-                HarmonyCardSlider(tarotResult = tarotOutputDto, outsideHorizontalPadding = 40.dp)
+                HarmonyCardSlider(outsideHorizontalPadding = 40.dp)
             }
 
 
@@ -165,7 +165,7 @@ fun HarmonyResultScreenPreview(
 
 @Preview
 @Composable
-fun OverallResult(resultViewModel: ResultViewModel = remember { ResultViewModel() }) {
+private fun OverallResult() {
     Column(
         modifier = Modifier
             .fillMaxWidth()

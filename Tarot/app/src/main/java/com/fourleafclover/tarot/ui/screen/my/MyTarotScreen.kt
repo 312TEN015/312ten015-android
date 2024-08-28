@@ -40,6 +40,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.myTarotViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.DeleteTarotResultDialog
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
@@ -151,7 +152,8 @@ fun MyTarotItemComponent(
         .clickable {
             myTarotViewModel.selectItem(idx)
             if (myTarotViewModel.selectedTarotResult.tarotType == 5){
-                navigateSaveState(navController, ScreenEnum.RoomShareScreen.name)
+                resultViewModel.tmpDistinguishCardResult(myTarotViewModel.selectedTarotResult)
+                navigateSaveState(navController, ScreenEnum.MyTarotHarmonyDetailScreen.name)
             }else{
                 navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
             }

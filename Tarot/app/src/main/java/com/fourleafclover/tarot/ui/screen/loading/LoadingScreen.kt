@@ -59,6 +59,7 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
             sendRequest(localContext, navController)
         }
         else if (loadingViewModel.getDestination() == ScreenEnum.RoomResultScreen){
+            getMatchResult()
             /* 테스트 코드 */
 //            Handler(Looper.getMainLooper())
 //                .postDelayed({

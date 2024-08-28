@@ -13,6 +13,7 @@ const val studyMajorQuestion = "시험 결과가 궁금해!"
 const val dreamMajorQuestion = "꿈이 이뤄졌으면!"
 const val jobMajorQuestion = "취업할 수 있을까?"
 const val todayMajorQuestion = "나의 하루가 궁금해!"
+const val harmonyMajorQuestion = "그 사람과의 운명은?"
 
 const val loveSubQuestion1 = "그 사람과의 첫만남은 어땠나요?"
 const val loveSubQuestion2 = "그 사람에 대한 현재 나의 감정은?"

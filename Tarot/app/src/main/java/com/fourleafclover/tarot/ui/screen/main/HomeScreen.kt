@@ -29,6 +29,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel
@@ -71,6 +72,8 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         if (activity != null && activity.intent != null) {
             receiveShareRequest(activity, navController)
         }
+
+//        loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.RoomResultScreen)
 
         initialize = true
     }

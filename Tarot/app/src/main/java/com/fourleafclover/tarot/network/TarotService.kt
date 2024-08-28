@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.network
 
 
+import com.fourleafclover.tarot.data.MatchCards
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
@@ -18,4 +19,7 @@ interface TarotService {
 
     @POST("tarot/match")
     fun getMatchResult(@Body cards: ArrayList<Int>): Call<TarotOutputDto>
+
+    @POST("tarot/match")
+    fun getMatchResult(@Body cards: MatchCards): Call<TarotOutputDto>
 }

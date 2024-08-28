@@ -99,7 +99,7 @@ fun RoomChatScreen(
     LaunchedEffect(Unit){
         if (initialComposition) {
             MyApplication.socket.on("next", onNext)
-            MyApplication.socket.on("result", onResult)
+//            MyApplication.socket.on("result", onResult)
             Log.d("socket-test", "set onNext")
 
             pickTarotViewModel.initCardDeck()
@@ -429,8 +429,6 @@ fun PartnerChattingBox(
     drawable: Int = 0
 ) {
 
-    val context = LocalContext.current.applicationContext as MyApplication
-
     Row(
         modifier = Modifier
             .padding(start = 20.dp, end = 48.dp)
@@ -491,10 +489,10 @@ fun PartnerChattingBox(
                             chatViewModel.moveToNextScenario()
                             chatViewModel.updatePickedCardNumberState()
 
-                            val jsonObject = JSONObject()
-                            jsonObject.put("roomId", harmonyViewModel.roomId.value)
-                            MyApplication.socket.emit("finish", jsonObject)
-                            Log.d("socket-test", "emit finish")
+//                            val jsonObject = JSONObject()
+//                            jsonObject.put("roomId", harmonyViewModel.roomId.value)
+//                            MyApplication.socket.emit("finish", jsonObject)
+//                            Log.d("socket-test", "emit finish")
 
                             loadingViewModel.startLoading(
                                 navController,

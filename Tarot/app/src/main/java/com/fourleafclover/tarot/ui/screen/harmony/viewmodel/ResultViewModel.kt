@@ -39,6 +39,14 @@ class ResultViewModel() : ViewModel() {
         }
     }
 
+    fun tmpDistinguishCardResult(tarotResult: TarotOutputDto){
+        initResult()
+        myCardResults = tarotResult.cardResults!!.slice(0..2)
+        myCardNumbers = tarotResult.cards.slice(0..2)
+        partnerCardResults = tarotResult.cardResults!!.slice(3..5)
+        partnerCardNumbers = tarotResult.cards.slice(3..5)
+    }
+
     fun openCloseDialog(){
         this.openCloseDialog.value = true
     }

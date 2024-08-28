@@ -53,3 +53,7 @@ data class TarotIdsInputDto(
 data class TarotIdsOutputDto(
     val tarotIds : ArrayList<TarotOutputDto> = arrayListOf<TarotOutputDto>()
 )
+
+data class MatchCards(
+    val cards: ArrayList<Int>
+)
