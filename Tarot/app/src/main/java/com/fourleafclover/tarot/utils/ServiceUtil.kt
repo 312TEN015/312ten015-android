@@ -81,6 +81,10 @@ fun getSharedTarotRequest(
                 Log.d("", response.body()!!.toString())
 
                 sharedTarotResult = response.body()!![0]
+                if (sharedTarotResult.tarotType == 5) {
+                    resultViewModel.tmpDistinguishCardResult(sharedTarotResult)
+                    loadingViewModel.changeDestination(ScreenEnum.ShareHarmonyDetailScreen)
+                }
                 loadingViewModel.endLoading(navController)
             }
 

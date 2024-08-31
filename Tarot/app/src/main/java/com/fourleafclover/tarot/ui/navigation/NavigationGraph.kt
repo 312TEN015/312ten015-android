@@ -29,6 +29,7 @@ import com.fourleafclover.tarot.ui.screen.loading.RoomInviteLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
 import com.fourleafclover.tarot.ui.screen.my.MyTarotHarmonyDetail
+import com.fourleafclover.tarot.ui.screen.my.ShareHarmonyDetailScreen
 
 @Composable
 fun NavigationHost() {
@@ -73,6 +74,9 @@ fun NavigationHost() {
             }
             composable(ScreenEnum.ShareDetailScreen.name) {
                 ShareDetailScreen(navController)
+            }
+            composable(ScreenEnum.ShareHarmonyDetailScreen.name) {
+                ShareHarmonyDetailScreen(navController)
             }
             composable(ScreenEnum.RoomCreateScreen.name) {
                 RoomCreateScreen(navController)

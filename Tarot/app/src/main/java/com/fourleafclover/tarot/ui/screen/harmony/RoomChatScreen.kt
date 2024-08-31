@@ -295,15 +295,15 @@ fun confirmSelectedCard(chatState: ChatState) {
     if (chatState.scenario != Scenario.Opening) {
         if (chatState.pickedCardNumberState.thirdCardNumber != -1){
             chatViewModel.addChatItem(
-                Chat(ChatType.PartnerChatText, "세번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+                Chat(ChatType.PartnerChatText, "세번째 카드 선택이 완료되었습니다! ${chatViewModel.getAdjectives()} 카드를 뽑으셨네요✨", code = "secondCard_1")
             )
         } else if (chatState.pickedCardNumberState.secondCardNumber != -1){
             chatViewModel.addChatItem(
-                Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+                Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! ${chatViewModel.getAdjectives()} 카드를 뽑으셨네요✨", code = "secondCard_1")
             )
         } else{
             chatViewModel.addChatItem(
-                Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
+                Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! ${chatViewModel.getAdjectives()} 카드를 뽑으셨네요✨", code = "secondCard_1")
             )
         }
     }

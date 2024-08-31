@@ -40,9 +40,7 @@ enum class ChatType {
 enum class Scenario {
     Opening,
     FirstCard,
-    FirstCardSelected,
     SecondCard,
-    SecondCardSelected,
     ThirdCard,
     Complete,
     End
@@ -94,9 +92,7 @@ class ChatViewModel : ViewModel() {
     fun initAllScenario() {
         initOpening()
         initFirst()
-        initFirstCardSelected()
         initSecond()
-        initSecondCardSelected()
         initThird()
         initComplete()
     }
@@ -124,24 +120,12 @@ class ChatViewModel : ViewModel() {
         )
     }
 
-    private fun initFirstCardSelected() {
-        firstCardSelected = listOf(
-            Chat(ChatType.PartnerChatText, "첫번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
-        )
-    }
-
     private fun initSecond(){
         secondCard = listOf(
             Chat(ChatType.PartnerChatText, "${harmonyViewModel.getPartnerNickname()}님은 이 카드를 선택하셨어요.", code = "secondCard_2"),
             Chat(type = ChatType.PartnerChatImage, drawable = _partnerChatState.value.pickedCardNumberState.firstCardNumber, code = "secondCard_2"),
             Chat(ChatType.PartnerChatText, "이제 두번째 카드를 골라봐요!", code = "secondCard_3"),
             Chat(ChatType.PickCard, code = "secondCard_4"),
-        )
-    }
-
-    private fun initSecondCardSelected() {
-        secondCardSelected = listOf(
-            Chat(ChatType.PartnerChatText, "두번째 카드 선택이 완료되었습니다! {의미심장한} 카드를 뽑으셨네요✨", code = "secondCard_1")
         )
     }
 
@@ -199,17 +183,9 @@ class ChatViewModel : ViewModel() {
                 initFirst()
                 chatList.addAll(firstCard)
             }
-            Scenario.FirstCardSelected -> {
-                initFirstCardSelected()
-                chatList.addAll(firstCardSelected)
-            }
             Scenario.SecondCard -> {
                 initSecond()
                 chatList.addAll(secondCard)
-            }
-            Scenario.SecondCardSelected -> {
-                initSecondCardSelected()
-                chatList.addAll(secondCardSelected)
             }
             Scenario.ThirdCard -> {
                 initThird()
@@ -261,5 +237,22 @@ class ChatViewModel : ViewModel() {
             }
             else -> {}
         }
+    }
+
+    private val adjectives = arrayListOf(
+        "의미심장한",
+        "멋진",
+        "신비로운",
+        "비밀스러운",
+        "상징적인",
+        "심오한",
+        "미묘한",
+        "몽환적인",
+        "수수께끼같은",
+        "독특한"
+    )
+
+    fun getAdjectives(): String {
+        return adjectives[(0..adjectives.size).random()]
     }
 }

@@ -156,14 +156,14 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
 
             val deepLinkUri = Uri.parse(deepLink.toString())
 
-            // 나의 타로 결과 공유
+            // 타로 결과 공유
             if (deepLinkUri.getBooleanQueryParameter("tarotId", false)){
                 val sharedTarotId = deepLinkUri.getQueryParameter("tarotId")!!
                 getSharedTarotRequest(activity, navController, sharedTarotId)
                 loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ShareDetailScreen)
             }
 
-            // 궁합 타로 결과 공유
+            // 궁합 초대
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
                 harmonyViewModel.roomId.value = deepLinkUri.getQueryParameter("roomId")!!
                 MyApplication.connectSocket()

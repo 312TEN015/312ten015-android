@@ -18,6 +18,7 @@ enum class ScreenEnum {
     LoadingScreen,     // 로딩 화면
 
     ShareDetailScreen,     // 공유하기 타로 상세 화면
+    ShareHarmonyDetailScreen,     // 궁합결과 공유하기 타로 상세 화면
 
     RoomCreateScreen,      // 초대방 생성 페이지
     RoomGenderScreen,      // 성별 선택 페이지
