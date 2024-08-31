@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot
 
 import android.app.Application
+import com.fourleafclover.tarot.network.PrettyJsonLogger
 import android.util.Log
 import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.utils.PreferenceUtil
@@ -9,6 +10,7 @@ import io.socket.client.Socket
 import io.socket.engineio.client.Transport
 import io.socket.engineio.client.transports.Polling
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.WebSocket
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -45,7 +47,7 @@ class MyApplication: Application() {
 //        prefs.addTarotResult("303R-CSMhBq6VZc9ICH_3")
 //        prefs.addTarotResult("jwWT2Fk6B4A705eZTo73T")
 //        prefs.addTarotResult("xY_dTJvxSvjbJ_KN2-sTh")
-        
+
         // 궁합
 //        prefs.addTarotResult("ktNAAiCk3DVX7G-_hh5_C")
 //        prefs.addTarotResult("zkm4uuT_VDSvnS8ba4M_h")
@@ -53,11 +55,17 @@ class MyApplication: Application() {
 
 //        prefs.deleteIsPickCardIndicateComplete()
 
+        val logging = HttpLoggingInterceptor(PrettyJsonLogger()).apply {
+            // 요청과 응답의 본문 내용까지 로그에 포함
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
         // 서버 초기화
         val okHttpClient = OkHttpClient().newBuilder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(logging)
             .build()
 
         val retrofit = Retrofit.Builder()

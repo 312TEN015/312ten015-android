@@ -36,7 +36,6 @@ fun getTarotRequest(
                 response: Response<ArrayList<TarotOutputDto>>
             ) {
 
-                Log.d("", "onResponse--------")
                 if (response.body() == null){
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
@@ -46,10 +45,6 @@ fun getTarotRequest(
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
             }
         })
 
@@ -70,15 +65,12 @@ fun getSharedTarotRequest(
                 response: Response<ArrayList<TarotOutputDto>>
             ) {
 
-                Log.d("", "onResponse--------")
                 if (response.body() == null || response.body()!![0] == null){
                     Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                     loadingViewModel.endLoading(navController)
                     return
                 }
-
-                Log.d("", response.body()!!.toString())
 
                 sharedTarotResult = response.body()!![0]
                 if (sharedTarotResult.tarotType == 5) {
@@ -89,10 +81,6 @@ fun getSharedTarotRequest(
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
             }
         })
 
@@ -112,7 +100,6 @@ fun getCertainTarotRequest(
                 response: Response<ArrayList<TarotOutputDto>>
             ) {
 
-                Log.d("", "onResponse--------")
                 if (response.body() == null || response.body()!![0] == null){
                     Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
@@ -120,18 +107,12 @@ fun getCertainTarotRequest(
                     return
                 }
 
-                Log.d("", response.body()!!.toString())
-
                 tarotOutputDto = response.body()!![0]
                 resultViewModel.distinguishCardResult(tarotOutputDto)
                 loadingViewModel.endLoading(navController)
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
             }
         })
 
@@ -140,7 +121,6 @@ fun getCertainTarotRequest(
 
 /* 타로 결과 요청 POST */
 fun sendRequest(localContext: Context, navController: NavHostController) {
-    Log.d("", fortuneViewModel.getTarotInputDto().toString())
     MyApplication.tarotService.postTarotResult(fortuneViewModel.getTarotInputDto(), getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
@@ -148,7 +128,6 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                 response: Response<TarotOutputDto>
             ) {
 
-                Log.d("", "onResponse--------")
                 if (response.body() == null){
                     Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
                     return
@@ -157,16 +136,11 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                 fortuneViewModel.setTarotResult(response.body()!!)
                 pickTarotViewModel.initCardDeck()
                 questionInputViewModel.initAnswers()
-                Log.d("", "${fortuneViewModel.tarotResult}--------")
 
                 loadingViewModel.updateLoadingState(false)
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-                Log.d("", "onFailure--------!")
-                Log.d("", "${t.cause}--------!")
-                Log.d("", "${t.message}--------!")
-                Log.d("", "${t.stackTrace}--------!")
 
                 loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                 loadingViewModel.updateLoadingState(false)
@@ -189,6 +163,7 @@ fun getMatchResult(reconnectCount: Int = 0){
 //        chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
 //    )
 
+    /* 테스트 */
     val cardArray = arrayListOf(1,2,3,4,5,6)
 
     MyApplication.tarotService.getMatchResult(MatchCards(cardArray))
@@ -198,7 +173,6 @@ fun getMatchResult(reconnectCount: Int = 0){
                 response: Response<TarotOutputDto>
             ) {
 
-                Log.d("api", "onResponse--------")
                 if (response.body() == null){
                     Log.d("api", "onResponse null")
                     return
@@ -206,14 +180,10 @@ fun getMatchResult(reconnectCount: Int = 0){
 
                 tarotOutputDto = response.body()!!
                 resultViewModel.tmpDistinguishCardResult(tarotOutputDto)
-                Log.d("api", "onResponse $tarotOutputDto")
                 loadingViewModel.updateLoadingState(false)
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-                Log.d("api", "onFailure--------!")
-                Log.d("api", "${t.cause}--------!")
-                Log.d("api", "${t.message}--------!")
                 Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
                 if (reconnectCount == 3) {

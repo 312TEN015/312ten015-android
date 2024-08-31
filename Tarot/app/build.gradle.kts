@@ -146,4 +146,7 @@ dependencies {
     implementation ("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // interceptor
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.2")
 }
