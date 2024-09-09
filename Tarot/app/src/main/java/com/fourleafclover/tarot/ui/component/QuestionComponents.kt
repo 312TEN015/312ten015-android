@@ -114,15 +114,7 @@ fun QuestionViewHeader(pickedTopicTemplate: TarotSubjectData, context: Context){
                     .padding(top = 16.dp)
             )
 
-            Image(painter = painterResource(id = when(fortuneViewModel.pickedTopicNumber){
-                0 -> R.drawable.illust_heartkey
-                1 -> R.drawable.illust_study
-                2 -> R.drawable.illust_dream
-                3 -> R.drawable.illust_career
-                else -> {
-                    R.drawable.illust_heartkey
-                }
-            }), contentDescription = null,
+            Image(painter = painterResource(id = questionInputViewModel.getTarotIllustId()), contentDescription = null,
                 modifier = Modifier
                     .width(83.dp)
                     .fillMaxHeight(),
@@ -213,7 +205,6 @@ fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, context: C
 fun QuestionViewFooter(navController: NavHostController){
     Button(
         onClick = {
-            fortuneViewModel.setFortuneAnswers()
             navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
         },
         shape = RoundedCornerShape(10.dp),

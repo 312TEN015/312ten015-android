@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
@@ -46,15 +47,13 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
 import com.fourleafclover.tarot.utils.ShareLinkType
-import com.fourleafclover.tarot.utils.getPickedTopic
-import com.fourleafclover.tarot.utils.getSubjectImoji
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 @Preview
 fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
-    val tarotSubjectData = getPickedTopic(myTarotViewModel.selectedTarotResult.tarotType)
+    val tarotSubjectData = fortuneViewModel.getPickedTopic(myTarotViewModel.selectedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
@@ -83,7 +82,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
+                val imoji = fortuneViewModel.getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
                 TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     color = gray_2,

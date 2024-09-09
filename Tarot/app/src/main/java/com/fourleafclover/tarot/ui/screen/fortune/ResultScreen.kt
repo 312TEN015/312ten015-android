@@ -63,7 +63,6 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
 import com.fourleafclover.tarot.utils.ShareLinkType
-import com.fourleafclover.tarot.utils.getPickedTopic
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
@@ -83,7 +82,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = fortuneViewModel.pickedTopicSubject.majorTopic,
+                text = fortuneViewModel.pickedTopicState.value.topicSubjectData.majorTopic,
                 style = getTextStyle(16, FontWeight.Medium, white),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -117,7 +116,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
             )
 
             Box(modifier = Modifier.background(color = backgroundColor_2)){
-                CardSlider(tarotResult = fortuneViewModel.tarotResult)
+                CardSlider(tarotResult = resultViewModel.tarotResult.value)
             }
 
 
@@ -149,7 +148,7 @@ fun OverallResult(){
         )
 
         TextB01M18(
-            text = fortuneViewModel.tarotResult.overallResult?.summary.toString(),
+            text = resultViewModel.tarotResult.value.overallResult?.summary.toString(),
             color = white,
             modifier = Modifier
                 .padding(top = 24.dp)
@@ -157,7 +156,7 @@ fun OverallResult(){
         )
 
         TextB02M16(
-            text = fortuneViewModel.tarotResult.overallResult?.full.toString(),
+            text = resultViewModel.tarotResult.value.overallResult?.full.toString(),
             color = gray_3,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 64.dp)
@@ -167,7 +166,7 @@ fun OverallResult(){
         Button(
             onClick = {
                 // 타로 결과 id 저장
-                MyApplication.prefs.addTarotResult(fortuneViewModel.tarotResult.tarotId)
+                MyApplication.prefs.addTarotResult(resultViewModel.tarotResult.value.tarotId)
                 resultViewModel.saveResult()
             },
             shape = RoundedCornerShape(10.dp),
@@ -227,7 +226,7 @@ fun OverallResult(){
             .clickable {
                 setDynamicLink(
                     localContext,
-                    fortuneViewModel.tarotResult.tarotId,
+                    resultViewModel.tarotResult.value.tarotId,
                     ShareLinkType.MY,
                     ShareActionType.OPEN_SHEET
                 )

@@ -4,6 +4,7 @@ package com.fourleafclover.tarot.ui.screen.fortune
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,21 +26,25 @@ import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 @Composable
 fun InputScreen(navController: NavHostController = rememberNavController()) {
     val localContext = LocalContext.current
-    val pickedTopicTemplate = remember { fortuneViewModel.pickedTopicSubject }
+    val pickedTopicTemplate by fortuneViewModel.pickedTopicState
 
-    setStatusbarColor(LocalView.current, pickedTopicTemplate.primaryColor)
+    setStatusbarColor(LocalView.current, pickedTopicTemplate.topicSubjectData.primaryColor)
 
     Column(modifier = getBackgroundModifier(backgroundColor_2))
     {
 
-        AppBarClose(navController = navController, pickedTopicTemplate = pickedTopicTemplate, backgroundColor = pickedTopicTemplate.primaryColor)
+        AppBarClose(
+            navController = navController,
+            pickedTopicTemplate = pickedTopicTemplate.topicSubjectData,
+            backgroundColor = pickedTopicTemplate.topicSubjectData.primaryColor
+        )
 
         Column(modifier = Modifier) {
 
             LazyColumn(content = {
                 // numberOfQuestion + header + footer
                 items(questionCount + 2){
-                    QuestionsComponent(pickedTopicTemplate, it, navController, localContext)
+                    QuestionsComponent(pickedTopicTemplate.topicSubjectData, it, navController, localContext)
                 }
 
             })

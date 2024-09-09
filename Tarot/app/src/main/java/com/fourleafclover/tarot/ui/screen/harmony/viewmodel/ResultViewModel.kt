@@ -4,9 +4,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.data.CardResultData
+import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.pickTarotViewModel
+import com.fourleafclover.tarot.questionInputViewModel
 
+/** 타로 뽑기 결과 관리 */
 class ResultViewModel() : ViewModel() {
 
     private var openCloseDialog = mutableStateOf(false) // close dialog state
@@ -18,6 +22,9 @@ class ResultViewModel() : ViewModel() {
     var myCardNumbers : List<Int> = arrayListOf(0, 0, 0)
     var partnerCardResults : List<CardResultData> = arrayListOf(CardResultData(), CardResultData(), CardResultData())
     var partnerCardNumbers : List<Int> = arrayListOf(0, 0, 0)
+
+    private var _tarotResult = mutableStateOf(TarotOutputDto())
+    val tarotResult = _tarotResult
 
     fun initResult(){
         openCloseDialog.value = false
@@ -95,5 +102,20 @@ class ResultViewModel() : ViewModel() {
     fun getNickname(): String {
         return if (isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname()
     }
+
+    fun setTarotResult(result: TarotOutputDto) {
+        _tarotResult.value = result
+    }
+
+    fun getTarotInputDto() = TarotInputDto(
+        questionInputViewModel.answer1.value.text,
+        questionInputViewModel.answer2.value.text,
+        questionInputViewModel.answer3.value.text,
+        arrayListOf(
+            pickTarotViewModel.pickedCardNumberState.value.firstCardNumber,
+            pickTarotViewModel.pickedCardNumberState.value.secondCardNumber,
+            pickTarotViewModel.pickedCardNumberState.value.thirdCardNumber,
+        )
+    )
 
 }

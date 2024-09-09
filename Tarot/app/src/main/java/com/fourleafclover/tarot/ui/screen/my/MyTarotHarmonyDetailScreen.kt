@@ -29,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
@@ -56,8 +57,6 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
 import com.fourleafclover.tarot.utils.ShareLinkType
-import com.fourleafclover.tarot.utils.getPickedTopic
-import com.fourleafclover.tarot.utils.getSubjectImoji
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
@@ -73,7 +72,7 @@ fun MyTarotHarmonyDetailPreview(
     navController: NavHostController = rememberNavController()
 ) {
     val localContext = LocalContext.current
-    val tarotSubjectData = getPickedTopic(5)
+    val tarotSubjectData = fortuneViewModel.getPickedTopic(5)
     setStatusbarColor(LocalView.current, backgroundColor_2)
 
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
@@ -101,7 +100,7 @@ fun MyTarotHarmonyDetailPreview(
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
+                val imoji = fortuneViewModel.getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
                 TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     color = gray_2,

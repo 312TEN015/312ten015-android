@@ -54,7 +54,6 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getCardImageId
 import kotlin.math.absoluteValue
 
 @Preview
@@ -67,7 +66,7 @@ fun CardSlider(
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
     for ((idx, value) in tarotResult.cards.withIndex()) {
-        sliderList[idx] = getCardImageId(LocalContext.current, value.toString())
+        sliderList[idx] = fortuneViewModel.getCardImageId(LocalContext.current, value.toString())
     }
 
     val pagerState = rememberPagerState(
@@ -233,13 +232,13 @@ fun HarmonyCardSlider(
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
     if (resultViewModel.isMyTab()) {
-        sliderList[0] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[0].toString())
-        sliderList[1] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[1].toString())
-        sliderList[2] = getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[2].toString())
+        sliderList[0] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[2].toString())
     }else {
-        sliderList[0] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[0].toString())
-        sliderList[1] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[1].toString())
-        sliderList[2] = getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[2].toString())
+        sliderList[0] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[2].toString())
     }
 
 

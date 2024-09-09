@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -29,7 +27,6 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyViewModel
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel
@@ -60,7 +57,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     /* 한번만 실행 */
     if (!initialize){
 
-        fortuneViewModel.initValues()
+        fortuneViewModel.clear()
         pickTarotViewModel.initCardDeck()
         questionInputViewModel.initAnswers()
         resultViewModel.initResult()

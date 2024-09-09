@@ -4,6 +4,19 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.SubjectDream
+import com.fourleafclover.tarot.SubjectHarmony
+import com.fourleafclover.tarot.SubjectJob
+import com.fourleafclover.tarot.SubjectLove
+import com.fourleafclover.tarot.SubjectStudy
+import com.fourleafclover.tarot.SubjectToday
+import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.fortuneViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class QuestionInputViewModel: ViewModel() {
     private var _answer1 = mutableStateOf(TextFieldValue(""))
@@ -40,5 +53,17 @@ class QuestionInputViewModel: ViewModel() {
 
     fun setTextField(idx: Int, newText: TextFieldValue){
         getNowTextField(idx).value = newText
+    }
+
+    fun getTarotIllustId() : Int {
+        return when(fortuneViewModel.pickedTopicState.value.topicNumber){
+            0 -> R.drawable.illust_heartkey
+            1 -> R.drawable.illust_study
+            2 -> R.drawable.illust_dream
+            3 -> R.drawable.illust_career
+            else -> {
+                R.drawable.illust_heartkey
+            }
+        }
     }
 }

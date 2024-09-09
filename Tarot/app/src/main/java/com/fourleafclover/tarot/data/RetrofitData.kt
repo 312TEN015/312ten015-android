@@ -16,12 +16,12 @@ data class TarotInputDto(
 
 // 타로 고민 결과 response
 data class TarotOutputDto(
-    var tarotId: String,
-    var tarotType: Int, // 분류
-    var cards: ArrayList<Int>,
-    @SerializedName("createdAt") var createdAt_: String, // 날짜
-    var cardResults: ArrayList<CardResultData>?,    // 카드설명
-    var overallResult: OverallResultData?   // 총평
+    var tarotId: String = "",
+    var tarotType: Int = 0, // 분류
+    var cards: ArrayList<Int> = arrayListOf(),
+    @SerializedName("createdAt") var createdAt_: String = "", // 날짜
+    var cardResults: ArrayList<CardResultData>? = null,    // 카드설명
+    var overallResult: OverallResultData? = null   // 총평
 ) {
     val createdAt: String
         get() {

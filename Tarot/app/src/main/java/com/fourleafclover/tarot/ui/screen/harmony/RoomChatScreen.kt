@@ -53,6 +53,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.chatViewModel
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
@@ -76,7 +77,6 @@ import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple50
-import com.fourleafclover.tarot.utils.getCardImageId
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -332,7 +332,7 @@ fun ChatCardDeck() {
                 chatViewModel.addChatItem(
                     Chat(
                         type = ChatType.MyChatImage,
-                        drawable = getCardImageId(localContext, pickTarotViewModel.getCardNumber(pickSequence.value).toString())
+                        drawable = fortuneViewModel.getCardImageId(localContext, pickTarotViewModel.getCardNumber(pickSequence.value).toString())
                     )
                 )
 
@@ -472,7 +472,7 @@ fun PartnerChattingBox(
                     /* 테스트 코드 */
                     Image(
                         modifier = Modifier.width(60.dp),
-                        painter = painterResource(id = getCardImageId(LocalContext.current, drawable.toString())),
+                        painter = painterResource(id = fortuneViewModel.getCardImageId(LocalContext.current, drawable.toString())),
                         contentDescription = null
                     )
                 } else {

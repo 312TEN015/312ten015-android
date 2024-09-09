@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
@@ -58,7 +59,6 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getPickedTopic
 
 var showSheet = mutableStateOf(false)
 
@@ -188,13 +188,13 @@ fun MyTarotItemComponent(
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
                     TextH03SB18(
-                        text = getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorTopic,
+                        text = fortuneViewModel.getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorTopic,
                         color = white,
                         modifier = Modifier.padding(end = 8.dp)
                     )
 
                     TextB04M12(
-                        text = getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorQuestion,
+                        text = fortuneViewModel.getPickedTopic(myTarotViewModel.myTarotResults[idx].tarotType).majorQuestion,
                         color = gray_2,
                         modifier = Modifier
                     )

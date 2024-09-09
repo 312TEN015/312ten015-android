@@ -136,7 +136,7 @@ fun AppBarPlain(
 @Preview
 fun AppBarClose(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicSubject,
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true
 ) {
@@ -195,7 +195,7 @@ fun AppBarClose(
 @Preview
 fun AppBarCloseTarotResult(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicSubject,
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true,
     resultViewModel: ResultViewModel = remember { ResultViewModel() }

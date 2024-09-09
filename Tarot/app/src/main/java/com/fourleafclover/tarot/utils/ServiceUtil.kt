@@ -121,7 +121,7 @@ fun getCertainTarotRequest(
 
 /* 타로 결과 요청 POST */
 fun sendRequest(localContext: Context, navController: NavHostController) {
-    MyApplication.tarotService.postTarotResult(fortuneViewModel.getTarotInputDto(), getPath())
+    MyApplication.tarotService.postTarotResult(resultViewModel.getTarotInputDto(), getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
                 call: Call<TarotOutputDto>,
@@ -133,7 +133,7 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
                     return
                 }
 
-                fortuneViewModel.setTarotResult(response.body()!!)
+                resultViewModel.setTarotResult(response.body()!!)
                 pickTarotViewModel.initCardDeck()
                 questionInputViewModel.initAnswers()
 
@@ -200,14 +200,14 @@ fun getMatchResult(reconnectCount: Int = 0){
 
 
 fun getPath() : String {
-    return when(fortuneViewModel.pickedTopicNumber){
+    return when(fortuneViewModel.pickedTopicState.value.topicNumber){
         0 -> "love"
         1 -> "study"
         2 -> "dream"
         3 -> "job"
         4 -> "today"
         else -> {
-            Log.e("tarotError", "error getPath(). pickedTopicNumber: ${fortuneViewModel.pickedTopicNumber}")
+            Log.e("tarotError", "error getPath(). pickedTopicNumber: ${fortuneViewModel.pickedTopicState.value.topicNumber}")
             ""
         }
     }

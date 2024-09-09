@@ -64,7 +64,6 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getCardImageId
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 
@@ -81,7 +80,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
         Column {
 
-            AppBarClose(navController = navController, pickedTopicTemplate = fortuneViewModel.pickedTopicSubject, backgroundColor = backgroundColor_1)
+            AppBarClose(navController = navController, pickedTopicTemplate = fortuneViewModel.pickedTopicState.value.topicSubjectData, backgroundColor = backgroundColor_1)
 
             var pickSequence by remember { mutableIntStateOf(1) }
 
@@ -148,7 +147,6 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     onClick = {
                         pickTarotViewModel.setPickedCard(pickSequence)
                         if (pickSequence == 3) {
-                            fortuneViewModel.setFortunePickedCards()
                             loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
                         }else{
                             pickSequence++
@@ -206,7 +204,7 @@ fun CardBlank(context: Context, sequence: Int){
 
         Image(painter = painterResource(
             id = if (isCardPicked) {
-                getCardImageId(context, pickTarotViewModel.getCardNumber(sequence).toString())
+                fortuneViewModel.getCardImageId(context, pickTarotViewModel.getCardNumber(sequence).toString())
             } else {
                 R.drawable.tarot_front
             }),
