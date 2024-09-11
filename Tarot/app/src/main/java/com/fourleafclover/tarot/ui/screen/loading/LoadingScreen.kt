@@ -56,7 +56,7 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
 
     LaunchedEffect(Unit){
         if (loadingViewModel.getDestination() == ScreenEnum.ResultScreen){
-            sendRequest(localContext, navController)
+            sendRequest(localContext)
         }
         else if (loadingViewModel.getDestination() == ScreenEnum.RoomResultScreen){
             getMatchResult()

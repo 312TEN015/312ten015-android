@@ -17,10 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +36,6 @@ import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -75,7 +70,7 @@ fun HarmonyResultScreenPreview(
 ) {
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
-        ControlDialog(navController, resultViewModel)
+        ControlDialog(navController)
 
         AppBarCloseTarotResult(
             navController,
@@ -208,7 +203,7 @@ private fun OverallResult() {
                 resultViewModel.saveResult()
             },
             shape = RoundedCornerShape(10.dp),
-            enabled = !resultViewModel.isSaved(),
+            enabled = !resultViewModel.saveState.value,
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
@@ -221,7 +216,7 @@ private fun OverallResult() {
             )
         ) {
 
-            if (resultViewModel.isSaved()) {
+            if (resultViewModel.saveState.value) {
                 Image(
                     painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
@@ -233,9 +228,9 @@ private fun OverallResult() {
             }
 
             TextButtonM16(
-                text = if (resultViewModel.isSaved()) "저장 완료!" else "타로 저장하기",
+                text = if (resultViewModel.saveState.value) "저장 완료!" else "타로 저장하기",
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = if (!resultViewModel.isSaved()) white else gray_5,
+                color = if (!resultViewModel.saveState.value) white else gray_5,
             )
         }
 

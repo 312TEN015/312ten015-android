@@ -80,13 +80,15 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
         Column {
 
-            AppBarClose(navController = navController, pickedTopicTemplate = fortuneViewModel.pickedTopicState.value.topicSubjectData, backgroundColor = backgroundColor_1)
+            AppBarClose(
+                navController = navController,
+                pickedTopicTemplate = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+                backgroundColor = backgroundColor_1
+            )
 
-            var pickSequence by remember { mutableIntStateOf(1) }
-
-            // "0번째 카드를 골라주세요."
+            // "n번째 카드를 골라주세요."
             TextH02M22(
-                text = pickTarotViewModel.getDirectionText(localContext, pickSequence),
+                text = pickTarotViewModel.getDirectionText(pickTarotViewModel.pickSequence.value),
                 color = white,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -145,15 +147,14 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
                 Button(
                     onClick = {
-                        pickTarotViewModel.setPickedCard(pickSequence)
-                        if (pickSequence == 3) {
+                        pickTarotViewModel.setPickedCard(pickTarotViewModel.pickSequence.value)
+                        if (pickTarotViewModel.pickSequence.value == 3) {
                             loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ResultScreen)
                         }else{
-                            pickSequence++
+                            pickTarotViewModel.moveToNextSequence()
                         }
 
                         pickTarotViewModel.resetNowSelectedCardIdx()
-
                     },
                     shape = RoundedCornerShape(10.dp),
                     modifier = Modifier
@@ -211,7 +212,7 @@ fun CardBlank(context: Context, sequence: Int){
             contentDescription = null,
             modifier = Modifier,
             alpha = pickTarotViewModel.getAlpha(isCardPicked))
-        TextCaptionM12(text = pickTarotViewModel.getCardBlankText(context, sequence),
+        TextCaptionM12(text = pickTarotViewModel.getCardBlankText(sequence),
             color = gray_4,
             modifier = Modifier
                 .wrapContentSize()

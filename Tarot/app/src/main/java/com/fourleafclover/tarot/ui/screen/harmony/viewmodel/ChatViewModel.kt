@@ -2,12 +2,14 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fourleafclover.tarot.data.PickedCardNumberState
 import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickedCardNumberState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 val scenarioSequence = arrayListOf(
     Scenario.Opening,
@@ -76,6 +78,8 @@ class ChatViewModel : ViewModel() {
     private lateinit var secondCardSelected: List<Chat>
     private lateinit var thirdCard: List<Chat>
     private lateinit var complete: List<Chat>
+
+    fun clear() = viewModelScope.launch { onCleared() }
 
     fun resetChatData() {
         initChatStates()

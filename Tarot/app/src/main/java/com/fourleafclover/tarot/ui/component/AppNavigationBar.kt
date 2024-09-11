@@ -44,6 +44,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
@@ -241,11 +242,10 @@ fun AppBarCloseTarotResult(
 
 @Composable
 fun OpenCloseDialog(
-    navController: NavHostController,
-    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+    navController: NavHostController
 ) {
     // 닫기 버튼 눌렀을 때 && 타로 결과 저장 안한 경우
-    if (resultViewModel.isCloseDialogOpen() && !resultViewModel.isSaved()) {
+    if (resultViewModel.openCloseDialog.value && !resultViewModel.saveState.value) {
         Dialog(onDismissRequest = { resultViewModel.closeCloseDialog() }) {
             CloseWithoutSaveDialog(onClickNo = { resultViewModel.closeCloseDialog() },
                 onClickOk = {
@@ -254,7 +254,7 @@ fun OpenCloseDialog(
         }
     }
     // 닫기 버튼 눌렀을 때 && 타로 결과 저장 한 경우
-    else if (resultViewModel.isCloseDialogOpen() && resultViewModel.isSaved()) {
+    else if (resultViewModel.openCloseDialog.value && resultViewModel.saveState.value) {
         Dialog(onDismissRequest = { resultViewModel.closeCloseDialog() }) {
             CloseDialog(onClickNo = { resultViewModel.closeCloseDialog() },
                 onClickOk = {
@@ -266,9 +266,9 @@ fun OpenCloseDialog(
 }
 
 @Composable
-fun OpenCompleteDialog(resultViewModel: ResultViewModel = remember { ResultViewModel() }) {
+fun OpenCompleteDialog() {
     // 타로 결과 저장 버튼 눌렀을 때
-    if (resultViewModel.isCompleteDialogOpen()) {
+    if (resultViewModel.openCompleteDialog.value) {
         Dialog(onDismissRequest = { resultViewModel.closeCompleteDialog() }) {
             SaveCompletedDialog(onClickOk = { resultViewModel.closeCompleteDialog() })
         }
@@ -277,11 +277,10 @@ fun OpenCompleteDialog(resultViewModel: ResultViewModel = remember { ResultViewM
 
 @Composable
 fun ControlDialog(
-    navController: NavHostController,
-    resultViewModel: ResultViewModel
+    navController: NavHostController
 ) {
     BackHandler { resultViewModel.closeCloseDialog() }
-    OpenCloseDialog(navController = navController, resultViewModel)
+    OpenCloseDialog(navController = navController)
     OpenCompleteDialog()
 
 }

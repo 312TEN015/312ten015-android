@@ -18,20 +18,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/** 유저가 입력한 답변 관리 */
 class QuestionInputViewModel: ViewModel() {
     private var _answer1 = mutableStateOf(TextFieldValue(""))
-    val answer1 = _answer1
+    val answer1 get() = _answer1
 
     private var _answer2 = mutableStateOf(TextFieldValue(""))
-    val answer2 = _answer2
+    val answer2 get() = _answer2
 
     private var _answer3 = mutableStateOf(TextFieldValue(""))
-    val answer3 = _answer3
+    val answer3 get() = _answer3
 
     private var _maxChar = 50
-    val maxChar
-        get() = _maxChar
+    val maxChar get() = _maxChar
 
+
+    fun clear() = viewModelScope.launch { onCleared() }
 
     fun initAnswers(){
         // 인풋 초기화

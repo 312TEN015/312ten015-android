@@ -58,11 +58,11 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
     if (!initialize){
 
         fortuneViewModel.clear()
-        pickTarotViewModel.initCardDeck()
-        questionInputViewModel.initAnswers()
-        resultViewModel.initResult()
-        chatViewModel.resetChatData()
-        harmonyViewModel.resetHarmonyData()
+        pickTarotViewModel.clear()
+        questionInputViewModel.clear()
+        resultViewModel.clear()
+        chatViewModel.clear()
+        harmonyViewModel.clear()
 
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()

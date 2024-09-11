@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.BottomNavigationBar
 import com.fourleafclover.tarot.ui.screen.main.HomeScreen
 import com.fourleafclover.tarot.ui.screen.fortune.InputScreen
@@ -17,7 +16,7 @@ import com.fourleafclover.tarot.ui.screen.my.MyTarotDetailScreen
 import com.fourleafclover.tarot.ui.screen.my.MyTarotScreen
 import com.fourleafclover.tarot.ui.screen.main.PagerOnBoarding
 import com.fourleafclover.tarot.ui.screen.fortune.PickTarotScreen
-import com.fourleafclover.tarot.ui.screen.fortune.ResultScreen
+import com.fourleafclover.tarot.ui.screen.fortune.TarotResultScreen
 import com.fourleafclover.tarot.ui.screen.my.ShareDetailScreen
 import com.fourleafclover.tarot.ui.screen.harmony.HarmonyResultScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomChatScreen
@@ -57,7 +56,7 @@ fun NavigationHost() {
                 PickTarotScreen(navController)
             }
             composable(ScreenEnum.ResultScreen.name) {
-                ResultScreen(navController)
+                TarotResultScreen(navController)
             }
             composable(ScreenEnum.OnBoardingScreen.name) {
                 if (MyApplication.prefs.isOnBoardingComplete()){

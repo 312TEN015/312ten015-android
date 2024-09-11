@@ -77,7 +77,7 @@ fun MyTarotHarmonyDetailPreview(
 
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
-        ControlDialog(navController, resultViewModel)
+        ControlDialog(navController)
 
         AppBarPlain(navController = navController, title = "MY 타로", backgroundColor = backgroundColor_2, backButtonVisible = true)
 

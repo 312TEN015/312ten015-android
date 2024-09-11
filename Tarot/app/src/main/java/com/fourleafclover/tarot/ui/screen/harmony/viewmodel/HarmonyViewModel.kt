@@ -2,6 +2,8 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class HarmonyViewModel: ViewModel() {
 
@@ -15,6 +17,8 @@ class HarmonyViewModel: ViewModel() {
     var shortLink = ""
 
     private var roomScenario = mutableStateOf(Scenario.Opening)
+
+    fun clear() = viewModelScope.launch { onCleared() }
 
     fun resetHarmonyData() {
         setUserNickname("")

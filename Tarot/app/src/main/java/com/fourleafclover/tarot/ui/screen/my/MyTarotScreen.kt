@@ -152,7 +152,7 @@ fun MyTarotItemComponent(
         .clickable {
             myTarotViewModel.selectItem(idx)
             if (myTarotViewModel.selectedTarotResult.tarotType == 5){
-                resultViewModel.tmpDistinguishCardResult(myTarotViewModel.selectedTarotResult)
+                resultViewModel.distinguishCardResult(myTarotViewModel.selectedTarotResult)
                 navigateSaveState(navController, ScreenEnum.MyTarotHarmonyDetailScreen.name)
             }else{
                 navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)

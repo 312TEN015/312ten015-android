@@ -1,9 +1,6 @@
 package com.fourleafclover.tarot
 
 import com.fourleafclover.tarot.constant.*
-import com.fourleafclover.tarot.data.CardResultData
-import com.fourleafclover.tarot.data.OverallResultData
-import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel

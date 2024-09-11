@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.fortune
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,8 +18,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
@@ -37,14 +33,9 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.CardSlider
-import com.fourleafclover.tarot.ui.component.CloseDialog
-import com.fourleafclover.tarot.ui.component.CloseWithoutSaveDialog
 import com.fourleafclover.tarot.ui.component.ControlDialog
-import com.fourleafclover.tarot.ui.component.SaveCompletedDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
-import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
@@ -67,16 +58,15 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 @Preview
-fun ResultScreen(navController: NavHostController = rememberNavController()){
+fun TarotResultScreen(navController: NavHostController = rememberNavController()){
 
     Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
     {
 
-        ControlDialog(navController, resultViewModel)
+        ControlDialog(navController)
 
 
-        Box(
-            modifier = appBarModifier
+        Box(modifier = appBarModifier
                 .background(color = backgroundColor_1)
                 .padding(top = 10.dp, bottom = 10.dp),
             contentAlignment = Alignment.Center
@@ -129,7 +119,7 @@ fun ResultScreen(navController: NavHostController = rememberNavController()){
 
 @Preview
 @Composable
-fun OverallResult(){
+private fun OverallResult(){
     Column(
         modifier = Modifier
             .background(color = gray_8)
@@ -168,9 +158,10 @@ fun OverallResult(){
                 // 타로 결과 id 저장
                 MyApplication.prefs.addTarotResult(resultViewModel.tarotResult.value.tarotId)
                 resultViewModel.saveResult()
+                resultViewModel.openCompleteDialog()
             },
             shape = RoundedCornerShape(10.dp),
-            enabled = !resultViewModel.isSaved(),
+            enabled = !resultViewModel.saveState.value,
             modifier = Modifier
                 .wrapContentHeight()
                 .fillMaxWidth()
@@ -183,7 +174,7 @@ fun OverallResult(){
             )
         ) {
 
-            if (resultViewModel.isSaved()){
+            if (resultViewModel.saveState.value){
                 Image(painter = painterResource(id = R.drawable.check_filled_disabled),
                     contentDescription = null,
                     modifier = Modifier
@@ -194,9 +185,9 @@ fun OverallResult(){
             }
 
             TextButtonM16(
-                text = if (resultViewModel.isSaved()) "저장 완료!" else "타로 저장하기",
+                text = if (resultViewModel.saveState.value) "저장 완료!" else "타로 저장하기",
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = if (!resultViewModel.isSaved()) white else gray_5,
+                color = if (!resultViewModel.saveState.value) white else gray_5,
             )
         }
 

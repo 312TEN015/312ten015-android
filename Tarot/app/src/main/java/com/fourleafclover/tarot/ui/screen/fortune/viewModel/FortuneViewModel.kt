@@ -15,6 +15,7 @@ import com.fourleafclover.tarot.SubjectStudy
 import com.fourleafclover.tarot.SubjectToday
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.OverallResultData
+import com.fourleafclover.tarot.data.PickedTopicState
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
 import kotlinx.coroutines.launch
@@ -52,17 +53,11 @@ var partnerTarotOutputDto = TarotOutputDto(
     OverallResultData(dummySummary, dummyFullResult)
 )
 
-/** 유저가 선택한 주제 상태 */
-data class PickedTopicState(
-    var topicNumber: Int = 0,
-    var topicSubjectData: TarotSubjectData = TarotSubjectData()
-)
-
 
 /** 유저가 선택한 주제 관리 */
 class FortuneViewModel : ViewModel() {
     private var _pickedTopicState = mutableStateOf(PickedTopicState())
-    val pickedTopicState = _pickedTopicState
+    val pickedTopicState get() = _pickedTopicState
 
     /* 선택한 대주제 인덱스 */
     // 0 -> 연애운

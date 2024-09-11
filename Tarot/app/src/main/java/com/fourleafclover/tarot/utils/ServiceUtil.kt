@@ -5,12 +5,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.data.MatchCards
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
@@ -74,7 +72,7 @@ fun getSharedTarotRequest(
 
                 sharedTarotResult = response.body()!![0]
                 if (sharedTarotResult.tarotType == 5) {
-                    resultViewModel.tmpDistinguishCardResult(sharedTarotResult)
+                    resultViewModel.distinguishCardResult(sharedTarotResult)
                     loadingViewModel.changeDestination(ScreenEnum.ShareHarmonyDetailScreen)
                 }
                 loadingViewModel.endLoading(navController)
@@ -120,7 +118,7 @@ fun getCertainTarotRequest(
 
 
 /* 타로 결과 요청 POST */
-fun sendRequest(localContext: Context, navController: NavHostController) {
+fun sendRequest(localContext: Context, reconnectCount: Int = 0) {
     MyApplication.tarotService.postTarotResult(resultViewModel.getTarotInputDto(), getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
@@ -142,9 +140,15 @@ fun sendRequest(localContext: Context, navController: NavHostController) {
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
 
-                loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
-                loadingViewModel.updateLoadingState(false)
-                Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                Log.d("api", "reconnectCount: ${reconnectCount}--------!")
+
+                if (reconnectCount == 3) {
+                    loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                    loadingViewModel.updateLoadingState(false)
+                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                }else{
+                    sendRequest(localContext, reconnectCount+1)
+                }
 
             }
         })
@@ -179,7 +183,7 @@ fun getMatchResult(reconnectCount: Int = 0){
                 }
 
                 tarotOutputDto = response.body()!!
-                resultViewModel.tmpDistinguishCardResult(tarotOutputDto)
+                resultViewModel.distinguishCardResult(tarotOutputDto)
                 loadingViewModel.updateLoadingState(false)
             }
 
