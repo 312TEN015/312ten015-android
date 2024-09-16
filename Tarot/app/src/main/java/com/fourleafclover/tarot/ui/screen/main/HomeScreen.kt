@@ -27,6 +27,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel

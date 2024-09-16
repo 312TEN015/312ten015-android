@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+
+/** 카드 선택 할때 절차 관리 및 카드 관리 */
 class PickTarotViewModel: ViewModel() {
     // 선택한 카드들의 상태
     private var _pickedCardNumberState = mutableStateOf(PickedCardNumberState())

@@ -30,7 +30,7 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 @Preview
 fun RoomCreateLoadingScreen(navController: NavHostController = rememberNavController()) {
 
-    if (!loadingViewModel.getIsLoading()) {
+    if (!loadingViewModel.isLoading.value) {
         loadingViewModel.endLoading(navController)
     }
 

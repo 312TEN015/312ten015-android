@@ -48,17 +48,17 @@ import com.fourleafclover.tarot.utils.sendRequest
 fun LoadingScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
 
-    if (!loadingViewModel.getIsLoading()) {
+    if (!loadingViewModel.isLoading.value) {
         loadingViewModel.endLoading(navController)
     }
 
     PreventBackPressed()
 
     LaunchedEffect(Unit){
-        if (loadingViewModel.getDestination() == ScreenEnum.ResultScreen){
+        if (loadingViewModel.destination == ScreenEnum.ResultScreen){
             sendRequest(localContext)
         }
-        else if (loadingViewModel.getDestination() == ScreenEnum.RoomResultScreen){
+        else if (loadingViewModel.destination == ScreenEnum.RoomResultScreen){
             getMatchResult()
             /* 테스트 코드 */
 //            Handler(Looper.getMainLooper())

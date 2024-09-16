@@ -40,7 +40,7 @@ import org.json.JSONObject
 @Preview
 fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavController()) {
 
-    if (!loadingViewModel.getIsLoading()) {
+    if (!loadingViewModel.isLoading.value) {
         loadingViewModel.endLoading(navController)
     }
 
