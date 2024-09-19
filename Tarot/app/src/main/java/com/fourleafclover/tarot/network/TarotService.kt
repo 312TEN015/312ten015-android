@@ -18,8 +18,5 @@ interface TarotService {
     fun getMyTarotResult(@Body tarotIds: TarotIdsInputDto): Call<ArrayList<TarotOutputDto>>
 
     @POST("tarot/match")
-    fun getMatchResult(@Body cards: ArrayList<Int>): Call<TarotOutputDto>
-
-    @POST("tarot/match")
     fun getMatchResult(@Body cards: MatchCards): Call<TarotOutputDto>
 }

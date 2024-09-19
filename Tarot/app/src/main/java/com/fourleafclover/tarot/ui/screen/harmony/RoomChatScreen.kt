@@ -1,7 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
@@ -32,11 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,7 +50,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarClose
@@ -80,7 +76,6 @@ import com.fourleafclover.tarot.ui.theme.purple50
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-import kotlin.math.roundToInt
 
 private val toShowProfileList = mutableIntSetOf()
 
@@ -195,8 +190,8 @@ fun RoomChatScreen(
                                                 )
 
                                                 val jsonObject = JSONObject()
-                                                jsonObject.put("nickname", harmonyViewModel.getUserNickname())
-                                                jsonObject.put("roomId", harmonyViewModel.roomId.value)
+                                                jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
+                                                jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
                                                 MyApplication.socket.emit("start", jsonObject)
                                                 Log.d("socket-test", "emit start")
 
@@ -337,8 +332,8 @@ fun ChatCardDeck() {
                 )
 
                 val jsonObject = JSONObject()
-                jsonObject.put("nickname", harmonyViewModel.getUserNickname())
-                jsonObject.put("roomId", harmonyViewModel.roomId.value)
+                jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
+                jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
                 jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence.value))
                 MyApplication.socket.emit("cardSelect", jsonObject)
                 Log.d("socket-test", "emit cardSelect")

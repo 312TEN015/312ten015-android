@@ -56,7 +56,7 @@ import com.fourleafclover.tarot.ui.theme.gray_8
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import com.fourleafclover.tarot.utils.getTarotRequest
+import com.fourleafclover.tarot.utils.getMyTarotList
 
 
 val backgroundModifier = Modifier
@@ -340,7 +340,7 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     onClick = {
                         if (item.screenName == ScreenEnum.MyTarotScreen.name) {
                             val tarotResultArray = MyApplication.prefs.getTarotResultArray()
-                            getTarotRequest(localContext, tarotResultArray)
+                            getMyTarotList(localContext, tarotResultArray)
                         }
                         navigateInclusive(navController, item.screenName)
                     }

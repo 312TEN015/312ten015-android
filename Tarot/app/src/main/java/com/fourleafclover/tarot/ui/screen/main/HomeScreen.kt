@@ -26,8 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyViewModel
-import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel
@@ -63,7 +62,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         questionInputViewModel.clear()
         resultViewModel.clear()
         chatViewModel.clear()
-        harmonyViewModel.clear()
+        harmonyShareViewModel.clear()
 
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()

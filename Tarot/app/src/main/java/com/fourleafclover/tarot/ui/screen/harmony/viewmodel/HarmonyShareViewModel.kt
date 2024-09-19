@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class HarmonyViewModel: ViewModel() {
+class HarmonyShareViewModel: ViewModel() {
 
     private var userNickname = mutableStateOf("")   // 사용자 닉네임
     private var partnerNickname = mutableStateOf("")    // 상대방 닉네임

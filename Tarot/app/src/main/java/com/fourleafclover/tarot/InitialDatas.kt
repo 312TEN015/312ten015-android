@@ -7,7 +7,7 @@ import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
@@ -63,7 +63,7 @@ var sharedTarotResult = TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(),
 val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
 fun getRandomCards(): List<Int> { return entireCards.toMutableList().shuffled() }
 
-val harmonyViewModel = HarmonyViewModel()
+val harmonyShareViewModel = HarmonyShareViewModel()
 val loadingViewModel = LoadingViewModel()
 val chatViewModel = ChatViewModel()
 val fortuneViewModel = FortuneViewModel()

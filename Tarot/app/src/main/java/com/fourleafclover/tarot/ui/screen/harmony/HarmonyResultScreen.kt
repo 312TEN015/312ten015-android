@@ -29,13 +29,13 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.tarotOutputDto
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.dummyTarotOutputDto
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -85,7 +85,7 @@ fun HarmonyResultScreenPreview(
         ) {
 
             TextH02M22(
-                text = "${if (resultViewModel.isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${if (resultViewModel.isMyTab()) harmonyShareViewModel.getUserNickname() else harmonyShareViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
                     .background(color = backgroundColor_2)
@@ -178,7 +178,7 @@ private fun OverallResult() {
         )
 
         TextB01M18(
-            text = tarotOutputDto.overallResult?.summary.toString(),
+            text = dummyTarotOutputDto.overallResult?.summary.toString(),
             color = white,
             modifier = Modifier
                 .padding(top = 24.dp)
@@ -186,7 +186,7 @@ private fun OverallResult() {
         )
 
         TextB02M16(
-            text = tarotOutputDto.overallResult?.full.toString(),
+            text = dummyTarotOutputDto.overallResult?.full.toString(),
             color = gray_3,
             modifier = Modifier
                 .fillMaxWidth()
@@ -199,7 +199,7 @@ private fun OverallResult() {
                 resultViewModel.openCompleteDialog()
 
                 // 타로 결과 id 저장
-                MyApplication.prefs.addTarotResult(tarotOutputDto.tarotId)
+                MyApplication.prefs.addTarotResult(dummyTarotOutputDto.tarotId)
                 resultViewModel.saveResult()
             },
             shape = RoundedCornerShape(10.dp),
@@ -261,7 +261,7 @@ private fun OverallResult() {
                 .clickable {
                     setDynamicLink(
                         localContext,
-                        tarotOutputDto.tarotId,
+                        dummyTarotOutputDto.tarotId,
                         ShareLinkType.MY,
                         ShareActionType.OPEN_SHEET
                     )

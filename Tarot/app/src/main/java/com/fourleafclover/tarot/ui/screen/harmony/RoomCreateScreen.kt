@@ -1,8 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import android.os.Handler
-import android.os.Looper
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,7 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.RoomDeletedDialog
 import com.fourleafclover.tarot.ui.component.VerticalYesNoDialog
@@ -221,13 +217,14 @@ fun OpenRoomExistDialog(
                 onClickNo = {
                     roomCreateViewModel.openRoomExistDialog.value = false
                     // 기존 방으로 입장하기
-                    harmonyViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
+                    harmonyShareViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
                     navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
                             },
                 onClickClose = { roomCreateViewModel.openRoomExistDialog.value = false },
                 onClickOk = {
                     roomCreateViewModel.openRoomExistDialog.value = false
                     // 새로운 방 입장하기
+                    harmonyShareViewModel.roomId.value = ""
                     navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
                 })
         }

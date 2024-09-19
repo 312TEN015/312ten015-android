@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.harmonyViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import kotlinx.coroutines.launch

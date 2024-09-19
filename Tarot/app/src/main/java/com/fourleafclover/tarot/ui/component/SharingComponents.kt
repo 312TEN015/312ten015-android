@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_7
@@ -41,14 +41,14 @@ fun ShareLinkOrCopy(){
             iconResource = R.drawable.share_g2,
             text = "초대 링크 공유",
             onClick = {
-                setDynamicLink(localContext, harmonyViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
+                setDynamicLink(localContext, harmonyShareViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
             })
         HowToShareButton(
             modifier = Modifier.weight(1f),
             iconResource = R.drawable.unlink_g2,
             text = "초대 링크 복사",
             onClick = {
-                setDynamicLink(localContext, harmonyViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
+                setDynamicLink(localContext, harmonyShareViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
             })
     }
 }

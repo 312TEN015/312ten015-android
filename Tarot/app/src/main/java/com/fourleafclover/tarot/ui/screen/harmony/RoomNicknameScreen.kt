@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.AppBarClose
 import com.fourleafclover.tarot.ui.component.ButtonNext
@@ -83,7 +83,7 @@ fun RoomNicknameScreen(
                             color = white
                         ),
                         onValueChange = { newText -> nicknameViewModel.updateNickname(newText) },
-                        value = nicknameViewModel.getNicknameString(),
+                        value = nicknameViewModel.nickname.value,
                         placeholder = {
                             TextB03M14(
                                 text = "별명을 입력해주세요.",
@@ -128,7 +128,7 @@ fun RoomNicknameScreen(
                 TextCaptionM12(
                     modifier = Modifier
                         .padding(top = 8.dp, start = 16.dp, end = 16.dp)
-                        .alpha(if (nicknameViewModel.getIsCaptionVisible()) 1f else 0f),
+                        .alpha(if (nicknameViewModel.isCaptionVisible.value) 1f else 0f),
                     text = "최대 10글자를 입력할 수 있어요.",
                     color = errorRed
                 )
@@ -136,10 +136,10 @@ fun RoomNicknameScreen(
 
             ButtonNext(
                 onClick = {
-                    harmonyViewModel.setUserNickname(nicknameViewModel.getNicknameString())
+                    harmonyShareViewModel.setUserNickname(nicknameViewModel.nickname.value)
 
                     // 새로 방을 생성
-                    if (harmonyViewModel.roomId.value.isEmpty()) {
+                    if (harmonyShareViewModel.roomId.value.isEmpty()) {
                         loadingViewModel.startLoading(
                             navController,
                             ScreenEnum.RoomCreateLoadingScreen,

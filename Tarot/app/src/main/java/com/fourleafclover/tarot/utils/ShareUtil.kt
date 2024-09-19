@@ -11,7 +11,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
@@ -47,12 +47,12 @@ fun setDynamicLink(
     actionType: ShareActionType
 ){
     if (linkType == ShareLinkType.HARMONY) {
-        if (harmonyViewModel.roomId.value.isNotEmpty()){
-            if (harmonyViewModel.shortLink.isNotEmpty())
-                doShare(context, actionType, harmonyViewModel.shortLink.toUri())
-            else if (harmonyViewModel.dynamicLink.isNotEmpty())
-                doShare(context, actionType, harmonyViewModel.dynamicLink.toUri())
-            else if (harmonyViewModel.dynamicLink.isEmpty() && harmonyViewModel.shortLink.isEmpty())
+        if (harmonyShareViewModel.roomId.value.isNotEmpty()){
+            if (harmonyShareViewModel.shortLink.isNotEmpty())
+                doShare(context, actionType, harmonyShareViewModel.shortLink.toUri())
+            else if (harmonyShareViewModel.dynamicLink.isNotEmpty())
+                doShare(context, actionType, harmonyShareViewModel.dynamicLink.toUri())
+            else if (harmonyShareViewModel.dynamicLink.isEmpty() && harmonyShareViewModel.shortLink.isEmpty())
                 getDynamicLink(context, value, linkType, actionType)
             return
         }
@@ -78,7 +78,7 @@ fun getDynamicLink(
     }
 
     if (linkType == ShareLinkType.HARMONY)
-        harmonyViewModel.shortLink = dynamicLink.uri.toString()
+        harmonyShareViewModel.shortLink = dynamicLink.uri.toString()
 
    val shortLinkTask = Firebase.dynamicLinks.shortLinkAsync(ShortDynamicLink.Suffix.SHORT) {
         longLink = dynamicLink.uri
@@ -92,7 +92,7 @@ fun getDynamicLink(
             doShare(context, actionType, shortLink.shortLink)
 
             if (linkType == ShareLinkType.HARMONY)
-                harmonyViewModel.shortLink = shortLink.shortLink.toString()
+                harmonyShareViewModel.shortLink = shortLink.shortLink.toString()
 
        }
        .addOnFailureListener {
@@ -159,13 +159,13 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             // 타로 결과 공유
             if (deepLinkUri.getBooleanQueryParameter("tarotId", false)){
                 val sharedTarotId = deepLinkUri.getQueryParameter("tarotId")!!
-                getSharedTarotRequest(activity, navController, sharedTarotId)
+                getSharedTarotDetail(activity, navController, sharedTarotId)
                 loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ShareDetailScreen)
             }
 
             // 궁합 초대
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
-                harmonyViewModel.roomId.value = deepLinkUri.getQueryParameter("roomId")!!
+                harmonyShareViewModel.roomId.value = deepLinkUri.getQueryParameter("roomId")!!
                 MyApplication.connectSocket()
 
                 navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
