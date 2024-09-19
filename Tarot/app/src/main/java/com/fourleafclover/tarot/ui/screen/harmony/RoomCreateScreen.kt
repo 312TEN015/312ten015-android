@@ -212,17 +212,21 @@ fun OpenRoomExistDialog(
 ) {
 
     if (roomCreateViewModel.openRoomExistDialog.value) {
-        Dialog(onDismissRequest = { roomCreateViewModel.openRoomExistDialog.value = false }) {
+        Dialog(onDismissRequest = { roomCreateViewModel.closeRoomExistDialog() }) {
             VerticalYesNoDialog(
                 onClickNo = {
-                    roomCreateViewModel.openRoomExistDialog.value = false
-                    // 기존 방으로 입장하기
-                    harmonyShareViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
-                    navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
+                    if (roomCreateViewModel.isRoomExpired.value) {
+                        roomCreateViewModel.openRoomDeletedDialog()
+                    }else{
+                        roomCreateViewModel.closeRoomExistDialog()
+                        // 기존 방으로 입장하기
+                        harmonyShareViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
+                        navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
+                    }
                             },
-                onClickClose = { roomCreateViewModel.openRoomExistDialog.value = false },
+                onClickClose = { roomCreateViewModel.closeRoomExistDialog() },
                 onClickOk = {
-                    roomCreateViewModel.openRoomExistDialog.value = false
+                    roomCreateViewModel.closeRoomExistDialog()
                     // 새로운 방 입장하기
                     harmonyShareViewModel.roomId.value = ""
                     navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
@@ -239,10 +243,10 @@ fun OpenRoomDeletedDialog(
 ) {
 
     if (roomCreateViewModel.openRoomDeletedDialog.value) {
-        Dialog(onDismissRequest = { roomCreateViewModel.openRoomDeletedDialog.value = false }) {
+        Dialog(onDismissRequest = { roomCreateViewModel.closeRoomDeletedDialog() }) {
             RoomDeletedDialog(
-                onClickClose = { roomCreateViewModel.openRoomDeletedDialog.value = false },
-                onClickOk = { roomCreateViewModel.openRoomDeletedDialog.value = false }
+                onClickClose = { roomCreateViewModel.closeRoomDeletedDialog() },
+                onClickOk = { roomCreateViewModel.closeRoomDeletedDialog() }
             )
         }
     }

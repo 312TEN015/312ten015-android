@@ -10,8 +10,30 @@ import java.util.Date
 
 class RoomCreateViewModel: ViewModel() {
 
-    var openRoomDeletedDialog = mutableStateOf(false)
-    var openRoomExistDialog = mutableStateOf(false)
+    private var _openRoomDeletedDialog = mutableStateOf(false)
+    val openRoomDeletedDialog get() = _openRoomDeletedDialog
+
+    private var _openRoomExistDialog = mutableStateOf(false)
+    val openRoomExistDialog get() = _openRoomExistDialog
+
+    private var _isRoomExpired = mutableStateOf(false)
+    val isRoomExpired get() = _isRoomExpired
+
+    fun openRoomDeletedDialog() {
+        _openRoomDeletedDialog.value = true
+    }
+
+    fun openRoomExistDialog() {
+        _openRoomExistDialog.value = true
+    }
+
+    fun closeRoomDeletedDialog() {
+        _openRoomDeletedDialog.value = false
+    }
+
+    fun closeRoomExistDialog() {
+        _openRoomExistDialog.value = false
+    }
 
 
     fun checkRoomExist(navController: NavHostController) {
@@ -20,22 +42,28 @@ class RoomCreateViewModel: ViewModel() {
         val createdAtString = MyApplication.prefs.getHarmonyRoomCreatedAt()
 
         if (roomId.isNotEmpty() && createdAtString.isNotEmpty()) {
-            val createdAt = Date(MyApplication.prefs.getHarmonyRoomCreatedAt())
-            val mNow = System.currentTimeMillis()
-            val diffMilliseconds = Date(mNow).time - createdAt.time
-            val diffHours = diffMilliseconds / (60 * 60 * 1000)
-            if (diffHours >= 1) {
-                // 1시간 지나서 사라짐
-                openRoomDeletedDialog.value = true
-                MyApplication.prefs.saveHarmonyRoomId("")
-                MyApplication.prefs.saveHarmonyRoomCreatedAt("")
-            } else {
-                // 이미 생성하신 초대방이 있어요
-                openRoomExistDialog.value = true
-            }
+            // 방 생성 후 1시간 경과 체크
+            checkRoomCreatedAt()
+
+            // 이미 생성하신 초대방이 있어요
+            openRoomExistDialog()
+
         } else {
             // 새로 초대방 만들기
             navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
+        }
+    }
+
+    fun checkRoomCreatedAt() {
+        val createdAt = Date(MyApplication.prefs.getHarmonyRoomCreatedAt())
+        val mNow = System.currentTimeMillis()
+        val diffMilliseconds = Date(mNow).time - createdAt.time
+        val diffHours = diffMilliseconds / (60 * 60 * 1000)
+        if (diffHours >= 1) {
+            // 1시간 지나서 사라짐
+            _isRoomExpired.value = true
+            MyApplication.prefs.saveHarmonyRoomId("")
+            MyApplication.prefs.saveHarmonyRoomCreatedAt("")
         }
     }
 
