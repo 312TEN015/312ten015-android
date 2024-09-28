@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import kotlinx.coroutines.launch
@@ -72,10 +73,17 @@ class ResultViewModel() : ViewModel() {
 
     fun distinguishCardResult(tarotResult: TarotOutputDto){
         initResult()
-        myCardResults = tarotResult.cardResults!!.slice(0..2)
-        myCardNumbers = tarotResult.cards.slice(0..2)
-        partnerCardResults = tarotResult.cardResults!!.slice(3..5)
-        partnerCardNumbers = tarotResult.cards.slice(3..5)
+        if (harmonyShareViewModel.isRoomOwner.value) {
+            myCardResults = tarotResult.cardResults!!.slice(0..2)
+            myCardNumbers = tarotResult.cards.slice(0..2)
+            partnerCardResults = tarotResult.cardResults!!.slice(3..5)
+            partnerCardNumbers = tarotResult.cards.slice(3..5)
+        } else {
+            partnerCardResults = tarotResult.cardResults!!.slice(0..2)
+            partnerCardNumbers = tarotResult.cards.slice(0..2)
+            myCardResults = tarotResult.cardResults!!.slice(3..5)
+            myCardNumbers = tarotResult.cards.slice(3..5)
+        }
     }
 
     fun openCloseDialog(){

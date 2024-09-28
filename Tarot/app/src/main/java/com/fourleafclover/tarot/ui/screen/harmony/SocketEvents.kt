@@ -29,12 +29,7 @@ var onCreateComplete = Emitter.Listener { args ->
         Log.d("socket-test", "createComplete " + args[0].toString())
 
         val roomId = JSONObject(args[0].toString()).getString("roomId")
-        harmonyShareViewModel.roomId.value = roomId
-        MyApplication.prefs.saveHarmonyRoomId(roomId)
-
-        val mNow = System.currentTimeMillis()
-        val mDate = Date(mNow)
-        MyApplication.prefs.saveHarmonyRoomCreatedAt(mDate.toString())
+        harmonyShareViewModel.createNewRoom(roomId)
 
         loadingViewModel.updateLoadingState(false)
     }

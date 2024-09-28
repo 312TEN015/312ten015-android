@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
+import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
@@ -160,7 +161,7 @@ fun HarmonyResultScreenPreview(
 
 @Preview
 @Composable
-private fun OverallResult() {
+private fun OverallResult(tarotOutputDto: TarotOutputDto = dummyTarotOutputDto) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -178,7 +179,7 @@ private fun OverallResult() {
         )
 
         TextB01M18(
-            text = dummyTarotOutputDto.overallResult?.summary.toString(),
+            text = tarotOutputDto.overallResult?.summary.toString(),
             color = white,
             modifier = Modifier
                 .padding(top = 24.dp)
@@ -186,7 +187,7 @@ private fun OverallResult() {
         )
 
         TextB02M16(
-            text = dummyTarotOutputDto.overallResult?.full.toString(),
+            text = tarotOutputDto.overallResult?.full.toString(),
             color = gray_3,
             modifier = Modifier
                 .fillMaxWidth()
@@ -199,7 +200,7 @@ private fun OverallResult() {
                 resultViewModel.openCompleteDialog()
 
                 // 타로 결과 id 저장
-                MyApplication.prefs.addTarotResult(dummyTarotOutputDto.tarotId)
+                MyApplication.prefs.addTarotResult(tarotOutputDto.tarotId)
                 resultViewModel.saveResult()
             },
             shape = RoundedCornerShape(10.dp),
@@ -261,7 +262,7 @@ private fun OverallResult() {
                 .clickable {
                     setDynamicLink(
                         localContext,
-                        dummyTarotOutputDto.tarotId,
+                        tarotOutputDto.tarotId,
                         ShareLinkType.MY,
                         ShareActionType.OPEN_SHEET
                     )

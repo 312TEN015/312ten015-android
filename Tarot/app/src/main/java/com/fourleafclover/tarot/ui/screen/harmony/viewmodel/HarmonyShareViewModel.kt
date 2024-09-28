@@ -3,30 +3,43 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fourleafclover.tarot.MyApplication
 import kotlinx.coroutines.launch
+import java.util.Date
 
 class HarmonyShareViewModel: ViewModel() {
 
     private var userNickname = mutableStateOf("")   // 사용자 닉네임
     private var partnerNickname = mutableStateOf("")    // 상대방 닉네임
 
-    var roomId = mutableStateOf("")       // 생성된 방 코드
-    private var roomCreatedAt = "" // 방 생성된 시간
+    private var _roomId = mutableStateOf("")       // 현재 들어가 있는 방 코드
+    val roomId get() = _roomId
+
+    private var _createdRoomId = mutableStateOf("")       // 내가 생성한 방 코드
+    val createdRoomId get() = _createdRoomId
+
+    private var _invitedRoomId = mutableStateOf("")       // 초대된 방 코드
+    val invitedRoomId get() = _invitedRoomId
+
+
+    private var _isRoomOwner = mutableStateOf(false)
+    val isRoomOwner get() = _isRoomOwner
 
     var dynamicLink = ""
     var shortLink = ""
 
-    private var roomScenario = mutableStateOf(Scenario.Opening)
-
     fun clear() = viewModelScope.launch { onCleared() }
 
-    fun resetHarmonyData() {
-        setUserNickname("")
-        setPartnerNickname("")
-        roomId.value = ""
-        roomCreatedAt = ""
-        dynamicLink = ""
-        shortLink = ""
+    fun setIsRoomOwner(isRoomOwner: Boolean) {
+        _isRoomOwner.value = isRoomOwner
+    }
+
+    fun getOwnerNickname(): String {
+        return if (isRoomOwner.value) userNickname.value else partnerNickname.value
+    }
+
+    fun getInviteeNickname(): String {
+        return if (!isRoomOwner.value) userNickname.value else partnerNickname.value
     }
 
     fun setUserNickname(userNickname: String) {
@@ -41,18 +54,44 @@ class HarmonyShareViewModel: ViewModel() {
 
     fun getPartnerNickname() = partnerNickname.value
 
-    fun setRoomScenario(newScenario: Scenario){
-        this.roomScenario.value = newScenario
+    // 기존 내가 만든 방에 입장하기
+    fun enterExistingRoom() {
+        _roomId.value = MyApplication.prefs.getHarmonyRoomId()
+        _createdRoomId.value = MyApplication.prefs.getHarmonyRoomId()
     }
 
-    fun getRoomScenario() = roomScenario.value
+    // 새로운 방을 생성
+    fun createNewRoom(newRoomId: String) {
+        _roomId.value = newRoomId
+        _createdRoomId.value = newRoomId
+        _isRoomOwner.value = true
 
-    fun setRoomCreatedAt() {
-        // TODO 방 생성 시간 저장하기
-        roomCreatedAt = ""
+        val mNow = System.currentTimeMillis()
+        val mDate = Date(mNow)
+        MyApplication.prefs.saveHarmonyRoomCreatedAt(mDate.toString())
     }
-    
-    fun getRoomCreatedAt() {
-        // TODO 1시간 지났는지 검사 후 지났으면 초기화 후 리턴시키기
+
+    // 초대 또는 생성한 방에서 나가기, 1시간 지나서 사라짐, 궁합 보기 완료
+    fun deleteRoom() {
+        _roomId.value = ""
+
+        if (_isRoomOwner.value) {
+            _createdRoomId.value = ""
+            MyApplication.prefs.saveHarmonyRoomId("")
+            MyApplication.prefs.saveHarmonyRoomCreatedAt("")
+        } else {
+            _invitedRoomId.value = ""
+        }
+
+        _isRoomOwner.value = false
+
     }
+
+
+    // 초대된 방에 들어가기
+    fun enterInvitedRoom(invitedRoomId: String) {
+        _roomId.value = invitedRoomId
+        _invitedRoomId.value = invitedRoomId
+    }
+
 }

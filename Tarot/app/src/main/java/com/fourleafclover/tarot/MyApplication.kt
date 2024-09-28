@@ -48,7 +48,7 @@ class MyApplication: Application() {
 
         // 궁합
 //        prefs.addTarotResult("ktNAAiCk3DVX7G-_hh5_C")
-//        prefs.addTarotResult("zkm4uuT_VDSvnS8ba4M_h")
+//        prefs.addTarotResult("A4Pz2ackc0XQlDGKRqHYx")
 
 
 //        prefs.deleteIsPickCardIndicateComplete()

@@ -6,10 +6,11 @@ import android.widget.Toast
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.chatViewModel
-import com.fourleafclover.tarot.data.MatchCards
+import com.fourleafclover.tarot.data.MatchTarotInputDto
 import com.fourleafclover.tarot.data.TarotIdsInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
@@ -149,20 +150,19 @@ fun getTarotResult(localContext: Context, reconnectCount: Int = 0) {
 
 
 /** 궁합 결과 요청 POST */
-fun getMatchResult(reconnectCount: Int = 0){
-    val cardArray = arrayListOf(
-        chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber,
-        chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber,
-        chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber,
-        chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
-    )
+fun getMatchResult(localContext: Context, reconnectCount: Int = 0){
 
     /* 테스트 */
 //    val cardArray = arrayListOf(1,2,3,4,5,6)
 
-    MyApplication.tarotService.getMatchResult(MatchCards(cardArray))
+    MyApplication.tarotService.getMatchResult(
+        MatchTarotInputDto(
+            harmonyShareViewModel.getOwnerNickname(),
+            harmonyShareViewModel.getInviteeNickname(),
+            harmonyShareViewModel.roomId.value,
+            setCardArray()
+        )
+    )
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
                 call: Call<TarotOutputDto>,
@@ -174,8 +174,7 @@ fun getMatchResult(reconnectCount: Int = 0){
                     return
                 }
 
-                dummyTarotOutputDto = response.body()!!
-                resultViewModel.distinguishCardResult(dummyTarotOutputDto)
+                resultViewModel.distinguishCardResult(response.body()!!)
                 loadingViewModel.updateLoadingState(false)
             }
 
@@ -185,12 +184,36 @@ fun getMatchResult(reconnectCount: Int = 0){
                 if (reconnectCount == 3) {
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                     loadingViewModel.updateLoadingState(false)
+                    harmonyShareViewModel.deleteRoom()
+                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
                 }else{
-                    getMatchResult(reconnectCount+1)
+                    getMatchResult(localContext, reconnectCount+1)
                 }
 
             }
         })
+}
+
+fun setCardArray(): ArrayList<Int> {
+    return if (harmonyShareViewModel.isRoomOwner.value) {
+        arrayListOf(
+            chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber,
+            chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber,
+            chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber,
+            chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber,
+            chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber,
+            chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
+        )
+    } else {
+        arrayListOf(
+            chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber,
+            chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber,
+            chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber,
+            chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber,
+            chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber,
+            chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber,
+        )
+    }
 }
 
 

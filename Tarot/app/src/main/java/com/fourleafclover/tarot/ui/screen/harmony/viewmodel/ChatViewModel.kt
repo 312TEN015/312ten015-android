@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.PickedCardNumberState

@@ -88,6 +88,7 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                     .clickable {
                         // 소켓 연결하기
                         MyApplication.connectSocket()
+                        harmonyShareViewModel.setIsRoomOwner(true)
                         if (MyApplication.socket.connected()){
                             roomCreateViewModel.checkRoomExist(navController)
                         }else{
@@ -226,7 +227,7 @@ fun OpenRoomExistDialog(
                     }else{
                         roomCreateViewModel.closeRoomExistDialog()
                         // 기존 방으로 입장하기
-                        harmonyShareViewModel.roomId.value = MyApplication.prefs.getHarmonyRoomId()
+                        harmonyShareViewModel.enterExistingRoom()
                         navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
                     }
                             },
@@ -234,7 +235,7 @@ fun OpenRoomExistDialog(
                 onClickOk = {
                     roomCreateViewModel.closeRoomExistDialog()
                     // 새로운 방 입장하기
-                    harmonyShareViewModel.roomId.value = ""
+                    roomCreateViewModel.isRoomExpired.value = false
                     navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
                 })
         }

@@ -43,7 +43,11 @@ data class CardResultData(
 // 뽑은 타로 결과에 대한 요약문, 전문
 data class OverallResultData(
     val summary: String,
-    val full: String
+    val full: String,
+
+    val firstUser: String = "", // 방 생성자
+    val secondUser: String = "", // 초대자
+    val roomId: String = "",
 )
 
 data class TarotIdsInputDto(
@@ -54,6 +58,9 @@ data class TarotIdsOutputDto(
     val tarotIds : ArrayList<TarotOutputDto> = arrayListOf<TarotOutputDto>()
 )
 
-data class MatchCards(
-    val cards: ArrayList<Int>
+data class MatchTarotInputDto (
+    val firstUser: String,       // 방 생성자
+    val secondUser: String,      // 초대자
+    val roomId: String,
+    val cards: ArrayList<Int>       // 카드 리스트 (방 생성자 카드, 초대자 카드 순서)
 )

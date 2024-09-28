@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import java.util.Date
@@ -62,8 +63,7 @@ class RoomCreateViewModel: ViewModel() {
         if (diffHours >= 1) {
             // 1시간 지나서 사라짐
             _isRoomExpired.value = true
-            MyApplication.prefs.saveHarmonyRoomId("")
-            MyApplication.prefs.saveHarmonyRoomCreatedAt("")
+            harmonyShareViewModel.deleteRoom()
         }
     }
 

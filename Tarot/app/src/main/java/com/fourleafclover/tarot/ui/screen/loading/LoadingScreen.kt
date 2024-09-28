@@ -37,7 +37,7 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
             getTarotResult(localContext)
         }
         else if (loadingViewModel.destination == ScreenEnum.RoomResultScreen){
-            getMatchResult()
+            getMatchResult(localContext)
             /* 테스트 코드 */
 //            Handler(Looper.getMainLooper())
 //                .postDelayed({
