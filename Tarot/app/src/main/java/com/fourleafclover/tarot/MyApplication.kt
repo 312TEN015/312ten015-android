@@ -4,6 +4,7 @@ import android.app.Application
 import com.fourleafclover.tarot.network.PrettyJsonLogger
 import android.util.Log
 import com.fourleafclover.tarot.network.TarotService
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.utils.PreferenceUtil
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -27,9 +28,6 @@ class MyApplication: Application() {
 
         fun connectSocket(){
             if (!socket.connected()) socket.connect()
-
-            if (socket.connected()) Log.d("socket-test", "socket connected for create")
-            else Log.d("socket-test", "socket connect failed")
         }
     }
 

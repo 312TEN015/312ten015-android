@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
@@ -167,8 +168,12 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
                 harmonyShareViewModel.roomId.value = deepLinkUri.getQueryParameter("roomId")!!
                 MyApplication.connectSocket()
+                if (MyApplication.socket.connected()){
+                    navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
+                }else{
+                    Toast.makeText(activity, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                }
 
-                navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
             }
 
             activity.intent = null

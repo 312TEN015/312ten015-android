@@ -1,5 +1,6 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +53,7 @@ import com.fourleafclover.tarot.ui.theme.white
 @Preview
 @Composable
 fun RoomCreateScreen(navController: NavHostController = rememberNavController()) {
-
+    val localContext = LocalContext.current
     val roomCreateViewModel = remember { RoomCreateViewModel() }
 
     OpenRoomDeletedDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
@@ -86,7 +88,11 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                     .clickable {
                         // 소켓 연결하기
                         MyApplication.connectSocket()
-                        roomCreateViewModel.checkRoomExist(navController)
+                        if (MyApplication.socket.connected()){
+                            roomCreateViewModel.checkRoomExist(navController)
+                        }else{
+                            Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                        }
                     }
             ) {
                 Row(
