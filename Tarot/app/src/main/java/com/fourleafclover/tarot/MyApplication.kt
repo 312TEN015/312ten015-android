@@ -3,6 +3,8 @@ package com.fourleafclover.tarot
 import android.app.Application
 import com.fourleafclover.tarot.network.PrettyJsonLogger
 import android.util.Log
+import android.widget.Toast
+import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.utils.PreferenceUtil

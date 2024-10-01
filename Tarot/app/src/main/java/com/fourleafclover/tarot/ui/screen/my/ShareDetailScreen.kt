@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.sharedTarotResult
+import com.fourleafclover.tarot.shareViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
@@ -43,7 +43,7 @@ import com.fourleafclover.tarot.ui.theme.white
 @Preview
 fun ShareDetailScreen(navController: NavHostController = rememberNavController()){
     val localContext = LocalContext.current
-    val tarotSubjectData = fortuneViewModel.getPickedTopic(sharedTarotResult.tarotType)
+    val tarotSubjectData = fortuneViewModel.getPickedTopic(shareViewModel.sharedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
 
     Column(modifier = backgroundModifier)
@@ -72,7 +72,7 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = fortuneViewModel.getSubjectImoji(localContext, sharedTarotResult.tarotType)
+                val imoji = fortuneViewModel.getSubjectImoji(localContext, shareViewModel.sharedTarotResult.tarotType)
                 TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     color = gray_2,
@@ -83,7 +83,7 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
                 )
 
                 TextB03M14(
-                    text = sharedTarotResult.createdAt,
+                    text = shareViewModel.sharedTarotResult.createdAt,
                     color = gray_4,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -93,7 +93,7 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
             }
 
             Box(modifier = Modifier.background(color = backgroundColor_2)) {
-                CardSlider(tarotResult = sharedTarotResult)
+                CardSlider(tarotResult = shareViewModel.sharedTarotResult)
             }
 
             Column(
@@ -110,13 +110,13 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
                 )
 
                 TextB01M18(
-                    text = sharedTarotResult.overallResult?.summary.toString(),
+                    text = shareViewModel.sharedTarotResult.overallResult?.summary.toString(),
                     color = white,
                     modifier = Modifier.padding(top = 24.dp)
                 )
 
                 TextB02M16(
-                    text = sharedTarotResult.overallResult?.full.toString(),
+                    text = shareViewModel.sharedTarotResult.overallResult?.full.toString(),
                     color = gray_3,
                     modifier = Modifier
                         .padding(top = 12.dp, bottom = 64.dp)

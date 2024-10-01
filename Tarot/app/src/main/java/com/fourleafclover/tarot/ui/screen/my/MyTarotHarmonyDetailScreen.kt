@@ -1,5 +1,6 @@
 package com.fourleafclover.tarot.ui.screen.my
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -110,7 +111,7 @@ fun MyTarotHarmonyDetailPreview(
                 )
 
                 TextB03M14(
-                    text = "${myTarotViewModel.selectedTarotResult.createdAt} • {별명}님과 본 궁합",
+                    text = myTarotViewModel.selectedTarotResult.createdAt,
                     color = gray_4,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -134,47 +135,53 @@ fun MyTarotHarmonyDetailPreview(
                 ) {
                     Box(modifier = Modifier
                         .clickable {
-                            resultViewModel.myTab()
+                            myTarotViewModel.roomOwnerTab()
                         }
                         .padding(end = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (resultViewModel.isMyTab()) white else gray_7
+                            color = if (myTarotViewModel.isRoomOwnerTab()) white else gray_7
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
                         contentAlignment = Alignment.Center) {
 
                         TextB03M14(
-                            color = if (resultViewModel.isMyTab()) gray_7 else gray_5,
-                            text = "내가 선택한 카드",
+                            color = if (myTarotViewModel.isRoomOwnerTab()) gray_7 else gray_5,
+                            text = "${myTarotViewModel.selectedTarotResult.overallResult?.firstUser}님의 카드",
                             textAlign = TextAlign.Center
                         )
                     }
 
                     Box(modifier = Modifier
                         .clickable {
-                            resultViewModel.partnerTab()
+                            myTarotViewModel.roomInviteeTab()
                         }
                         .padding(start = 4.dp)
                         .background(
                             shape = RoundedCornerShape(6.dp),
-                            color = if (resultViewModel.isMyTab()) gray_7 else white
+                            color = if (myTarotViewModel.isRoomOwnerTab()) gray_7 else white
                         )
                         .padding(vertical = 8.dp, horizontal = 16.dp)
                         .weight(1f),
                         contentAlignment = Alignment.Center) {
 
                         TextB03M14(
-                            color = if (resultViewModel.isMyTab()) gray_5 else gray_7,
-                            text = "상대방 카드",
+                            color = if (myTarotViewModel.isRoomOwnerTab()) gray_5 else gray_7,
+                            text = "${myTarotViewModel.selectedTarotResult.overallResult?.secondUser}님의 카드",
                             textAlign = TextAlign.Center
                         )
                     }
                 }
 
 
-                HarmonyCardSlider(outsideHorizontalPadding = 40.dp)
+                HarmonyCardSlider(
+                    outsideHorizontalPadding = 40.dp,
+                    sliderList = getSliderList(LocalContext.current),
+                    firstCardResults = myTarotViewModel.roomOwnerCardResults,
+                    secondCardResults = myTarotViewModel.inviteeCardResults,
+                    isFirstTab = myTarotViewModel.isRoomOwnerTab()
+                )
 
             }
 
@@ -184,6 +191,21 @@ fun MyTarotHarmonyDetailPreview(
         }
 
     }
+}
+
+private fun getSliderList(context: Context) : ArrayList<Int> {
+    val sliderList: ArrayList<Int> = arrayListOf(0, 0, 0)
+    if (myTarotViewModel.isRoomOwnerTab()) {
+        sliderList[0] = fortuneViewModel.getCardImageId(context, myTarotViewModel.roomOwnerCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(context, myTarotViewModel.roomOwnerCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(context, myTarotViewModel.roomOwnerCardNumbers[2].toString())
+    }else {
+        sliderList[0] = fortuneViewModel.getCardImageId(context, myTarotViewModel.inviteeCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(context, myTarotViewModel.inviteeCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(context, myTarotViewModel.inviteeCardNumbers[2].toString())
+    }
+
+    return sliderList
 }
 
 @Preview

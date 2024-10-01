@@ -168,13 +168,9 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
 
                 MyApplication.connectSocket()
-                if (MyApplication.socket.connected()){
-                    harmonyShareViewModel.setIsRoomOwner(false)
-                    harmonyShareViewModel.enterInvitedRoom(deepLinkUri.getQueryParameter("roomId")!!)
-                    navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
-                }else{
-                    Toast.makeText(activity, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-                }
+                harmonyShareViewModel.setIsRoomOwner(false)
+                harmonyShareViewModel.enterInvitedRoom(deepLinkUri.getQueryParameter("roomId")!!)
+                navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
 
             }
 

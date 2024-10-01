@@ -258,6 +258,6 @@ class ChatViewModel : ViewModel() {
     )
 
     fun getAdjectives(): String {
-        return adjectives[(0..adjectives.size).random()]
+        return adjectives[(0 until adjectives.size).random()]
     }
 }

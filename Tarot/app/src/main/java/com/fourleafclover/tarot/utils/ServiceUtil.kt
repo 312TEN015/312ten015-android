@@ -16,9 +16,9 @@ import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel
-import com.fourleafclover.tarot.sharedTarotResult
+import com.fourleafclover.tarot.shareViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.dummyTarotOutputDto
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +27,7 @@ import retrofit2.Response
 // 마이 타로 화면
 fun getMyTarotList(
     localContext: Context,
+    navController: NavHostController,
     tarotResultArray: ArrayList<String>
 ) {
     Log.d("", tarotResultArray.joinToString(" "))
@@ -43,6 +44,8 @@ fun getMyTarotList(
                 }
 
                 myTarotViewModel.setMyTarotResults(response.body()!!)
+                navigateInclusive(navController, ScreenEnum.MyTarotScreen.name)
+
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
@@ -64,9 +67,9 @@ fun getSharedTarotDetail(
         navController,
         tarotId, 
         onResponse = {
-            sharedTarotResult = it
-            if (sharedTarotResult.tarotType == 5) {
-                resultViewModel.distinguishCardResult(sharedTarotResult)
+            shareViewModel.setSharedTarotResult(it)
+            if (it.tarotType == 5) {
+                shareViewModel.distinguishCardResult(it)
                 loadingViewModel.changeDestination(ScreenEnum.ShareHarmonyDetailScreen)
             }
             loadingViewModel.endLoading(navController)

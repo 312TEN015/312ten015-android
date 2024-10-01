@@ -73,6 +73,7 @@ class ResultViewModel() : ViewModel() {
 
     fun distinguishCardResult(tarotResult: TarotOutputDto){
         initResult()
+        setTarotResult(tarotResult)
         if (harmonyShareViewModel.isRoomOwner.value) {
             myCardResults = tarotResult.cardResults!!.slice(0..2)
             myCardNumbers = tarotResult.cards.slice(0..2)

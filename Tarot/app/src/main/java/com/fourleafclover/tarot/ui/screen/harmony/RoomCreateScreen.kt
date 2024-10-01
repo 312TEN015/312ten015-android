@@ -89,11 +89,7 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                         // 소켓 연결하기
                         MyApplication.connectSocket()
                         harmonyShareViewModel.setIsRoomOwner(true)
-                        if (MyApplication.socket.connected()){
-                            roomCreateViewModel.checkRoomExist(navController)
-                        }else{
-                            Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-                        }
+                        roomCreateViewModel.checkRoomExist(navController)
                     }
             ) {
                 Row(

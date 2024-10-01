@@ -340,7 +340,10 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                     onClick = {
                         if (item.screenName == ScreenEnum.MyTarotScreen.name) {
                             val tarotResultArray = MyApplication.prefs.getTarotResultArray()
-                            getMyTarotList(localContext, tarotResultArray)
+                            if (tarotResultArray.isNotEmpty()) {
+                                getMyTarotList(localContext, navController, tarotResultArray)
+                                return@BottomNavigationItem
+                            }
                         }
                         navigateInclusive(navController, item.screenName)
                     }

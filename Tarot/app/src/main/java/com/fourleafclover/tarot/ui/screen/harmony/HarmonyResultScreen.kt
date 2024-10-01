@@ -1,5 +1,6 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,6 +31,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
@@ -148,20 +150,40 @@ fun HarmonyResultScreenPreview(
                     }
                 }
 
-                HarmonyCardSlider(outsideHorizontalPadding = 40.dp)
+                HarmonyCardSlider(
+                    outsideHorizontalPadding = 40.dp,
+                    sliderList = getSliderList(LocalContext.current),
+                    firstCardResults = resultViewModel.myCardResults,
+                    secondCardResults = resultViewModel.partnerCardResults,
+                    isFirstTab = resultViewModel.isMyTab()
+                )
             }
 
 
-            OverallResult()
+            OverallResult(resultViewModel.tarotResult.value)
 
         }
 
     }
 }
 
-@Preview
+private fun getSliderList(context: Context) : ArrayList<Int> {
+    val sliderList: ArrayList<Int> = arrayListOf(0, 0, 0)
+    if (resultViewModel.isMyTab()) {
+        sliderList[0] = fortuneViewModel.getCardImageId(context, resultViewModel.myCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(context, resultViewModel.myCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(context, resultViewModel.myCardNumbers[2].toString())
+    }else {
+        sliderList[0] = fortuneViewModel.getCardImageId(context, resultViewModel.partnerCardNumbers[0].toString())
+        sliderList[1] = fortuneViewModel.getCardImageId(context, resultViewModel.partnerCardNumbers[1].toString())
+        sliderList[2] = fortuneViewModel.getCardImageId(context, resultViewModel.partnerCardNumbers[2].toString())
+    }
+
+    return sliderList
+}
+
 @Composable
-private fun OverallResult(tarotOutputDto: TarotOutputDto = dummyTarotOutputDto) {
+private fun OverallResult(tarotOutputDto: TarotOutputDto) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

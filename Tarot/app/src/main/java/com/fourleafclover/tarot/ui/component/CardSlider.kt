@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.resultViewModel
@@ -220,24 +221,15 @@ fun DotsIndicator(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-@Preview
 @Composable
 fun HarmonyCardSlider(
     modifier: Modifier = Modifier,
-    outsideHorizontalPadding: Dp = 0.dp
+    outsideHorizontalPadding: Dp = 0.dp,
+    sliderList: MutableList<Int> = arrayListOf(0, 0, 0),
+    firstCardResults: List<CardResultData>,
+    secondCardResults: List<CardResultData>,
+    isFirstTab: Boolean
 ) {
-
-    val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)
-    if (resultViewModel.isMyTab()) {
-        sliderList[0] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[0].toString())
-        sliderList[1] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[1].toString())
-        sliderList[2] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.myCardNumbers[2].toString())
-    }else {
-        sliderList[0] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[0].toString())
-        sliderList[1] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[1].toString())
-        sliderList[2] = fortuneViewModel.getCardImageId(LocalContext.current, resultViewModel.partnerCardNumbers[2].toString())
-    }
-
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -333,10 +325,10 @@ fun HarmonyCardSlider(
 
                     TextB04M12(
                         text = "# ${
-                            if (resultViewModel.isMyTab()) {
-                                resultViewModel.myCardResults[pagerState.currentPage].keywords[it]
+                            if (isFirstTab) {
+                                firstCardResults[pagerState.currentPage].keywords[it]
                             } else {
-                                resultViewModel.partnerCardResults[pagerState.currentPage].keywords[it]
+                                secondCardResults[pagerState.currentPage].keywords[it]
                             }
                         }",
                         color = gray_4,
@@ -350,10 +342,10 @@ fun HarmonyCardSlider(
             }
 
             TextB02M16(
-                text = if (resultViewModel.isMyTab()) {
-                    resultViewModel.myCardResults[pagerState.currentPage].description
+                text = if (isFirstTab) {
+                    firstCardResults[pagerState.currentPage].description
                 } else {
-                    resultViewModel.partnerCardResults[pagerState.currentPage].description
+                    secondCardResults[pagerState.currentPage].description
                 },
                 color = gray_3,
                 textAlign = TextAlign.Center,

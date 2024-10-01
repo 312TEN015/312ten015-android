@@ -45,7 +45,7 @@ class PreferenceUtil(context: Context) {
         saveTarotResult(
             getTarotResultArray()
                 .apply {
-                    if (this.size >= 10) this.removeFirst()
+                    if (this.size >= 10) this.removeAt(0)
                     add(tarotId)
                 })
     }
