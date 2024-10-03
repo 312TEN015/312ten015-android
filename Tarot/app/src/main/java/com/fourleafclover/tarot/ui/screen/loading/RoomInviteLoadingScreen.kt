@@ -17,10 +17,12 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
 import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.screen.harmony.onJoinComplete
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -58,7 +60,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
     
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarCloseWithDialog(
+        AppBarCloseChatWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

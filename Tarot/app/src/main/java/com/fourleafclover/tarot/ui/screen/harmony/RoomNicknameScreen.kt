@@ -25,6 +25,7 @@ import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -48,6 +49,8 @@ fun RoomNicknameScreen(
     navController: NavHostController = rememberNavController(),
     nicknameViewModel: NicknameViewModel = remember { NicknameViewModel() }
 ) {
+
+    PreventBackPressed()
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarCloseWithDialog(

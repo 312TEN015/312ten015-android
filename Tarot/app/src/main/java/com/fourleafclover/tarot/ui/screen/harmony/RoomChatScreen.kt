@@ -57,6 +57,8 @@ import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
 import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
+import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.screen.fortune.CardDeck
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardDeckStatus
@@ -90,6 +92,8 @@ fun RoomChatScreen(
 
     val chatState = chatViewModel.chatState.collectAsState()
     val partnerChatState = chatViewModel.partnerChatState.collectAsState()
+
+    PreventBackPressed()
 
 
     LaunchedEffect(Unit){

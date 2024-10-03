@@ -50,9 +50,9 @@ fun setDynamicLink(
     if (linkType == ShareLinkType.HARMONY) {
         if (harmonyShareViewModel.roomId.value.isNotEmpty()){
             if (harmonyShareViewModel.shortLink.isNotEmpty())
-                doShare(context, actionType, harmonyShareViewModel.shortLink.toUri())
+                doShare(context, actionType, harmonyShareViewModel.shortLink.toUri(), linkType)
             else if (harmonyShareViewModel.dynamicLink.isNotEmpty())
-                doShare(context, actionType, harmonyShareViewModel.dynamicLink.toUri())
+                doShare(context, actionType, harmonyShareViewModel.dynamicLink.toUri(), linkType)
             else if (harmonyShareViewModel.dynamicLink.isEmpty() && harmonyShareViewModel.shortLink.isEmpty())
                 getDynamicLink(context, value, linkType, actionType)
             return
@@ -90,14 +90,14 @@ fun getDynamicLink(
 
    }
        .addOnSuccessListener { shortLink ->
-            doShare(context, actionType, shortLink.shortLink)
+            doShare(context, actionType, shortLink.shortLink, linkType)
 
             if (linkType == ShareLinkType.HARMONY)
                 harmonyShareViewModel.shortLink = shortLink.shortLink.toString()
 
        }
        .addOnFailureListener {
-            doShare(context, actionType, dynamicLink.uri)
+            doShare(context, actionType, dynamicLink.uri, linkType)
        }
 }
 
@@ -105,10 +105,11 @@ fun getDynamicLink(
 fun doShare(
     context: Context,
     actionType: ShareActionType,
-    link: Uri?
+    link: Uri?,
+    linkType: ShareLinkType
 ){
     when(actionType) {
-        ShareActionType.OPEN_SHEET -> showShareSheet(context, link)
+        ShareActionType.OPEN_SHEET -> showShareSheet(context, link, linkType)
 
         ShareActionType.COPY_LINK ->  copyLink(context, link.toString())
     }
@@ -130,11 +131,18 @@ fun initLink(value: String, linkType: ShareLinkType): String {
 }
 
 // actions -----------------------------------------------------------------------------------------
-fun showShareSheet(context: Context, link: Uri?){
+fun showShareSheet(context: Context, link: Uri?, linkType: ShareLinkType){
     val intent = Intent(Intent.ACTION_SEND)
     intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_TEXT,"${context.resources.getString(R.string.share_content)}\n\n$link")
-    context.startActivity(Intent.createChooser(intent, null));
+
+    val shareText = when (linkType) {
+        ShareLinkType.HARMONY -> "${context.resources.getString(R.string.share_harmony_content)}\n\n$link"
+
+        ShareLinkType.MY -> "${context.resources.getString(R.string.share_content)}\n\n$link"
+    }
+
+    intent.putExtra(Intent.EXTRA_TEXT, shareText)
+    context.startActivity(Intent.createChooser(intent, null))
 }
 
 fun copyLink(context: Context, linkToCopy: String){

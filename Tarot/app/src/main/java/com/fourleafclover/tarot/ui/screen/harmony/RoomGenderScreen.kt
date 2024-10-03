@@ -25,6 +25,7 @@ import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
+import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
@@ -49,6 +50,7 @@ fun RoomGenderScreen(
     navController: NavHostController = rememberNavController(),
     genderViewModel: GenderViewModel = GenderViewModel()
 ) {
+    PreventBackPressed()
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarCloseWithDialog(

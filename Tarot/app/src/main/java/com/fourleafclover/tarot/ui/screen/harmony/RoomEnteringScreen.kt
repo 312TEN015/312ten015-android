@@ -23,6 +23,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
+import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -34,6 +35,8 @@ import com.fourleafclover.tarot.ui.theme.white
 fun RoomEnteringScreen(navController: NavHostController = rememberNavController()) {
 
     var initialize by remember { mutableStateOf(false) }
+
+    PreventBackPressed()
 
     /* 한번만 실행 */
     if (!initialize) {

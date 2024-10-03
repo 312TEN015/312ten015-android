@@ -4,11 +4,15 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import com.fourleafclover.tarot.dialogViewModel
+import com.fourleafclover.tarot.ui.component.OpenCloseChatDialog
 
 @Composable
 fun FinishOnBackPressed() {
@@ -31,6 +35,21 @@ fun FinishOnBackPressed() {
 @Composable
 fun PreventBackPressed(){
     BackHandler { }
+}
+
+@Composable
+fun NavigateHomeOnBackPressed(navController: NavHostController) {
+    BackHandler {
+        navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+    }
+}
+
+@Composable
+fun OpenDialogOnBackPressed() {
+    BackHandler {
+        if (dialogViewModel.openDialog) dialogViewModel.closeDialog()
+        else dialogViewModel.openDialog()
+    }
 }
 
 

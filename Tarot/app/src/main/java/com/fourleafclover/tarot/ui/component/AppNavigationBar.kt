@@ -46,6 +46,7 @@ import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.dialogViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.resultViewModel
+import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
@@ -157,14 +158,9 @@ fun AppBarCloseWithDialog(
 }
 
 @Composable
-@Preview
-fun AppBarCloseChatWithDialog(
-    navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
-    backgroundColor: Color = backgroundColor_1,
-    isTitleVisible: Boolean = true
+fun OpenCloseChatDialog(
+    navController: NavHostController
 ) {
-
     if (dialogViewModel.openDialog) {
         Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
             CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
@@ -174,6 +170,18 @@ fun AppBarCloseChatWithDialog(
                 })
         }
     }
+}
+
+@Composable
+@Preview
+fun AppBarCloseChatWithDialog(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true
+) {
+
+    OpenCloseChatDialog(navController)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
 }

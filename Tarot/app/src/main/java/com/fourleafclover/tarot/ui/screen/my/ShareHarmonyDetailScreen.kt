@@ -30,6 +30,7 @@ import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.navigation.NavigateHomeOnBackPressed
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -51,6 +52,8 @@ fun ShareHarmonyDetailScreen(navController: NavHostController = rememberNavContr
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(shareViewModel.sharedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_2)
+
+    NavigateHomeOnBackPressed(navController)
 
     Column(modifier = getBackgroundModifier(backgroundColor_2))
     {
