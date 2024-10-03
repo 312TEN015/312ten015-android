@@ -21,7 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -50,7 +50,7 @@ fun RoomNicknameScreen(
 ) {
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarClose(
+        AppBarCloseWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

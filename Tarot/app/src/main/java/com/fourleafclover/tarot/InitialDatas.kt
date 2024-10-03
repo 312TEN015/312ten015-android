@@ -10,6 +10,7 @@ import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
@@ -72,3 +73,4 @@ val pickTarotViewModel = PickTarotViewModel()
 val resultViewModel = ResultViewModel()
 val myTarotViewModel = MyTarotViewModel()
 val shareViewModel = ShareViewModel()
+val dialogViewModel = DialogViewModel()

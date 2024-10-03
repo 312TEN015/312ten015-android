@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
+import com.fourleafclover.tarot.dialogViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -135,25 +136,56 @@ fun AppBarPlain(
 
 @Composable
 @Preview
-fun AppBarClose(
+fun AppBarCloseWithDialog(
     navController: NavHostController = rememberNavController(),
     pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true
 ) {
 
-    var openDialog by remember {
-        mutableStateOf(false)
-    }
-
-    if (openDialog) {
-        Dialog(onDismissRequest = { openDialog = false }) {
-            CloseDialog(onClickNo = { openDialog = false },
+    if (dialogViewModel.openDialog) {
+        Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
+            CloseDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
+                    dialogViewModel.closeDialog()
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
         }
     }
+
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+}
+
+@Composable
+@Preview
+fun AppBarCloseChatWithDialog(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true
+) {
+
+    if (dialogViewModel.openDialog) {
+        Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
+            CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
+                onClickOk = {
+                    dialogViewModel.closeDialog()
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+}
+
+@Composable
+@Preview
+fun AppBarClose(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true
+) {
 
     Box(
         modifier = appBarModifier
@@ -184,7 +216,7 @@ fun AppBarClose(
                 painter = painterResource(id = if (backgroundColor == backgroundColor_1 || backgroundColor == backgroundColor_2) R.drawable.cancel else R.drawable.cancel_black),
                 contentDescription = "닫기버튼",
                 modifier = Modifier
-                    .clickable { openDialog = true }
+                    .clickable { dialogViewModel.openDialog() }
                     .size(28.dp),
                 alignment = Alignment.Center
             )

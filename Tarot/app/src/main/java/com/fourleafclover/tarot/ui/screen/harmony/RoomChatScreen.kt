@@ -53,7 +53,8 @@ import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -103,7 +104,7 @@ fun RoomChatScreen(
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarClose(
+        AppBarCloseChatWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

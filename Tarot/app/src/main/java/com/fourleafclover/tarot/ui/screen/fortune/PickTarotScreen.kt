@@ -25,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,7 +49,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -64,7 +63,6 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
-import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 
@@ -80,7 +78,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 
         Column {
 
-            AppBarClose(
+            AppBarCloseWithDialog(
                 navController = navController,
                 pickedTopicTemplate = fortuneViewModel.pickedTopicState.value.topicSubjectData,
                 backgroundColor = backgroundColor_1

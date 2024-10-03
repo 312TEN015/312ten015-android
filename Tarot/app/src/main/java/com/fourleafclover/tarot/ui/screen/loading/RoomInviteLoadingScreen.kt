@@ -17,7 +17,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.ui.component.AppBarClose
+import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -58,7 +58,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
     
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarClose(
+        AppBarCloseWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
