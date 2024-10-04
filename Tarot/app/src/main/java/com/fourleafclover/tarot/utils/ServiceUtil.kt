@@ -19,9 +19,16 @@ import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.shareViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+var reconnectCount = 0
+
 
 /* 타로 결과 여러개 GET */
 // 마이 타로 화면
@@ -39,7 +46,7 @@ fun getMyTarotList(
             ) {
 
                 if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
+                    MyApplication.toastUtil.makeShortToast("response null")
                     return
                 }
 
@@ -57,14 +64,11 @@ fun getMyTarotList(
 
 // 공유하기 상세 보기
 fun getSharedTarotDetail(
-    localContext: Context,
     navController: NavHostController,
     tarotId: String
 ) {
     
     getCertainTarotDetail(
-        localContext,
-        navController,
         tarotId, 
         onResponse = {
             shareViewModel.setSharedTarotResult(it)
@@ -81,8 +85,6 @@ fun getSharedTarotDetail(
 
 /* 타로 결과 단일 GET */
 fun getCertainTarotDetail(
-    localContext: Context,
-    navController: NavHostController,
     tarotId: String,
     onResponse: (responseBody: TarotOutputDto) -> Unit = {},
     onFailure: () -> Unit = {}
@@ -96,9 +98,9 @@ fun getCertainTarotDetail(
             ) {
 
                 if (response.body() == null || response.body()!![0] == null){
-                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                    MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
-                    loadingViewModel.endLoading(navController)
+                    loadingViewModel.updateLoadingState(false)
                     return
                 }
                 
@@ -114,7 +116,7 @@ fun getCertainTarotDetail(
 
 
 /* 타로 결과 요청 POST */
-fun getTarotResult(localContext: Context, reconnectCount: Int = 0) {
+fun getTarotResult(localContext: Context) {
     MyApplication.tarotService.postTarotResult(resultViewModel.getTarotInputDto(), getPath())
         .enqueue(object : Callback<TarotOutputDto>{
             override fun onResponse(
@@ -123,7 +125,7 @@ fun getTarotResult(localContext: Context, reconnectCount: Int = 0) {
             ) {
 
                 if (response.body() == null){
-                    Toast.makeText(localContext, "response null", Toast.LENGTH_SHORT).show()
+                    MyApplication.toastUtil.makeShortToast("response null")
                     return
                 }
 
@@ -135,15 +137,16 @@ fun getTarotResult(localContext: Context, reconnectCount: Int = 0) {
             }
 
             override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-
+                reconnectCount += 1
                 Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
                 if (reconnectCount == 3) {
+                    reconnectCount = 0
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                     loadingViewModel.updateLoadingState(false)
-                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
+                    MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
                 }else{
-                    getTarotResult(localContext, reconnectCount+1)
+                    getTarotResult(localContext)
                 }
 
             }
@@ -151,50 +154,59 @@ fun getTarotResult(localContext: Context, reconnectCount: Int = 0) {
 
 }
 
-
 /** 궁합 결과 요청 POST */
-fun getMatchResult(localContext: Context, reconnectCount: Int = 0){
+fun getMatchResult(){
 
     /* 테스트 */
 //    val cardArray = arrayListOf(1,2,3,4,5,6)
 
-    MyApplication.tarotService.getMatchResult(
-        MatchTarotInputDto(
-            harmonyShareViewModel.getOwnerNickname(),
-            harmonyShareViewModel.getInviteeNickname(),
-            harmonyShareViewModel.roomId.value,
-            setCardArray()
+    CoroutineScope(Dispatchers.IO).launch {
+        MyApplication.tarotService.getMatchResult(
+            MatchTarotInputDto(
+                harmonyShareViewModel.getOwnerNickname(),
+                harmonyShareViewModel.getInviteeNickname(),
+                harmonyShareViewModel.roomId.value,
+                setCardArray()
+            )
         )
-    )
-        .enqueue(object : Callback<TarotOutputDto>{
-            override fun onResponse(
-                call: Call<TarotOutputDto>,
-                response: Response<TarotOutputDto>
-            ) {
+            .enqueue(object : Callback<TarotOutputDto> {
+                override fun onResponse(
+                    call: Call<TarotOutputDto>,
+                    response: Response<TarotOutputDto>
+                ) {
 
-                if (response.body() == null){
-                    Log.d("api", "onResponse null")
-                    return
+                    if (response.body() == null) {
+                        Log.d("api", "onResponse null")
+                        return
+                    }
+
+
+                    val jsonObject = JSONObject()
+                    jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+                    jsonObject.put("tarotId", response.body()!!.tarotId)
+                    MyApplication.socket.emit("resultReceived", jsonObject)
+                    Log.d("socket-test", "emit resultReceived")
+
                 }
 
-                resultViewModel.distinguishCardResult(response.body()!!)
-                loadingViewModel.updateLoadingState(false)
-            }
+                override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
+                    reconnectCount += 1
+                    Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
-            override fun onFailure(call: Call<TarotOutputDto>, t: Throwable) {
-                Log.d("api", "reconnectCount: ${reconnectCount}--------!")
+                    if (reconnectCount == 3) {
+                        reconnectCount = 0
+                        loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                        loadingViewModel.updateLoadingState(false)
+                        harmonyShareViewModel.deleteRoom()
+                        MyApplication.closeSocket()
+                        MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
+                    } else {
+                        getMatchResult()
+                    }
 
-                if (reconnectCount == 3) {
-                    loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
-                    loadingViewModel.updateLoadingState(false)
-                    harmonyShareViewModel.deleteRoom()
-                    Toast.makeText(localContext, "네트워크 상태를 확인 후 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
-                }else{
-                    getMatchResult(localContext, reconnectCount+1)
                 }
-
-            }
-        })
+            })
+    }
 }
 
 fun setCardArray(): ArrayList<Int> {

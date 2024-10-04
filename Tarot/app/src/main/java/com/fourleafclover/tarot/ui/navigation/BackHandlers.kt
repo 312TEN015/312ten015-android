@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.dialogViewModel
 import com.fourleafclover.tarot.ui.component.OpenCloseChatDialog
 
@@ -26,7 +27,7 @@ fun FinishOnBackPressed() {
             (context as Activity).finish()
         } else {
             backPressedState = true
-            Toast.makeText(context, "한 번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+            MyApplication.toastUtil.makeShortToast("한 번 더 누르시면 앱이 종료됩니다.")
         }
         backPressedTime = System.currentTimeMillis()
     }

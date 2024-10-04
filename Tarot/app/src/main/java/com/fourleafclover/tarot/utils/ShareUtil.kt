@@ -168,7 +168,7 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             // 타로 결과 공유
             if (deepLinkUri.getBooleanQueryParameter("tarotId", false)){
                 val sharedTarotId = deepLinkUri.getQueryParameter("tarotId")!!
-                getSharedTarotDetail(activity, navController, sharedTarotId)
+                getSharedTarotDetail(navController, sharedTarotId)
                 loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ShareDetailScreen)
             }
 

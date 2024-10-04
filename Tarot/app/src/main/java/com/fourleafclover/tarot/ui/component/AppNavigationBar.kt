@@ -45,6 +45,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.dialogViewModel
 import com.fourleafclover.tarot.fortuneViewModel
+import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -166,6 +167,25 @@ fun OpenCloseChatDialog(
             CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
                     dialogViewModel.closeDialog()
+                    harmonyShareViewModel.deleteRoom()
+                    MyApplication.closeSocket()
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+}
+
+@Composable
+fun OpenCloseCreateChatDialog(
+    navController: NavHostController
+) {
+    if (dialogViewModel.openDialog) {
+        Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
+            CloseCreateChatDialog(onClickNo = { dialogViewModel.closeDialog() },
+                onClickOk = {
+                    dialogViewModel.closeDialog()
+                    harmonyShareViewModel.deleteRoom()
+                    MyApplication.closeSocket()
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
         }
@@ -182,6 +202,20 @@ fun AppBarCloseChatWithDialog(
 ) {
 
     OpenCloseChatDialog(navController)
+
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+}
+
+@Composable
+@Preview
+fun AppBarCloseCreateChatWithDialog(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true
+) {
+
+    OpenCloseCreateChatDialog(navController)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
 }

@@ -260,4 +260,14 @@ class ChatViewModel : ViewModel() {
     fun getAdjectives(): String {
         return adjectives[(0 until adjectives.size).random()]
     }
+
+    fun checkIsAllCardPicked() : Boolean {
+        return (chatState.value.pickedCardNumberState.firstCardNumber != -1
+                && chatState.value.pickedCardNumberState.secondCardNumber != -1
+                && chatState.value.pickedCardNumberState.thirdCardNumber != -1
+                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
+                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
+                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
+                )
+    }
 }

@@ -27,6 +27,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.harmonyShareViewModel
+import com.fourleafclover.tarot.mainViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.resultViewModel
@@ -63,6 +64,7 @@ fun HomeScreen(navController: NavHostController = rememberNavController()) {
         resultViewModel.clear()
         chatViewModel.clear()
         harmonyShareViewModel.clear()
+        mainViewModel.clear()
 
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()

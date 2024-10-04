@@ -50,11 +50,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        MyApplication.socket.close()
-    }
-
 
 }
 

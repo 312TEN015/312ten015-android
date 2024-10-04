@@ -29,6 +29,8 @@ class ResultViewModel() : ViewModel() {
 
     private var isMyTab = mutableStateOf(true) // 나의 탭 터치했는지 여부
 
+    var isMatchResultPrepared = mutableStateOf(false)
+
     // 공통 ----------------------------------------------------------------------------------------
 
     private var _openCloseDialog = mutableStateOf(false) // close dialog state
@@ -55,6 +57,10 @@ class ResultViewModel() : ViewModel() {
     )
 
     fun clear() = viewModelScope.launch { onCleared() }
+
+    fun setIsMatchResultPrepared(isPrepared: Boolean) {
+        isMatchResultPrepared.value = isPrepared
+    }
 
     fun initResult(){
         _tarotResult = mutableStateOf(TarotOutputDto())

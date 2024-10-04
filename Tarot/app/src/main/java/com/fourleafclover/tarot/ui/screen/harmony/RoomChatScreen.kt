@@ -99,7 +99,7 @@ fun RoomChatScreen(
     LaunchedEffect(Unit){
         if (initialComposition) {
             MyApplication.socket.on("next", onNext)
-//            MyApplication.socket.on("result", onResult)
+            MyApplication.socket.on("resultPrepared", onResult)
             Log.d("socket-test", "set onNext")
 
             pickTarotViewModel.initCardDeck()
@@ -463,13 +463,6 @@ fun PartnerChattingBox(
             ) {
 
                 if (drawable != 0 && drawable != -1) {
-//                    Image(
-//                        modifier = Modifier.width(60.dp),
-//                        painter = painterResource(id = drawable),
-//                        contentDescription = null
-//                    )
-
-                    /* 테스트 코드 */
                     Image(
                         modifier = Modifier.width(60.dp),
                         painter = painterResource(id = fortuneViewModel.getCardImageId(LocalContext.current, drawable.toString())),
@@ -487,12 +480,6 @@ fun PartnerChattingBox(
                         text = buttonText,
                         onClick = {
                             chatViewModel.moveToNextScenario()
-                            chatViewModel.updatePickedCardNumberState()
-
-//                            val jsonObject = JSONObject()
-//                            jsonObject.put("roomId", harmonyViewModel.roomId.value)
-//                            MyApplication.socket.emit("finish", jsonObject)
-//                            Log.d("socket-test", "emit finish")
 
                             loadingViewModel.startLoading(
                                 navController,

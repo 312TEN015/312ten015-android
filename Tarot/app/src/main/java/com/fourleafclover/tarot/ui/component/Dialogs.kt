@@ -43,6 +43,12 @@ fun CloseChatDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
     YesNoDialog("궁합 보기를 중단하고 나가시겠습니까?\n생성된 초대방이 삭제됩니다.", onClickNo, onClickOk)
 }
 
+@Composable
+@Preview
+fun CloseCreateChatDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+    YesNoDialog("궁합 보기를 중단하고 나가시겠습니까?", onClickNo, onClickOk)
+}
+
 
 @Composable
 @Preview

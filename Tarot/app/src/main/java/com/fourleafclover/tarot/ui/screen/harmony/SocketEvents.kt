@@ -1,10 +1,17 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
+import android.content.Context
 import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.chatViewModel
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.mainViewModel
+import com.fourleafclover.tarot.resultViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
+import com.fourleafclover.tarot.utils.getCertainTarotDetail
+import com.fourleafclover.tarot.utils.getMatchResult
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,7 +65,7 @@ var onJoinComplete = Emitter.Listener { args ->
 
 // 상대방이 시작하기 누름 or 카드 선택함
 var onNext = Emitter.Listener { args ->
-    CoroutineScope(Dispatchers.Main).launch {
+    CoroutineScope(Dispatchers.IO).launch {
         // 상대방 업데이트 한 후에
         chatViewModel.updatePartnerScenario()
 
@@ -91,6 +98,12 @@ var onNext = Emitter.Listener { args ->
             chatViewModel.addNextScenario()
         }
 
+        // 내가 방장이고, 둘다 완료된 경우
+        if (harmonyShareViewModel.isRoomOwner.value && chatViewModel.checkIsAllCardPicked()) {
+            chatViewModel.updatePickedCardNumberState()
+            getMatchResult()
+        }
+
         Log.d("socket-test", "onNext my cards : "
                 + chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber + ", "
                 + chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber + ", "
@@ -100,5 +113,24 @@ var onNext = Emitter.Listener { args ->
                 + chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber + ", "
                 + chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber)
 
+    }
+}
+
+// 응답 생성 완료
+var onResult = Emitter.Listener { args ->
+    CoroutineScope(Dispatchers.IO).launch {
+        Log.d("socket-test", "resultPrepared " + args[0].toString())
+
+        if (args.isNotEmpty()){
+            val tarotId = JSONObject(args[0].toString()).getString("tarotId")
+            getCertainTarotDetail(
+                tarotId,
+                onResponse = {
+                    resultViewModel.setIsMatchResultPrepared(true)
+                    resultViewModel.distinguishCardResult(it)
+                    loadingViewModel.updateLoadingState(false)
+                }
+            )
+        }
     }
 }

@@ -12,13 +12,13 @@ import java.util.Date
 class RoomCreateViewModel: ViewModel() {
 
     private var _openRoomDeletedDialog = mutableStateOf(false)
-    val openRoomDeletedDialog get() = _openRoomDeletedDialog
+    val openRoomDeletedDialog = _openRoomDeletedDialog
 
     private var _openRoomExistDialog = mutableStateOf(false)
-    val openRoomExistDialog get() = _openRoomExistDialog
+    val openRoomExistDialog = _openRoomExistDialog
 
     private var _isRoomExpired = mutableStateOf(false)
-    val isRoomExpired get() = _isRoomExpired
+    val isRoomExpired = _isRoomExpired
 
     fun openRoomDeletedDialog() {
         _openRoomDeletedDialog.value = true
@@ -64,6 +64,7 @@ class RoomCreateViewModel: ViewModel() {
             // 1시간 지나서 사라짐
             _isRoomExpired.value = true
             harmonyShareViewModel.deleteRoom()
+            MyApplication.closeSocket()
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.utils.PreferenceUtil
+import com.fourleafclover.tarot.utils.ToastUtil
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.engineio.client.Transport
@@ -27,8 +28,39 @@ class MyApplication: Application() {
         lateinit var prefs: PreferenceUtil
         lateinit var tarotService: TarotService
         lateinit var socket: Socket
+        lateinit var toastUtil: ToastUtil
+
+        fun closeSocket() {
+            if (socket != null) socket.close()
+        }
 
         fun connectSocket(){
+            try {
+                val options = IO.Options().apply {
+                    reconnection = false // 자동 재연결
+                    reconnectionAttempts = 5 // 재연결 시도 횟수
+                    reconnectionDelay = 2000 // 재연결 지연 시간
+                    forceNew = false
+                    transports = arrayOf("polling", "websocket")
+                }
+
+                socket = IO.socket(BuildConfig.BASE_URL, options)
+
+                // 이벤트 리스너 설정
+                socket.on(Socket.EVENT_CONNECT) { args ->
+                    Log.d("SocketIO", "Current transport: connect")
+                }
+                socket.on(Socket.EVENT_DISCONNECT) { args ->
+                    Log.d("SocketIO", "Current transport: connect disconnect")
+                }
+                socket.on(Socket.EVENT_CONNECT_ERROR) { args ->
+                    Log.d("SocketIO", "Current transport: connect error ${Arrays.toString(args)}")
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             if (!socket.connected()) socket.connect()
         }
     }
@@ -36,6 +68,7 @@ class MyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        toastUtil = ToastUtil(applicationContext)
 
         prefs = PreferenceUtil(applicationContext)
 //        prefs.deleteAllTarotResults()
@@ -77,34 +110,6 @@ class MyApplication: Application() {
         tarotService = retrofit.create(TarotService::class.java)
 
 //        Log.d("buildConfig", BuildConfig.BUILD_TYPE)
-
-        try {
-            val options = IO.Options().apply {
-                reconnection = false // 자동 재연결
-                reconnectionAttempts = 5 // 재연결 시도 횟수
-                reconnectionDelay = 2000 // 재연결 지연 시간
-                forceNew = false
-                transports = arrayOf("polling", "websocket")
-            }
-
-            socket = IO.socket(BuildConfig.BASE_URL, options)
-
-            // 이벤트 리스너 설정
-            socket.on(Socket.EVENT_CONNECT) { args ->
-                Log.d("SocketIO", "Current transport: connect")
-            }
-            socket.on(Socket.EVENT_DISCONNECT) { args ->
-                Log.d("SocketIO", "Current transport: connect disconnect")
-            }
-            socket.on(Socket.EVENT_CONNECT_ERROR) { args ->
-                Log.d("SocketIO", "Current transport: connect error ${Arrays.toString(args)}")
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-
 
     }
 }

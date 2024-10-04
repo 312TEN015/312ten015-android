@@ -1,5 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.loading
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.loadingViewModel
+import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
@@ -37,12 +40,12 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
             getTarotResult(localContext)
         }
         else if (loadingViewModel.destination == ScreenEnum.RoomResultScreen){
-            getMatchResult(localContext)
-            /* 테스트 코드 */
-//            Handler(Looper.getMainLooper())
-//                .postDelayed({
-//                    onResult(localContext, navController)
-//                }, 4000)
+            if (resultViewModel.isMatchResultPrepared.value) {
+                Handler(Looper.getMainLooper())
+                    .postDelayed({
+                        loadingViewModel.updateLoadingState(false)
+                    }, 4000)
+            }
         }
     }
 

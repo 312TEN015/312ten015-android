@@ -2,12 +2,14 @@ package com.fourleafclover.tarot.ui.navigation
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
+import com.fourleafclover.tarot.mainViewModel
 import com.fourleafclover.tarot.ui.component.BottomNavigationBar
 import com.fourleafclover.tarot.ui.screen.main.HomeScreen
 import com.fourleafclover.tarot.ui.screen.fortune.InputScreen
@@ -27,6 +29,7 @@ import com.fourleafclover.tarot.ui.screen.harmony.RoomEnteringScreen
 import com.fourleafclover.tarot.ui.screen.loading.RoomInviteLoadingScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
+import com.fourleafclover.tarot.ui.screen.main.MainViewModel
 import com.fourleafclover.tarot.ui.screen.my.MyTarotHarmonyDetail
 import com.fourleafclover.tarot.ui.screen.my.ShareHarmonyDetailScreen
 
@@ -41,6 +44,11 @@ fun NavigationHost() {
             BottomNavigationBar(navController = navController)
     }
     ) { innerPadding -> innerPadding
+
+        LaunchedEffect(Unit) {
+            mainViewModel = MainViewModel()
+            mainViewModel.setNavController(navController)
+        }
 
         NavHost(navController = navController, startDestination = ScreenEnum.OnBoardingScreen.name) {
             composable(ScreenEnum.HomeScreen.name) {

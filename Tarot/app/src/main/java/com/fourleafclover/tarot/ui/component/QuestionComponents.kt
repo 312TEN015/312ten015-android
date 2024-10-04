@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.constant.questionCount
 import com.fourleafclover.tarot.data.TarotSubjectData
@@ -172,7 +173,7 @@ fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, context: C
             shape = RoundedCornerShape(size = 10.dp),
             onValueChange = { newText ->
                 if (newText.text.length > maxChar){
-                    Toast.makeText(context, "${maxChar}자 이상 입력할 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    MyApplication.toastUtil.makeShortToast("${maxChar}자 이상 입력할 수 없습니다.")
                 }
                 else {
                     questionInputViewModel.setTextField(idx, newText)

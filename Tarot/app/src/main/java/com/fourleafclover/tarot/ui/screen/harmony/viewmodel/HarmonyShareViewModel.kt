@@ -28,7 +28,11 @@ class HarmonyShareViewModel: ViewModel() {
     var dynamicLink = ""
     var shortLink = ""
 
-    fun clear() = viewModelScope.launch { onCleared() }
+    fun clear() {
+        viewModelScope.launch { onCleared() }
+        dynamicLink = ""
+        shortLink = ""
+    }
 
     fun setIsRoomOwner(isRoomOwner: Boolean) {
         _isRoomOwner.value = isRoomOwner
@@ -69,6 +73,7 @@ class HarmonyShareViewModel: ViewModel() {
         val mNow = System.currentTimeMillis()
         val mDate = Date(mNow)
         MyApplication.prefs.saveHarmonyRoomCreatedAt(mDate.toString())
+        MyApplication.prefs.saveHarmonyRoomId(newRoomId)
     }
 
     // 초대 또는 생성한 방에서 나가기, 1시간 지나서 사라짐, 궁합 보기 완료
