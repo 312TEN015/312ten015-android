@@ -262,9 +262,9 @@ class ChatViewModel : ViewModel() {
     }
 
     fun checkIsAllCardPicked() : Boolean {
-        return (chatState.value.pickedCardNumberState.firstCardNumber != -1
-                && chatState.value.pickedCardNumberState.secondCardNumber != -1
-                && chatState.value.pickedCardNumberState.thirdCardNumber != -1
+        return (pickTarotViewModel.pickedCardNumberState.value.firstCardNumber != -1
+                && pickTarotViewModel.pickedCardNumberState.value.secondCardNumber != -1
+                && pickTarotViewModel.pickedCardNumberState.value.thirdCardNumber != -1
                 && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
                 && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
                 && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1

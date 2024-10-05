@@ -98,13 +98,6 @@ var onNext = Emitter.Listener { args ->
         chatViewModel.addNextScenario()
     }
 
-    // 내가 방장이고, 둘다 완료된 경우
-    if (harmonyShareViewModel.isRoomOwner.value && chatViewModel.checkIsAllCardPicked()) {
-        Log.d("socket-test", "onNext room owner send")
-        chatViewModel.updatePickedCardNumberState()
-        getMatchResult()
-    }
-
     Log.d("socket-test", "onNext my cards : "
             + chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber + ", "
             + chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber + ", "
@@ -113,6 +106,13 @@ var onNext = Emitter.Listener { args ->
             + chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber + ", "
             + chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber + ", "
             + chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber)
+
+    // 둘다 완료된 경우
+    if (chatViewModel.checkIsAllCardPicked()) {
+        Log.d("socket-test", "onNext result request send")
+        chatViewModel.updatePickedCardNumberState()
+        getMatchResult()
+    }
 }
 
 // 응답 생성 완료
