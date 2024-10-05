@@ -9,6 +9,7 @@ import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.mainViewModel
 import com.fourleafclover.tarot.resultViewModel
+import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
 import com.fourleafclover.tarot.utils.getCertainTarotDetail
 import com.fourleafclover.tarot.utils.getMatchResult
@@ -65,64 +66,70 @@ var onJoinComplete = Emitter.Listener { args ->
 
 // 상대방이 시작하기 누름 or 카드 선택함
 var onNext = Emitter.Listener { args ->
-    CoroutineScope(Dispatchers.IO).launch {
-        // 상대방 업데이트 한 후에
-        chatViewModel.updatePartnerScenario()
+    // 상대방 업데이트 한 후에
+    chatViewModel.updatePartnerScenario()
 
-        val myScenario = chatViewModel.chatState.value.scenario
-        val partnerScenario = chatViewModel.partnerChatState.value.scenario
-        Log.d("socket-test", "onNext my: " + myScenario.name)
-        Log.d("socket-test", "onNext partner: " + partnerScenario.name)
-        Log.d("socket-test", "onNext args: ${Arrays.toString(args)}")
+    val myScenario = chatViewModel.chatState.value.scenario
+    val partnerScenario = chatViewModel.partnerChatState.value.scenario
+    Log.d("socket-test", "onNext my: " + myScenario.name)
+    Log.d("socket-test", "onNext partner: " + partnerScenario.name)
+    Log.d("socket-test", "onNext args: ${Arrays.toString(args)}")
 
-        // 업데이트 한게 나랑 다름 = 내가 뒤처짐
-        if (myScenario != partnerScenario){
-            if (args.isNotEmpty()){
-                val partnerCardNum = JSONObject(args[0].toString()).getString("cardNum")
-                chatViewModel.updatePartnerCardNumber(chatViewModel.getBeforeScenario(partnerScenario), partnerCardNum.toInt())
-                Log.d("socket-test", "onNext partner card - $partnerCardNum")
-            }else{
-                Log.d("socket-test", "onNext - partner started")
-            }
+    // 업데이트 한게 나랑 다름 = 내가 뒤처짐
+    if (myScenario != partnerScenario){
+        if (args.isNotEmpty()){
+            val partnerCardNum = JSONObject(args[0].toString()).getString("cardNum")
+            chatViewModel.updatePartnerCardNumber(chatViewModel.getBeforeScenario(partnerScenario), partnerCardNum.toInt())
+            Log.d("socket-test", "onNext partner card - $partnerCardNum")
+        }else{
+            Log.d("socket-test", "onNext - partner started")
         }
-        // 업데이트 한게 나랑 같음 = 내가 먼저함
-        else {
-            chatViewModel.updateGuidText("상대방이 답변을 선택했습니다.✨️")
-            if (args.isNotEmpty()){
-                val partnerCardNum = JSONObject(args[0].toString()).getString("cardNum")
-                chatViewModel.updatePartnerCardNumber(chatViewModel.getBeforeScenario(partnerScenario), partnerCardNum.toInt())
-                Log.d("socket-test", "onNext partner card - $partnerCardNum")
-            }else{
-                Log.d("socket-test", "onNext - I started")
-            }
-            chatViewModel.addNextScenario()
-        }
-
-        // 내가 방장이고, 둘다 완료된 경우
-        if (harmonyShareViewModel.isRoomOwner.value && chatViewModel.checkIsAllCardPicked()) {
-            chatViewModel.updatePickedCardNumberState()
-            getMatchResult()
-        }
-
-        Log.d("socket-test", "onNext my cards : "
-                + chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber + ", "
-                + chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber + ", "
-                + chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber)
-        Log.d("socket-test", "onNext partner cards : "
-                + chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber + ", "
-                + chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber + ", "
-                + chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber)
-
     }
+    // 업데이트 한게 나랑 같음 = 내가 먼저함
+    else {
+        chatViewModel.updateGuidText("상대방이 답변을 선택했습니다.✨️")
+        if (args.isNotEmpty()){
+            val partnerCardNum = JSONObject(args[0].toString()).getString("cardNum")
+            chatViewModel.updatePartnerCardNumber(chatViewModel.getBeforeScenario(partnerScenario), partnerCardNum.toInt())
+            Log.d("socket-test", "onNext partner card - $partnerCardNum")
+        }else{
+            Log.d("socket-test", "onNext - I started")
+        }
+        chatViewModel.addNextScenario()
+    }
+
+    // 내가 방장이고, 둘다 완료된 경우
+    if (harmonyShareViewModel.isRoomOwner.value && chatViewModel.checkIsAllCardPicked()) {
+        Log.d("socket-test", "onNext room owner send")
+        chatViewModel.updatePickedCardNumberState()
+        getMatchResult()
+    }
+
+    Log.d("socket-test", "onNext my cards : "
+            + chatViewModel.chatState.value.pickedCardNumberState.firstCardNumber + ", "
+            + chatViewModel.chatState.value.pickedCardNumberState.secondCardNumber + ", "
+            + chatViewModel.chatState.value.pickedCardNumberState.thirdCardNumber)
+    Log.d("socket-test", "onNext partner cards : "
+            + chatViewModel.partnerChatState.value.pickedCardNumberState.firstCardNumber + ", "
+            + chatViewModel.partnerChatState.value.pickedCardNumberState.secondCardNumber + ", "
+            + chatViewModel.partnerChatState.value.pickedCardNumberState.thirdCardNumber)
 }
 
 // 응답 생성 완료
 var onResult = Emitter.Listener { args ->
-    CoroutineScope(Dispatchers.IO).launch {
-        Log.d("socket-test", "resultPrepared " + args[0].toString())
+    Log.d("socket-test", "resultPrepared " + args[0].toString())
 
-        if (args.isNotEmpty()){
-            val tarotId = JSONObject(args[0].toString()).getString("tarotId")
+    if (args.isNotEmpty()){
+        val tarotId = JSONObject(args[0].toString()).getString("tarotId")
+
+        // 궁합 결과 가져오기 실패한 경우
+        if (tarotId.isNullOrEmpty()) {
+            loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+            loadingViewModel.updateLoadingState(false)
+            MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
+        }
+        // 성공한 경우
+        else{
             getCertainTarotDetail(
                 tarotId,
                 onResponse = {
@@ -132,5 +139,8 @@ var onResult = Emitter.Listener { args ->
                 }
             )
         }
+
+        MyApplication.closeSocket()
+
     }
 }

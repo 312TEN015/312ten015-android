@@ -22,12 +22,14 @@ import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 var reconnectCount = 0
+const val maxReconnectCount = 3
 
 
 /* 타로 결과 여러개 GET */
@@ -89,7 +91,6 @@ fun getCertainTarotDetail(
     onResponse: (responseBody: TarotOutputDto) -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-
     MyApplication.tarotService.getMyTarotResult(TarotIdsInputDto(arrayListOf(tarotId)))
         .enqueue(object : Callback<ArrayList<TarotOutputDto>> {
             override fun onResponse(
@@ -97,14 +98,16 @@ fun getCertainTarotDetail(
                 response: Response<ArrayList<TarotOutputDto>>
             ) {
 
-                if (response.body() == null || response.body()!![0] == null){
-                    MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
-                    loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
-                    loadingViewModel.updateLoadingState(false)
-                    return
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (response.body() == null || response.body()!![0] == null) {
+                        MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
+                        loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
+                        loadingViewModel.updateLoadingState(false)
+                        return@launch
+                    }
+
+                    onResponse(response.body()!![0])
                 }
-                
-                onResponse(response.body()!![0])
             }
 
             override fun onFailure(call: Call<ArrayList<TarotOutputDto>>, t: Throwable) {
@@ -140,7 +143,7 @@ fun getTarotResult(localContext: Context) {
                 reconnectCount += 1
                 Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
-                if (reconnectCount == 3) {
+                if (reconnectCount == maxReconnectCount) {
                     reconnectCount = 0
                     loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                     loadingViewModel.updateLoadingState(false)
@@ -177,15 +180,9 @@ fun getMatchResult(){
 
                     if (response.body() == null) {
                         Log.d("api", "onResponse null")
-                        return
                     }
 
-
-                    val jsonObject = JSONObject()
-                    jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
-                    jsonObject.put("tarotId", response.body()!!.tarotId)
-                    MyApplication.socket.emit("resultReceived", jsonObject)
-                    Log.d("socket-test", "emit resultReceived")
+                    emitResultPrepared(response.body()!!.tarotId)
 
                 }
 
@@ -193,12 +190,14 @@ fun getMatchResult(){
                     reconnectCount += 1
                     Log.d("api", "reconnectCount: ${reconnectCount}--------!")
 
-                    if (reconnectCount == 3) {
+                    if (reconnectCount == maxReconnectCount) {
                         reconnectCount = 0
+
+                        emitResultPrepared()
+
                         loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                         loadingViewModel.updateLoadingState(false)
                         harmonyShareViewModel.deleteRoom()
-                        MyApplication.closeSocket()
                         MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
                     } else {
                         getMatchResult()
@@ -207,6 +206,30 @@ fun getMatchResult(){
                 }
             })
     }
+}
+
+fun emitResultPrepared(tarotId: String = ""){
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val jsonObject = JSONObject()
+            jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+            jsonObject.put("tarotId", tarotId)
+            MyApplication.socket.emit("resultReceived", jsonObject)
+
+            withContext(Dispatchers.Main) {
+                Log.d("socket-test", "emit resultReceived success")
+            }
+        } catch (e: Exception) {
+            // 오류 처리
+            withContext(Dispatchers.Main) {
+                Log.d("socket-test", "emit resultReceived failed")
+                Log.e("socket-test", "exception: ${e.message}")
+                MyApplication.closeSocket()
+            }
+        }
+    }
+
+
 }
 
 fun setCardArray(): ArrayList<Int> {
