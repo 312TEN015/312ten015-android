@@ -1,10 +1,8 @@
 package com.fourleafclover.tarot.ui.navigation
 
 import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,8 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.dialogViewModel
-import com.fourleafclover.tarot.ui.component.OpenCloseChatDialog
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 
 @Composable
 fun FinishOnBackPressed() {
@@ -46,7 +43,8 @@ fun NavigateHomeOnBackPressed(navController: NavHostController) {
 }
 
 @Composable
-fun OpenDialogOnBackPressed() {
+fun OpenDialogOnBackPressed(dialogViewModel: DialogViewModel) {
+
     BackHandler {
         if (dialogViewModel.openDialog) dialogViewModel.closeDialog()
         else dialogViewModel.openDialog()

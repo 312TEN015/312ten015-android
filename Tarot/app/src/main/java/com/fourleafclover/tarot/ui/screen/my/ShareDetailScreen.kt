@@ -17,15 +17,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.shareViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.NavigateHomeOnBackPressed
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -42,7 +43,11 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Composable
 @Preview
-fun ShareDetailScreen(navController: NavHostController = rememberNavController()){
+fun ShareDetailScreen(
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    shareViewModel: ShareViewModel = hiltViewModel()
+){
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(shareViewModel.sharedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
@@ -96,7 +101,7 @@ fun ShareDetailScreen(navController: NavHostController = rememberNavController()
             }
 
             Box(modifier = Modifier.background(color = backgroundColor_2)) {
-                CardSlider(tarotResult = shareViewModel.sharedTarotResult)
+                CardSlider(tarotResult = shareViewModel.sharedTarotResult, fortuneViewModel = fortuneViewModel)
             }
 
             Column(

@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,18 +23,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.myTarotViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
-import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -45,15 +41,12 @@ import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
-import com.fourleafclover.tarot.ui.theme.gray_1
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_3
 import com.fourleafclover.tarot.ui.theme.gray_4
 import com.fourleafclover.tarot.ui.theme.gray_5
-import com.fourleafclover.tarot.ui.theme.gray_6
 import com.fourleafclover.tarot.ui.theme.gray_7
 import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import com.fourleafclover.tarot.utils.ShareActionType
@@ -62,15 +55,20 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 fun MyTarotHarmonyDetail(
-    navController: NavHostController
+    navController: NavHostController,
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    myTarotViewModel: MyTarotViewModel = hiltViewModel(),
 ) {
-    MyTarotHarmonyDetailPreview(navController)
+    MyTarotHarmonyDetailPreview(navController, fortuneViewModel, myTarotViewModel)
 }
 
 @Preview
 @Composable
 fun MyTarotHarmonyDetailPreview(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    myTarotViewModel: MyTarotViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
 ) {
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(5)
@@ -177,7 +175,7 @@ fun MyTarotHarmonyDetailPreview(
 
                 HarmonyCardSlider(
                     outsideHorizontalPadding = 40.dp,
-                    sliderList = getSliderList(LocalContext.current),
+                    sliderList = getSliderList(LocalContext.current, fortuneViewModel, myTarotViewModel),
                     firstCardResults = myTarotViewModel.roomOwnerCardResults,
                     secondCardResults = myTarotViewModel.inviteeCardResults,
                     isFirstTab = myTarotViewModel.isRoomOwnerTab()
@@ -186,14 +184,14 @@ fun MyTarotHarmonyDetailPreview(
             }
 
 
-            OverallResult()
+            OverallResult(myTarotViewModel, harmonyShareViewModel)
 
         }
 
     }
 }
 
-private fun getSliderList(context: Context) : ArrayList<Int> {
+private fun getSliderList(context: Context, fortuneViewModel: FortuneViewModel, myTarotViewModel: MyTarotViewModel) : ArrayList<Int> {
     val sliderList: ArrayList<Int> = arrayListOf(0, 0, 0)
     if (myTarotViewModel.isRoomOwnerTab()) {
         sliderList[0] = fortuneViewModel.getCardImageId(context, myTarotViewModel.roomOwnerCardNumbers[0].toString())
@@ -208,9 +206,10 @@ private fun getSliderList(context: Context) : ArrayList<Int> {
     return sliderList
 }
 
-@Preview
+
 @Composable
-private fun OverallResult() {
+private fun OverallResult(myTarotViewModel: MyTarotViewModel, harmonyShareViewModel: HarmonyShareViewModel) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -253,7 +252,8 @@ private fun OverallResult() {
                         localContext,
                         myTarotViewModel.selectedTarotResult.tarotId,
                         ShareLinkType.MY,
-                        ShareActionType.OPEN_SHEET
+                        ShareActionType.OPEN_SHEET,
+                        harmonyShareViewModel
                     )
                 },
             horizontalArrangement = Arrangement.Center

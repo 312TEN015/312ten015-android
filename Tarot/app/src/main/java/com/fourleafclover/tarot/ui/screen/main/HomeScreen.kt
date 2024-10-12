@@ -19,23 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.chatViewModel
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.mainViewModel
-import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.questionInputViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -49,30 +45,36 @@ fun Context.findActivity(): Activity? = when (this) {
     else -> null
 }
 
-@Preview
 @Composable
-fun HomeScreen(navController: NavHostController = rememberNavController()) {
+fun HomeScreen(
+    navController: NavHostController = rememberNavController(),
+    harmonyShareViewModel: HarmonyShareViewModel,
+    shareViewModel: ShareViewModel,
+    dialogViewModel: DialogViewModel,
+    loadingViewModel: LoadingViewModel,
+    fortuneViewModel: FortuneViewModel
+) {
+
+    dialogViewModel.closeDialog()
 
     var initialize by remember { mutableStateOf(false) }
 
     /* 한번만 실행 */
     if (!initialize){
 
-        fortuneViewModel.clear()
-        pickTarotViewModel.clear()
-        questionInputViewModel.clear()
-        resultViewModel.clear()
-        chatViewModel.clear()
-        harmonyShareViewModel.clear()
-        mainViewModel.clear()
+//        fortuneViewModel.clear()
+//        pickTarotViewModel.clear()
+//        questionInputViewModel.clear()
+//        resultViewModel.clear()
+//        chatViewModel.clear()
+//        harmonyShareViewModel.clear()
+//        mainViewModel.clear()
 
         // 공유하기 확인
         val activity = LocalContext.current.findActivity()
         if (activity != null && activity.intent != null) {
-            receiveShareRequest(activity, navController)
+            receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyShareViewModel)
         }
-
-//        loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.RoomResultScreen)
 
         initialize = true
     }

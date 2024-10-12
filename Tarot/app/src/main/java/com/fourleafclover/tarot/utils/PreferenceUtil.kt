@@ -3,7 +3,7 @@ package com.fourleafclover.tarot.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.fourleafclover.tarot.myTarotViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
@@ -52,10 +52,10 @@ class PreferenceUtil(context: Context) {
 
 
     fun deleteAllTarotResults(){
-        prefs.edit().remove(tarotResultListKey).commit()
+        prefs.edit().remove(tarotResultListKey).apply()
     }
 
-    fun deleteTarotResult(){
+    fun deleteTarotResult(myTarotViewModel: MyTarotViewModel){
         myTarotViewModel.deleteSelectedItem()
         saveTarotResult(myTarotViewModel.myTarotResults.map { it.tarotId } as ArrayList<String>)
     }
@@ -77,7 +77,7 @@ class PreferenceUtil(context: Context) {
     }
 
     fun deleteIsPickCardIndicateComplete(){
-        prefs.edit().remove(pickCardIndicateKey).commit()
+        prefs.edit().remove(pickCardIndicateKey).apply()
     }
 
     fun saveHarmonyRoomId(roomId: String){

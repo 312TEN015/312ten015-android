@@ -42,17 +42,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
 import com.fourleafclover.tarot.ui.theme.TextCaptionM12
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -68,7 +70,13 @@ import kotlin.math.roundToInt
 
 @Preview
 @Composable
-fun PickTarotScreen(navController: NavHostController = rememberNavController()) {
+fun PickTarotScreen(
+    navController: NavHostController = rememberNavController(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    pickTarotViewModel: PickTarotViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
+) {
     val localContext = LocalContext.current
     var showIndicator by remember { mutableStateOf(MyApplication.prefs.isPickCardIndicateComplete()) }
 
@@ -81,7 +89,8 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
             AppBarCloseWithDialog(
                 navController = navController,
                 pickedTopicTemplate = fortuneViewModel.pickedTopicState.value.topicSubjectData,
-                backgroundColor = backgroundColor_1
+                backgroundColor = backgroundColor_1,
+                dialogViewModel = dialogViewModel
             )
 
             // "n번째 카드를 골라주세요."
@@ -105,19 +114,25 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                         // "첫번째 카드"
                         CardBlank(
                             context = localContext,
-                            sequence = 1
+                            sequence = 1,
+                            fortuneViewModel,
+                            pickTarotViewModel
                         )
 
                         // "두번째 카드"
                         CardBlank(
                             context = localContext,
-                            sequence = 2
+                            sequence = 2,
+                            fortuneViewModel,
+                            pickTarotViewModel
                         )
 
                         // "세번째 카드"
                         CardBlank(
                             context = localContext,
-                            sequence = 3
+                            sequence = 3,
+                            fortuneViewModel,
+                            pickTarotViewModel
                         )
                     }
 
@@ -126,7 +141,7 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
                     Column(modifier = Modifier.weight(1f),
                         verticalArrangement = Arrangement.Bottom) {
 
-                        CardDeck()
+                        CardDeck(pickTarotViewModel)
 
                         // 인디케이터
                         Image(painter = painterResource(id = R.drawable.tarot_pick_indicator),
@@ -187,7 +202,13 @@ fun PickTarotScreen(navController: NavHostController = rememberNavController()) 
 }
 
 @Composable
-fun CardBlank(context: Context, sequence: Int){
+fun CardBlank(
+    context: Context,
+    sequence: Int,
+    fortuneViewModel: FortuneViewModel,
+    pickTarotViewModel: PickTarotViewModel
+){
+
     val dash = Stroke(width = 3f, pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f)))
     val isCardPicked = pickTarotViewModel.getIsCardPicked(sequence)
 
@@ -222,7 +243,7 @@ fun CardBlank(context: Context, sequence: Int){
 }
 
 @Composable
-fun CardDeck(){
+fun CardDeck(pickTarotViewModel: PickTarotViewModel){
     val pxToMove = with(LocalDensity.current) { -30.dp.toPx().roundToInt() }
 
     LazyRow(

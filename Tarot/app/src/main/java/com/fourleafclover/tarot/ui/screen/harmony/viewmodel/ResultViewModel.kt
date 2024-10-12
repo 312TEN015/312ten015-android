@@ -6,16 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotInputDto
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.pickTarotViewModel
-import com.fourleafclover.tarot.questionInputViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /** 타로 뽑기 결과 관리 */
 /** 타로 뽑기 결과 & 궁합보기 결과 화면에서 사용 */
 @HiltViewModel
-class ResultViewModel() : ViewModel() {
+class ResultViewModel @Inject constructor(): ViewModel() {
 
     // 타로보기 -------------------------------------------------------------------------------------
 
@@ -47,7 +47,10 @@ class ResultViewModel() : ViewModel() {
     // ---------------------------------------------------------------------------------------------
 
     /** 타로 보기 결과 요청 */
-    fun getTarotInputDto() = TarotInputDto(
+    fun getTarotInputDto(
+        pickTarotViewModel: PickTarotViewModel,
+        questionInputViewModel: QuestionInputViewModel)
+    = TarotInputDto(
         questionInputViewModel.answer1.value.text,
         questionInputViewModel.answer2.value.text,
         questionInputViewModel.answer3.value.text,
@@ -79,10 +82,10 @@ class ResultViewModel() : ViewModel() {
         _saveState.value = false
     }
 
-    fun distinguishCardResult(tarotResult: TarotOutputDto){
+    fun distinguishCardResult(tarotResult: TarotOutputDto, isRoomOwner: Boolean){
         initResult()
         setTarotResult(tarotResult)
-        if (harmonyShareViewModel.isRoomOwner.value) {
+        if (isRoomOwner) {
             myCardResults = tarotResult.cardResults!!.slice(0..2)
             myCardNumbers = tarotResult.cards.slice(0..2)
             partnerCardResults = tarotResult.cardResults!!.slice(3..5)

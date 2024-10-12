@@ -35,18 +35,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.myTarotViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.DeleteTarotResultDialog
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.TextH03SB18
@@ -64,13 +64,18 @@ var showSheet = mutableStateOf(false)
 
 @Preview
 @Composable
-fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
+fun MyTarotScreen(
+    navController: NavHostController = rememberNavController(),
+    myTarotViewModel: MyTarotViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel()
+) {
+
     setStatusbarColor(LocalView.current, backgroundColor_2)
 
     Box {
 
         if (showSheet.value) {
-            BottomSheet()
+            BottomSheet(myTarotViewModel)
         }
 
         Column(
@@ -133,7 +138,7 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
                     contentPadding = PaddingValues(vertical = 10.dp),
                     content = {
                         items(myTarotViewModel.myTarotResults.size) {
-                            MyTarotItemComponent(navController, it)
+                            MyTarotItemComponent(navController, it, fortuneViewModel, myTarotViewModel)
                         }
 
                     })
@@ -145,16 +150,19 @@ fun MyTarotScreen(navController: NavHostController = rememberNavController()) {
 @Composable
 fun MyTarotItemComponent(
     navController: NavHostController = rememberNavController(),
-    idx: Int = 0
+    idx: Int = 0,
+    fortuneViewModel: FortuneViewModel,
+    myTarotViewModel: MyTarotViewModel
 ){
+
     Box(modifier = Modifier
         .padding(bottom = 16.dp)
         .clickable {
             myTarotViewModel.selectItem(idx)
-            if (myTarotViewModel.selectedTarotResult.tarotType == 5){
+            if (myTarotViewModel.selectedTarotResult.tarotType == 5) {
                 myTarotViewModel.distinguishCardResult(myTarotViewModel.selectedTarotResult)
                 navigateSaveState(navController, ScreenEnum.MyTarotHarmonyDetailScreen.name)
-            }else{
+            } else {
                 navigateSaveState(navController, ScreenEnum.MyTarotDetailScreen.name)
             }
         })
@@ -228,8 +236,7 @@ fun MyTarotItemComponent(
 }
 
 @Composable
-fun BottomSheet() {
-
+fun BottomSheet(myTarotViewModel: MyTarotViewModel) {
     val modalBottomSheetState = rememberModalBottomSheetState()
     var openDeleteDialog by remember { mutableStateOf(false) }
 
@@ -244,7 +251,7 @@ fun BottomSheet() {
                 showSheet.value = false
                                                 },
                 onClickOk = {
-                    MyApplication.prefs.deleteTarotResult()
+                    MyApplication.prefs.deleteTarotResult(myTarotViewModel)
                     showSheet.value = false
                 })
         }

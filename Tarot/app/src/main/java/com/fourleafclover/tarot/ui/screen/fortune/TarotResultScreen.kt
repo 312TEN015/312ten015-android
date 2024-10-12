@@ -26,16 +26,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
@@ -58,17 +60,22 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 @Preview
-fun TarotResultScreen(navController: NavHostController = rememberNavController()){
+fun TarotResultScreen(
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    resultViewModel: ResultViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+){
 
     Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
     {
 
-        ControlDialog(navController)
+        ControlDialog(navController, resultViewModel)
 
 
         Box(modifier = appBarModifier
-                .background(color = backgroundColor_1)
-                .padding(top = 10.dp, bottom = 10.dp),
+            .background(color = backgroundColor_1)
+            .padding(top = 10.dp, bottom = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -106,20 +113,21 @@ fun TarotResultScreen(navController: NavHostController = rememberNavController()
             )
 
             Box(modifier = Modifier.background(color = backgroundColor_2)){
-                CardSlider(tarotResult = resultViewModel.tarotResult.value)
+                CardSlider(tarotResult = resultViewModel.tarotResult.value, fortuneViewModel = fortuneViewModel)
             }
 
 
-            OverallResult()
+            OverallResult(resultViewModel, harmonyShareViewModel)
 
         }
 
     }
 }
 
-@Preview
+
 @Composable
-private fun OverallResult(){
+private fun OverallResult(resultViewModel: ResultViewModel, harmonyShareViewModel: HarmonyShareViewModel){
+
     Column(
         modifier = Modifier
             .background(color = gray_8)
@@ -219,7 +227,8 @@ private fun OverallResult(){
                     localContext,
                     resultViewModel.tarotResult.value.tarotId,
                     ShareLinkType.MY,
-                    ShareActionType.OPEN_SHEET
+                    ShareActionType.OPEN_SHEET,
+                    harmonyShareViewModel
                 )
             },
             horizontalArrangement = Arrangement.Center)

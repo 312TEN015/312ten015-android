@@ -22,9 +22,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,14 +40,12 @@ import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.dialogViewModel
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.resultViewModel
-import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.theme.backgroundColor_1
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.getTextStyle
@@ -137,12 +132,12 @@ fun AppBarPlain(
 }
 
 @Composable
-@Preview
 fun AppBarCloseWithDialog(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
-    isTitleVisible: Boolean = true
+    isTitleVisible: Boolean = true,
+    dialogViewModel: DialogViewModel
 ) {
 
     if (dialogViewModel.openDialog) {
@@ -155,13 +150,16 @@ fun AppBarCloseWithDialog(
         }
     }
 
-    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }
 
 @Composable
 fun OpenCloseChatDialog(
-    navController: NavHostController
+    navController: NavHostController,
+    harmonyShareViewModel: HarmonyShareViewModel,
+    dialogViewModel: DialogViewModel
 ) {
+
     if (dialogViewModel.openDialog) {
         Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
             CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
@@ -177,7 +175,9 @@ fun OpenCloseChatDialog(
 
 @Composable
 fun OpenCloseCreateChatDialog(
-    navController: NavHostController
+    navController: NavHostController,
+    harmonyShareViewModel: HarmonyShareViewModel,
+    dialogViewModel: DialogViewModel
 ) {
     if (dialogViewModel.openDialog) {
         Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
@@ -193,40 +193,42 @@ fun OpenCloseCreateChatDialog(
 }
 
 @Composable
-@Preview
 fun AppBarCloseChatWithDialog(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
-    isTitleVisible: Boolean = true
+    isTitleVisible: Boolean = true,
+    harmonyShareViewModel: HarmonyShareViewModel,
+    dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseChatDialog(navController)
+    OpenCloseChatDialog(navController, harmonyShareViewModel, dialogViewModel)
 
-    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }
 
 @Composable
-@Preview
 fun AppBarCloseCreateChatWithDialog(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
-    isTitleVisible: Boolean = true
+    isTitleVisible: Boolean = true,
+    harmonyShareViewModel: HarmonyShareViewModel,
+    dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseCreateChatDialog(navController)
+    OpenCloseCreateChatDialog(navController, harmonyShareViewModel, dialogViewModel)
 
-    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible)
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }
 
 @Composable
-@Preview
 fun AppBarClose(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
-    isTitleVisible: Boolean = true
+    isTitleVisible: Boolean = true,
+    dialogViewModel: DialogViewModel
 ) {
 
     Box(
@@ -267,13 +269,12 @@ fun AppBarClose(
 }
 
 @Composable
-@Preview
 fun AppBarCloseTarotResult(
     navController: NavHostController = rememberNavController(),
-    pickedTopicTemplate: TarotSubjectData = fortuneViewModel.pickedTopicState.value.topicSubjectData,
+    pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true,
-    resultViewModel: ResultViewModel = remember { ResultViewModel() }
+    resultViewModel: ResultViewModel
 ) {
 
 
@@ -316,8 +317,10 @@ fun AppBarCloseTarotResult(
 
 @Composable
 fun OpenCloseDialog(
-    navController: NavHostController
+    navController: NavHostController,
+    resultViewModel: ResultViewModel
 ) {
+
     // 닫기 버튼 눌렀을 때 && 타로 결과 저장 안한 경우
     if (resultViewModel.openCloseDialog.value && !resultViewModel.saveState.value) {
         Dialog(onDismissRequest = { resultViewModel.closeCloseDialog() }) {
@@ -340,7 +343,7 @@ fun OpenCloseDialog(
 }
 
 @Composable
-fun OpenCompleteDialog() {
+fun OpenCompleteDialog(resultViewModel: ResultViewModel) {
     // 타로 결과 저장 버튼 눌렀을 때
     if (resultViewModel.openCompleteDialog.value) {
         Dialog(onDismissRequest = { resultViewModel.closeCompleteDialog() }) {
@@ -351,11 +354,12 @@ fun OpenCompleteDialog() {
 
 @Composable
 fun ControlDialog(
-    navController: NavHostController
+    navController: NavHostController,
+    resultViewModel: ResultViewModel
 ) {
     BackHandler { resultViewModel.closeCloseDialog() }
-    OpenCloseDialog(navController = navController)
-    OpenCompleteDialog()
+    OpenCloseDialog(navController = navController, resultViewModel)
+    OpenCompleteDialog(resultViewModel)
 
 }
 
@@ -365,7 +369,7 @@ fun ControlDialog(
 
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController = rememberNavController()) {
+fun BottomNavigationBar(navController: NavHostController = rememberNavController(), myTarotViewModel: MyTarotViewModel) {
     val localContext = LocalContext.current
     val items = listOf<BottomNavItem>(
         BottomNavItem.Home,
@@ -415,7 +419,7 @@ fun BottomNavigationBar(navController: NavHostController = rememberNavController
                         if (item.screenName == ScreenEnum.MyTarotScreen.name) {
                             val tarotResultArray = MyApplication.prefs.getTarotResultArray()
                             if (tarotResultArray.isNotEmpty()) {
-                                getMyTarotList(localContext, navController, tarotResultArray)
+                                getMyTarotList(localContext, navController, tarotResultArray, myTarotViewModel)
                                 return@BottomNavigationItem
                             }
                         }

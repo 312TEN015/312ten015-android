@@ -9,26 +9,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseCreateChatWithDialog
-import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextCaptionM12
@@ -48,7 +48,10 @@ import com.fourleafclover.tarot.ui.theme.white
 @Composable
 fun RoomNicknameScreen(
     navController: NavHostController = rememberNavController(),
-    nicknameViewModel: NicknameViewModel = remember { NicknameViewModel() }
+    nicknameViewModel: NicknameViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
 
     PreventBackPressed()
@@ -58,7 +61,9 @@ fun RoomNicknameScreen(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
-            isTitleVisible = false
+            isTitleVisible = false,
+            harmonyShareViewModel = harmonyShareViewModel,
+            dialogViewModel = dialogViewModel
         )
 
         Column(

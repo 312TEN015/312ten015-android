@@ -7,15 +7,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData
 import com.google.firebase.dynamiclinks.ShortDynamicLink
@@ -45,7 +45,8 @@ fun setDynamicLink(
     context: Context,
     value: String,
     linkType: ShareLinkType,
-    actionType: ShareActionType
+    actionType: ShareActionType,
+    harmonyShareViewModel: HarmonyShareViewModel
 ){
     if (linkType == ShareLinkType.HARMONY) {
         if (harmonyShareViewModel.roomId.value.isNotEmpty()){
@@ -54,12 +55,12 @@ fun setDynamicLink(
             else if (harmonyShareViewModel.dynamicLink.isNotEmpty())
                 doShare(context, actionType, harmonyShareViewModel.dynamicLink.toUri(), linkType)
             else if (harmonyShareViewModel.dynamicLink.isEmpty() && harmonyShareViewModel.shortLink.isEmpty())
-                getDynamicLink(context, value, linkType, actionType)
+                getDynamicLink(context, value, linkType, actionType, harmonyShareViewModel)
             return
         }
     }
 
-    getDynamicLink(context, value, linkType, actionType)
+    getDynamicLink(context, value, linkType, actionType, harmonyShareViewModel)
 }
 
 // 2) 다이나믹 링크 초기화
@@ -67,7 +68,8 @@ fun getDynamicLink(
     context: Context,
     value: String,
     linkType: ShareLinkType,
-    actionType: ShareActionType
+    actionType: ShareActionType,
+    harmonyShareViewModel: HarmonyShareViewModel
 ){
     val url = initLink(value, linkType)
 
@@ -154,7 +156,13 @@ fun copyLink(context: Context, linkToCopy: String){
 
 
 // receive =========================================================================================
-fun receiveShareRequest(activity: Activity, navController: NavHostController){
+fun receiveShareRequest(
+    activity: Activity,
+    navController: NavHostController,
+    shareViewModel: ShareViewModel,
+    loadingViewModel: LoadingViewModel,
+    harmonyShareViewModel: HarmonyShareViewModel
+){
     Firebase.dynamicLinks
         .getDynamicLink(activity.intent)
         .addOnSuccessListener(activity) { pendingDynamicLinkData: PendingDynamicLinkData? ->
@@ -168,7 +176,7 @@ fun receiveShareRequest(activity: Activity, navController: NavHostController){
             // 타로 결과 공유
             if (deepLinkUri.getBooleanQueryParameter("tarotId", false)){
                 val sharedTarotId = deepLinkUri.getQueryParameter("tarotId")!!
-                getSharedTarotDetail(navController, sharedTarotId)
+                getSharedTarotDetail(navController, sharedTarotId, shareViewModel, loadingViewModel)
                 loadingViewModel.startLoading(navController, ScreenEnum.LoadingScreen, ScreenEnum.ShareDetailScreen)
             }
 

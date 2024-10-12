@@ -1,17 +1,15 @@
 package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.PickedCardNumberState
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.pickTarotViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 val scenarioSequence = arrayListOf(
     Scenario.Opening,
@@ -56,13 +54,14 @@ enum class CardDeckStatus {
 }
 
 data class ChatState(
+    var nickname: String = "",
     var scenario: Scenario = Scenario.Opening,
     var cardDeckStatus: CardDeckStatus = CardDeckStatus.Gathered,
     var pickedCardNumberState: PickedCardNumberState = PickedCardNumberState()
 )
 
 @HiltViewModel
-class ChatViewModel : ViewModel() {
+class ChatViewModel  @Inject constructor() : ViewModel() {
     private var _chatState = MutableStateFlow(ChatState())
     val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
 
@@ -72,7 +71,7 @@ class ChatViewModel : ViewModel() {
     private val _pickSequence = MutableStateFlow(1)
     val pickSequence: StateFlow<Int> = _pickSequence.asStateFlow()
 
-    private val chatList = mutableStateListOf<Chat>()
+    private var chatList = mutableStateListOf<Chat>()
 
     private lateinit var opening: List<Chat>
     private lateinit var firstCard: List<Chat>
@@ -84,34 +83,16 @@ class ChatViewModel : ViewModel() {
 
     fun clear() = viewModelScope.launch { onCleared() }
 
-    fun resetChatData() {
-        initChatStates()
-        chatList.clear()
-        opening = listOf()
-        firstCard = listOf()
-        firstCardSelected = listOf()
-        secondCard = listOf()
-        secondCardSelected = listOf()
-        thirdCard = listOf()
-        complete = listOf()
-    }
-
-    fun initAllScenario() {
+    fun startChat(myNickname: String, partnerNickname: String) {
+        _chatState.value = ChatState(nickname = myNickname)
+        _partnerChatState.value = ChatState(nickname = partnerNickname)
+        chatList = mutableStateListOf<Chat>()
         initOpening()
-        initFirst()
-        initSecond()
-        initThird()
-        initComplete()
-    }
-
-    fun initChatStates(){
-        _chatState.value = ChatState()
-        _partnerChatState.value = ChatState()
     }
 
     fun initOpening(){
         opening = listOf(
-            Chat(ChatType.PartnerChatText, "${harmonyShareViewModel.getUserNickname()}님, 그 사람과의 운명이 궁금하시군요!", code = "opening_1"),
+            Chat(ChatType.PartnerChatText, "${_chatState.value.nickname}님, 그 사람과의 운명이 궁금하시군요!", code = "opening_1"),
             Chat(ChatType.PartnerChatText, "지금부터 타로카드를 통해 서로의 운명 궁합을 봐드릴게요!\n궁합 보실 준비가 되셨다면 [시작하기]를 눌러주세요!", code = "opening_2"),
             Chat(ChatType.Button, "시작하기", code = "opening_3")
         )
@@ -129,7 +110,7 @@ class ChatViewModel : ViewModel() {
 
     private fun initSecond(){
         secondCard = listOf(
-            Chat(ChatType.PartnerChatText, "${harmonyShareViewModel.getPartnerNickname()}님은 이 카드를 선택하셨어요.", code = "secondCard_2"),
+            Chat(ChatType.PartnerChatText, "${_partnerChatState.value.nickname}님은 이 카드를 선택하셨어요.", code = "secondCard_2"),
             Chat(type = ChatType.PartnerChatImage, drawable = _partnerChatState.value.pickedCardNumberState.firstCardNumber, code = "secondCard_2"),
             Chat(ChatType.PartnerChatText, "이제 두번째 카드를 골라봐요!", code = "secondCard_3"),
             Chat(ChatType.PickCard, code = "secondCard_4"),
@@ -138,7 +119,7 @@ class ChatViewModel : ViewModel() {
 
     private fun initThird(){
         thirdCard = listOf(
-            Chat(ChatType.PartnerChatText, "${harmonyShareViewModel.getPartnerNickname()}님은 이 카드를 선택하셨어요.", code = "thirdCard_2"),
+            Chat(ChatType.PartnerChatText, "${_partnerChatState.value.nickname}님은 이 카드를 선택하셨어요.", code = "thirdCard_2"),
             Chat(type = ChatType.PartnerChatImage, drawable = _partnerChatState.value.pickedCardNumberState.secondCardNumber, code = "secondCard_2"),
             Chat(ChatType.PartnerChatText, "이제 세번째 카드를 골라봐요!", code = "thirdCard_3"),
             Chat(ChatType.PickCard, code = "thirdCard_4"),
@@ -147,7 +128,7 @@ class ChatViewModel : ViewModel() {
 
     fun initComplete(){
         complete = listOf(
-            Chat(ChatType.PartnerChatButton, "짝짝짝\uD83D\uDC4F\n모든 카드 선택이 완료되었습니다! ${harmonyShareViewModel.getUserNickname()}님과 ${harmonyShareViewModel.getPartnerNickname()}님의 궁합은...", code = "complete_1")
+            Chat(ChatType.PartnerChatButton, "짝짝짝\uD83D\uDC4F\n모든 카드 선택이 완료되었습니다! ${_chatState.value.nickname}님과 ${_partnerChatState.value.nickname}님의 궁합은...", code = "complete_1")
         )
     }
 
@@ -219,16 +200,17 @@ class ChatViewModel : ViewModel() {
 
     fun updateCardDeckStatus(newStatus: CardDeckStatus) {
         _chatState.value = ChatState(
+            _chatState.value.nickname,
             _chatState.value.scenario,
             newStatus,
             _chatState.value.pickedCardNumberState
         )
     }
 
-    fun updatePickedCardNumberState(){
-        _chatState.value.pickedCardNumberState.firstCardNumber = pickTarotViewModel.pickedCardNumberState.value.firstCardNumber
-        _chatState.value.pickedCardNumberState.secondCardNumber = pickTarotViewModel.pickedCardNumberState.value.secondCardNumber
-        _chatState.value.pickedCardNumberState.thirdCardNumber = pickTarotViewModel.pickedCardNumberState.value.thirdCardNumber
+    fun updatePickedCardNumberState(pickedCardNumberState: PickedCardNumberState){
+        _chatState.value.pickedCardNumberState.firstCardNumber = pickedCardNumberState.firstCardNumber
+        _chatState.value.pickedCardNumberState.secondCardNumber = pickedCardNumberState.secondCardNumber
+        _chatState.value.pickedCardNumberState.thirdCardNumber = pickedCardNumberState.thirdCardNumber
     }
 
     fun updatePartnerCardNumber(partnerScenario: Scenario, cardNumber: Int) {
@@ -261,15 +243,5 @@ class ChatViewModel : ViewModel() {
 
     fun getAdjectives(): String {
         return adjectives[(0 until adjectives.size).random()]
-    }
-
-    fun checkIsAllCardPicked() : Boolean {
-        return (pickTarotViewModel.pickedCardNumberState.value.firstCardNumber != -1
-                && pickTarotViewModel.pickedCardNumberState.value.secondCardNumber != -1
-                && pickTarotViewModel.pickedCardNumberState.value.thirdCardNumber != -1
-                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
-                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
-                && partnerChatState.value.pickedCardNumberState.firstCardNumber != -1
-                )
     }
 }

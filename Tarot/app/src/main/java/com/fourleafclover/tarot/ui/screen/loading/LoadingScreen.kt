@@ -12,21 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.gray_8
-import com.fourleafclover.tarot.utils.getMatchResult
 import com.fourleafclover.tarot.utils.getTarotResult
 
 
 @Composable
 @Preview
-fun LoadingScreen(navController: NavHostController = rememberNavController()){
+fun LoadingScreen(
+    navController: NavHostController = rememberNavController(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    resultViewModel: ResultViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    pickTarotViewModel: PickTarotViewModel = hiltViewModel(),
+    questionInputViewModel: QuestionInputViewModel = hiltViewModel()
+){
     val localContext = LocalContext.current
 
     if (!loadingViewModel.isLoading.value) {
@@ -37,7 +47,14 @@ fun LoadingScreen(navController: NavHostController = rememberNavController()){
 
     LaunchedEffect(Unit){
         if (loadingViewModel.destination == ScreenEnum.ResultScreen){
-            getTarotResult(localContext)
+            getTarotResult(
+                localContext,
+                resultViewModel = resultViewModel,
+                pickTarotViewModel = pickTarotViewModel,
+                loadingViewModel = loadingViewModel,
+                questionInputViewModel = questionInputViewModel,
+                fortuneViewModel.pickedTopicState.value.topicNumber
+            )
         }
         else if (loadingViewModel.destination == ScreenEnum.RoomResultScreen){
             if (resultViewModel.isMatchResultPrepared.value) {

@@ -1,22 +1,17 @@
 package com.fourleafclover.tarot.ui.screen.fortune.viewModel
 
-import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.PickedCardNumberState
 import com.fourleafclover.tarot.getRandomCards
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 /** 카드 선택 할때 절차 관리 및 카드 관리 */
 @HiltViewModel
-class PickTarotViewModel: ViewModel() {
+class PickTarotViewModel @Inject constructor(): ViewModel() {
     // 선택한 카드들의 상태
     private var _pickedCardNumberState = mutableStateOf(PickedCardNumberState())
     val pickedCardNumberState get() = _pickedCardNumberState
@@ -35,7 +30,12 @@ class PickTarotViewModel: ViewModel() {
 
     // ---------------------------------------------------------------------------------------------
 
-    fun clear() = viewModelScope.launch { onCleared() }
+    fun clear() {
+        _pickedCardNumberState = mutableStateOf(PickedCardNumberState())
+        _nowSelectedCardIdx = mutableStateOf(-1)
+        _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
+        _pickSequence = mutableStateOf(1)
+    }
 
     fun initCardDeck(){
         _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }

@@ -1,22 +1,16 @@
 package com.fourleafclover.tarot
 
 import android.app.Application
-import com.fourleafclover.tarot.network.PrettyJsonLogger
 import android.util.Log
-import android.widget.Toast
-import androidx.navigation.NavHostController
+import com.fourleafclover.tarot.network.PrettyJsonLogger
 import com.fourleafclover.tarot.network.TarotService
-import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.utils.PreferenceUtil
 import com.fourleafclover.tarot.utils.ToastUtil
 import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.IO
 import io.socket.client.Socket
-import io.socket.engineio.client.Transport
-import io.socket.engineio.client.transports.Polling
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.WebSocket
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Arrays

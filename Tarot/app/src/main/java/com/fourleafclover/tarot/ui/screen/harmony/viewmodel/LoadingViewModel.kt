@@ -7,15 +7,21 @@ import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 /** 로딩 상태를 관리 */
 @HiltViewModel
-class LoadingViewModel: ViewModel() {
+class LoadingViewModel @Inject constructor(): ViewModel() {
     private var _isLoading = mutableStateOf(false)
     val isLoading get() = _isLoading
 
     private var _destination = ScreenEnum.HomeScreen
     val destination get() = _destination
+
+    fun clear() {
+        _isLoading = mutableStateOf(false)
+        _destination = ScreenEnum.HomeScreen
+    }
 
 
     /** 로딩 실행 여부를 업데이트

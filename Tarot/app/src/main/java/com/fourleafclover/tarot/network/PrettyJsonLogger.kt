@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import okhttp3.internal.platform.Platform
 import okhttp3.logging.HttpLoggingInterceptor
-import javax.security.auth.callback.Callback
 
 class PrettyJsonLogger : HttpLoggingInterceptor.Logger {
     private val gson = GsonBuilder().setPrettyPrinting().create()

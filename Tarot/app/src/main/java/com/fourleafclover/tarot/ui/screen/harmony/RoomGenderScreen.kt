@@ -16,12 +16,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.ui.component.AppBarCloseCreateChatWithDialog
-import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -30,6 +30,8 @@ import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH02M22
 import com.fourleafclover.tarot.ui.theme.TextH03SB18
@@ -49,7 +51,9 @@ const val MAN = 1
 @Composable
 fun RoomGenderScreen(
     navController: NavHostController = rememberNavController(),
-    genderViewModel: GenderViewModel = GenderViewModel()
+    genderViewModel: GenderViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
     PreventBackPressed()
 
@@ -58,7 +62,9 @@ fun RoomGenderScreen(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
-            isTitleVisible = false
+            isTitleVisible = false,
+            harmonyShareViewModel = harmonyShareViewModel,
+            dialogViewModel = dialogViewModel
         )
 
         Column(

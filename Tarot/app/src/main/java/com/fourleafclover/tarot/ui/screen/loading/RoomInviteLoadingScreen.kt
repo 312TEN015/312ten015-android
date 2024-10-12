@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.loading
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,29 +10,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
-import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
-import com.fourleafclover.tarot.ui.screen.harmony.onJoinComplete
+import com.fourleafclover.tarot.ui.screen.harmony.emitJoin
+import com.fourleafclover.tarot.ui.screen.harmony.setOnJoin
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 import com.fourleafclover.tarot.ui.theme.gray_5
-import org.json.JSONObject
 
 // 추후 로딩 화면 컴포넌트화 하기
 @Composable
 @Preview
-fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavController()) {
+fun RoomInviteLoadingScreen(
+    navController: NavHostController = rememberNavController(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    chatViewModel: ChatViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
+) {
 
     if (!loadingViewModel.isLoading.value) {
         loadingViewModel.endLoading(navController)
@@ -41,30 +46,20 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
 
     PreventBackPressed()
 
-    LaunchedEffect(Unit){
-        val jsonObject = JSONObject()
-        jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-        jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
-        MyApplication.socket.on("joinComplete", onJoinComplete)
-        MyApplication.socket.emit("join", jsonObject)
-        Log.d("socket-test", "set onJoinComplete")
-        Log.d("socket-test", "emit join")
-
-
-        /* 테스트 코드 */
-//        Handler(Looper.getMainLooper())
-//            .postDelayed({
-//                onJoinComplete()
-//            }, 4000)
+    LaunchedEffect(Unit) {
+        setOnJoin(harmonyShareViewModel, loadingViewModel, chatViewModel)
+        emitJoin(harmonyShareViewModel)
     }
-    
+
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarCloseChatWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
-            isTitleVisible = false
+            isTitleVisible = false,
+            harmonyShareViewModel = harmonyShareViewModel,
+            dialogViewModel = dialogViewModel
         )
 
         Column(
@@ -93,7 +88,7 @@ fun RoomInviteLoadingScreen(navController: NavHostController = rememberNavContro
                     textAlign = TextAlign.Center
                 )
 
-                ShareLinkOrCopy()
+                ShareLinkOrCopy(harmonyShareViewModel)
 
             }
 

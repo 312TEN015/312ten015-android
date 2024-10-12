@@ -1,4 +1,3 @@
-
 package com.fourleafclover.tarot.ui.screen.fortune
 
 import androidx.compose.foundation.layout.Column
@@ -8,20 +7,25 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.constant.questionCount
-import com.fourleafclover.tarot.fortuneViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.QuestionsComponent
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
 
-@Preview
 @Composable
-fun InputScreen(navController: NavHostController = rememberNavController()) {
+fun InputScreen(
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel,
+    questionInputViewModel: QuestionInputViewModel,
+    dialogViewModel: DialogViewModel
+) {
     val localContext = LocalContext.current
     val pickedTopicTemplate by fortuneViewModel.pickedTopicState
 
@@ -33,15 +37,23 @@ fun InputScreen(navController: NavHostController = rememberNavController()) {
         AppBarCloseWithDialog(
             navController = navController,
             pickedTopicTemplate = pickedTopicTemplate.topicSubjectData,
-            backgroundColor = pickedTopicTemplate.topicSubjectData.primaryColor
+            backgroundColor = pickedTopicTemplate.topicSubjectData.primaryColor,
+            dialogViewModel = dialogViewModel
         )
 
         Column(modifier = Modifier) {
 
             LazyColumn(content = {
                 // numberOfQuestion + header + footer
-                items(questionCount + 2){
-                    QuestionsComponent(pickedTopicTemplate.topicSubjectData, it, navController, localContext)
+                items(questionCount + 2) {
+                    QuestionsComponent(
+                        pickedTopicTemplate.topicSubjectData,
+                        it,
+                        navController,
+                        localContext,
+                        fortuneViewModel,
+                        questionInputViewModel
+                    )
                 }
 
             })

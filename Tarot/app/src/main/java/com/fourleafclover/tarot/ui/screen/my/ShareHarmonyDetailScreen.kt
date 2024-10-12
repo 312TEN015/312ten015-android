@@ -22,15 +22,16 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.shareViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.navigation.NavigateHomeOnBackPressed
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -48,7 +49,11 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Composable
 @Preview
-fun ShareHarmonyDetailScreen(navController: NavHostController = rememberNavController()){
+fun ShareHarmonyDetailScreen(
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    shareViewModel: ShareViewModel = hiltViewModel()
+){
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(shareViewModel.sharedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_2)
@@ -159,7 +164,7 @@ fun ShareHarmonyDetailScreen(navController: NavHostController = rememberNavContr
 
                 HarmonyCardSlider(
                     outsideHorizontalPadding = 40.dp,
-                    sliderList = getSliderList(LocalContext.current),
+                    sliderList = getSliderList(LocalContext.current, fortuneViewModel, shareViewModel),
                     firstCardResults = shareViewModel.roomOwnerCardResults,
                     secondCardResults = shareViewModel.inviteeCardResults,
                     isFirstTab = shareViewModel.isRoomOwnerTab()
@@ -168,14 +173,14 @@ fun ShareHarmonyDetailScreen(navController: NavHostController = rememberNavContr
             }
 
 
-            OverallResult()
+            OverallResult(shareViewModel)
 
         }
     }
 
 }
 
-private fun getSliderList(context: Context) : ArrayList<Int> {
+private fun getSliderList(context: Context, fortuneViewModel: FortuneViewModel, shareViewModel: ShareViewModel) : ArrayList<Int> {
     val sliderList: ArrayList<Int> = arrayListOf(0, 0, 0)
     if (shareViewModel.isRoomOwnerTab()) {
         sliderList[0] = fortuneViewModel.getCardImageId(context, shareViewModel.roomOwnerCardNumbers[0].toString())
@@ -191,7 +196,8 @@ private fun getSliderList(context: Context) : ArrayList<Int> {
 }
 
 @Composable
-private fun OverallResult() {
+private fun OverallResult(shareViewModel: ShareViewModel) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()

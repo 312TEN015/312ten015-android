@@ -13,15 +13,18 @@ import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.fourleafclover.tarot.ui.navigation.NavigationHost
 import com.fourleafclover.tarot.ui.theme.TarotTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private lateinit var splashScreen: SplashScreen
-    private val viewModel: SplashViewModel by viewModels()
+    private val splashViewModel: SplashViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         splashScreen.setKeepOnScreenCondition{
-            viewModel.isLoading.value
+            splashViewModel.isLoading.value
         }
 
         // ATTENTION: This was auto-generated to handle app links.

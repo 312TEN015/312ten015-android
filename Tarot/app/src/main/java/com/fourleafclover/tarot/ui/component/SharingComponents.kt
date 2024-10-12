@@ -13,10 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_7
@@ -26,8 +25,7 @@ import com.fourleafclover.tarot.utils.ShareLinkType
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
-@Preview
-fun ShareLinkOrCopy(){
+fun ShareLinkOrCopy(harmonyShareViewModel: HarmonyShareViewModel) {
     val localContext = LocalContext.current
 
     Row(
@@ -41,14 +39,26 @@ fun ShareLinkOrCopy(){
             iconResource = R.drawable.share_g2,
             text = "초대 링크 공유",
             onClick = {
-                setDynamicLink(localContext, harmonyShareViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.OPEN_SHEET)
+                setDynamicLink(
+                    localContext,
+                    harmonyShareViewModel.roomId.value,
+                    ShareLinkType.HARMONY,
+                    ShareActionType.OPEN_SHEET,
+                    harmonyShareViewModel
+                )
             })
         HowToShareButton(
             modifier = Modifier.weight(1f),
             iconResource = R.drawable.unlink_g2,
             text = "초대 링크 복사",
             onClick = {
-                setDynamicLink(localContext, harmonyShareViewModel.roomId.value, ShareLinkType.HARMONY, ShareActionType.COPY_LINK)
+                setDynamicLink(
+                    localContext,
+                    harmonyShareViewModel.roomId.value,
+                    ShareLinkType.HARMONY,
+                    ShareActionType.COPY_LINK,
+                    harmonyShareViewModel
+                )
             })
     }
 }
@@ -70,10 +80,12 @@ fun HowToShareButton(
             .clickable { onClick() }
             .then(modifier),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Row(horizontalArrangement = Arrangement.Center) {
             Image(
-                modifier = Modifier.padding(end = 4.dp).size(20.dp),
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .size(20.dp),
                 painter = painterResource(id = iconResource),
                 contentDescription = null
             )

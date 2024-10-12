@@ -2,14 +2,13 @@ package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.MyApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import java.util.Date
+import javax.inject.Inject
 
 @HiltViewModel
-class HarmonyShareViewModel: ViewModel() {
+class HarmonyShareViewModel @Inject constructor(): ViewModel() {
 
     private var userNickname = mutableStateOf("")   // 사용자 닉네임
     private var partnerNickname = mutableStateOf("")    // 상대방 닉네임
@@ -31,7 +30,12 @@ class HarmonyShareViewModel: ViewModel() {
     var shortLink = ""
 
     fun clear() {
-        viewModelScope.launch { onCleared() }
+        userNickname = mutableStateOf("")
+        partnerNickname = mutableStateOf("")
+        _roomId = mutableStateOf("")
+        _createdRoomId = mutableStateOf("")
+        _invitedRoomId = mutableStateOf("")
+        _isRoomOwner = mutableStateOf(false)
         dynamicLink = ""
         shortLink = ""
     }
@@ -91,6 +95,10 @@ class HarmonyShareViewModel: ViewModel() {
         }
 
         _isRoomOwner.value = false
+//        pickTarotViewModel.clear()
+//        resultViewModel.clear()
+//        chatViewModel.clear()
+//        harmonyShareViewModel.clear()
 
     }
 

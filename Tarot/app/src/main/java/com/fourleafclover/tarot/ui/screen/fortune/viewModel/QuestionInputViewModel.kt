@@ -6,22 +6,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.SubjectDream
-import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.SubjectJob
-import com.fourleafclover.tarot.SubjectLove
-import com.fourleafclover.tarot.SubjectStudy
-import com.fourleafclover.tarot.SubjectToday
-import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.fortuneViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /** 유저가 입력한 답변 관리 */
 @HiltViewModel
-class QuestionInputViewModel: ViewModel() {
+class QuestionInputViewModel @Inject constructor(): ViewModel() {
     private var _answer1 = mutableStateOf(TextFieldValue(""))
     val answer1 get() = _answer1
 
@@ -59,8 +50,8 @@ class QuestionInputViewModel: ViewModel() {
         getNowTextField(idx).value = newText
     }
 
-    fun getTarotIllustId() : Int {
-        return when(fortuneViewModel.pickedTopicState.value.topicNumber){
+    fun getTarotIllustId(topicNumber: Int) : Int {
+        return when(topicNumber){
             0 -> R.drawable.illust_heartkey
             1 -> R.drawable.illust_study
             2 -> R.drawable.illust_dream

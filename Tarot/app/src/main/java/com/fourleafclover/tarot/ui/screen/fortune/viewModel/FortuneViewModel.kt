@@ -20,6 +20,7 @@ import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 val dummyFullResult = "당신에게는 어려운 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 있습니다. 포기하지 않고 매달 100만원씩 적금을 들고 있는 것이 그 예시겠네요. 하지만, 때로는 지나친 의욕 때문에 무리한 목표를 세우다가 실패로 이어지는 경우도 있지요. \n" +
         " 따라서, 지금까지의 생활 패턴을 유지하면서 안정감을 추구하려는 마음가짐이 중요합니다. 그리고, 다른 사람들을 위해 헌신하거나 배려하는 자세 역시 꼭 필요해요. 자신의 목표만 바라보기보다, 다른 사람에게 양보하는 마음가짐을 가지고 인생의 균형을 지켜가는 것이 중요합니다. \n" +
@@ -43,7 +44,7 @@ var dummyTarotOutputDto = TarotOutputDto(
 
 /** 유저가 선택한 주제 관리 */
 @HiltViewModel
-class FortuneViewModel : ViewModel() {
+class FortuneViewModel @Inject constructor() : ViewModel() {
     private var _pickedTopicState = mutableStateOf(PickedTopicState())
     val pickedTopicState get() = _pickedTopicState
 

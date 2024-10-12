@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class ShareViewModel: ViewModel() {
+class ShareViewModel @Inject constructor(): ViewModel() {
     // 공유하기로 받은 타로 데이터
     private var _sharedTarotResult = mutableStateOf(TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null))
     val sharedTarotResult get() = _sharedTarotResult.value

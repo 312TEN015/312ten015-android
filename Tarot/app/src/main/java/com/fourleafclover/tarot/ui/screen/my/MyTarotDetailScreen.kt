@@ -22,15 +22,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.myTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -51,7 +53,12 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 @Preview
-fun MyTarotDetailScreen(navController: NavHostController = rememberNavController()){
+fun MyTarotDetailScreen(
+    navController: NavHostController = rememberNavController(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    myTarotViewModel: MyTarotViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+) {
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(myTarotViewModel.selectedTarotResult.tarotType)
     setStatusbarColor(LocalView.current, backgroundColor_1)
@@ -59,11 +66,18 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
     Column(modifier = backgroundModifier)
     {
 
-        AppBarPlain(navController = navController, title = "MY 타로", backgroundColor = backgroundColor_1, backButtonVisible = true)
+        AppBarPlain(
+            navController = navController,
+            title = "MY 타로",
+            backgroundColor = backgroundColor_1,
+            backButtonVisible = true
+        )
 
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        )
         {
             Column(
                 modifier = Modifier
@@ -82,7 +96,10 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                     textAlign = TextAlign.Center
                 )
 
-                val imoji = fortuneViewModel.getSubjectImoji(localContext, myTarotViewModel.selectedTarotResult.tarotType)
+                val imoji = fortuneViewModel.getSubjectImoji(
+                    localContext,
+                    myTarotViewModel.selectedTarotResult.tarotType
+                )
                 TextH02M22(
                     text = "$imoji ${tarotSubjectData.majorQuestion} $imoji",
                     color = gray_2,
@@ -104,7 +121,7 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
 
 
             Box(modifier = Modifier.background(color = backgroundColor_2)) {
-                CardSlider(tarotResult = myTarotViewModel.selectedTarotResult)
+                CardSlider(tarotResult = myTarotViewModel.selectedTarotResult, fortuneViewModel = fortuneViewModel)
             }
 
             Column(
@@ -118,13 +135,17 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                 TextH01M26(
                     text = "타로 카드 종합 리딩",
                     color = highlightPurple,
-                    modifier = Modifier.padding(top = 48.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(top = 48.dp)
+                        .fillMaxWidth()
                 )
 
                 TextB01M18(
                     text = myTarotViewModel.selectedTarotResult.overallResult?.summary.toString(),
                     color = white,
-                    modifier = Modifier.padding(top = 24.dp).fillMaxWidth()
+                    modifier = Modifier
+                        .padding(top = 24.dp)
+                        .fillMaxWidth()
                 )
 
                 TextB02M16(
@@ -135,17 +156,27 @@ fun MyTarotDetailScreen(navController: NavHostController = rememberNavController
                         .wrapContentHeight()
                 )
 
-                Row(modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 16.dp)
-                    .padding(bottom = 45.dp)
-                    .clickable {
-                        setDynamicLink(localContext, myTarotViewModel.selectedTarotResult.tarotId, ShareLinkType.MY, ShareActionType.OPEN_SHEET)
-                    },
-                    horizontalArrangement = Arrangement.Center)
+                Row(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                        .padding(bottom = 45.dp)
+                        .clickable {
+                            setDynamicLink(
+                                localContext,
+                                myTarotViewModel.selectedTarotResult.tarotId,
+                                ShareLinkType.MY,
+                                ShareActionType.OPEN_SHEET,
+                                harmonyShareViewModel
+                            )
+                        },
+                    horizontalArrangement = Arrangement.Center
+                )
                 {
-                    Image(painter = painterResource(id = R.drawable.share),
+                    Image(
+                        painter = painterResource(id = R.drawable.share),
                         contentDescription = null,
-                        modifier = Modifier.padding(end = 3.dp))
+                        modifier = Modifier.padding(end = 3.dp)
+                    )
                     TextButtonM16(
                         text = "공유하기",
                         color = gray_3

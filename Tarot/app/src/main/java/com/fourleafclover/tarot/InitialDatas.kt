@@ -1,19 +1,42 @@
 package com.fourleafclover.tarot
 
-import com.fourleafclover.tarot.constant.*
-import com.fourleafclover.tarot.data.TarotOutputDto
+import com.fourleafclover.tarot.constant.dreamFortune
+import com.fourleafclover.tarot.constant.dreamMajorQuestion
+import com.fourleafclover.tarot.constant.dreamPlaceHolder1
+import com.fourleafclover.tarot.constant.dreamPlaceHolder2
+import com.fourleafclover.tarot.constant.dreamPlaceHolder3
+import com.fourleafclover.tarot.constant.dreamSubQuestion1
+import com.fourleafclover.tarot.constant.dreamSubQuestion2
+import com.fourleafclover.tarot.constant.dreamSubQuestion3
+import com.fourleafclover.tarot.constant.harmonyFortune
+import com.fourleafclover.tarot.constant.harmonyMajorQuestion
+import com.fourleafclover.tarot.constant.jobFortune
+import com.fourleafclover.tarot.constant.jobMajorQuestion
+import com.fourleafclover.tarot.constant.jobPlaceHolder1
+import com.fourleafclover.tarot.constant.jobPlaceHolder2
+import com.fourleafclover.tarot.constant.jobPlaceHolder3
+import com.fourleafclover.tarot.constant.jobSubQuestion1
+import com.fourleafclover.tarot.constant.jobSubQuestion2
+import com.fourleafclover.tarot.constant.jobSubQuestion3
+import com.fourleafclover.tarot.constant.loveFortune
+import com.fourleafclover.tarot.constant.loveMajorQuestion
+import com.fourleafclover.tarot.constant.lovePlaceHolder1
+import com.fourleafclover.tarot.constant.lovePlaceHolder2
+import com.fourleafclover.tarot.constant.lovePlaceHolder3
+import com.fourleafclover.tarot.constant.loveSubQuestion1
+import com.fourleafclover.tarot.constant.loveSubQuestion2
+import com.fourleafclover.tarot.constant.loveSubQuestion3
+import com.fourleafclover.tarot.constant.studyFortune
+import com.fourleafclover.tarot.constant.studyMajorQuestion
+import com.fourleafclover.tarot.constant.studyPlaceHolder1
+import com.fourleafclover.tarot.constant.studyPlaceHolder2
+import com.fourleafclover.tarot.constant.studyPlaceHolder3
+import com.fourleafclover.tarot.constant.studySubQuestion1
+import com.fourleafclover.tarot.constant.studySubQuestion2
+import com.fourleafclover.tarot.constant.studySubQuestion3
+import com.fourleafclover.tarot.constant.todayFortune
+import com.fourleafclover.tarot.constant.todayMajorQuestion
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
-import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
-import com.fourleafclover.tarot.ui.screen.main.MainViewModel
-import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
-import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
 import com.fourleafclover.tarot.ui.theme.primaryDream
 import com.fourleafclover.tarot.ui.theme.primaryJob
@@ -64,15 +87,3 @@ val SubjectHarmony = TarotSubjectData(
 
 val entireCards = arrayListOf<Int>(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)
 fun getRandomCards(): List<Int> { return entireCards.toMutableList().shuffled() }
-
-val harmonyShareViewModel = HarmonyShareViewModel()
-val loadingViewModel = LoadingViewModel()
-val chatViewModel = ChatViewModel()
-val fortuneViewModel = FortuneViewModel()
-val questionInputViewModel = QuestionInputViewModel()
-val pickTarotViewModel = PickTarotViewModel()
-val resultViewModel = ResultViewModel()
-val myTarotViewModel = MyTarotViewModel()
-val shareViewModel = ShareViewModel()
-val dialogViewModel = DialogViewModel()
-lateinit var mainViewModel: MainViewModel

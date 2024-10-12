@@ -15,20 +15,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.loadingViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
-import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -39,7 +40,12 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Preview
 @Composable
-fun RoomShareScreen(navController: NavHostController = rememberNavController()) {
+fun RoomShareScreen(
+    navController: NavHostController = rememberNavController(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
+) {
 
     PreventBackPressed()
 
@@ -49,7 +55,9 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
-            isTitleVisible = false
+            isTitleVisible = false,
+            harmonyShareViewModel = harmonyShareViewModel,
+            dialogViewModel = dialogViewModel
         )
 
         Column(
@@ -83,7 +91,7 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
                     textAlign = TextAlign.Center
                 )
 
-                ShareLinkOrCopy()
+                ShareLinkOrCopy(harmonyShareViewModel)
 
                 Row(
                     modifier = Modifier
@@ -106,7 +114,13 @@ fun RoomShareScreen(navController: NavHostController = rememberNavController()) 
             }
 
             ButtonNext(
-                onClick = { loadingViewModel.startLoading(navController, ScreenEnum.RoomInviteLoadingScreen, ScreenEnum.RoomEnteringScreen) },
+                onClick = {
+                    loadingViewModel.startLoading(
+                        navController,
+                        ScreenEnum.RoomInviteLoadingScreen,
+                        ScreenEnum.RoomEnteringScreen
+                    )
+                },
                 enabled = { true },
                 content = { ButtonText(true, "초대방 입장") }
             )

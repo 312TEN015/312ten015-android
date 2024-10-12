@@ -35,13 +35,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.resultViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.dummyTarotOutputDto
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB04M12
@@ -54,12 +52,12 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.white
 import kotlin.math.absoluteValue
 
-@Preview
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardSlider(
     modifier: Modifier = Modifier,
-    tarotResult: TarotOutputDto = dummyTarotOutputDto
+    tarotResult: TarotOutputDto = dummyTarotOutputDto,
+    fortuneViewModel: FortuneViewModel
 ) {
 
     val sliderList: MutableList<Int> = arrayListOf(0, 0, 0)

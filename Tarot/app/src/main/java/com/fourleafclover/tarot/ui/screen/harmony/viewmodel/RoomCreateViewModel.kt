@@ -4,14 +4,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
+import javax.inject.Inject
 
 @HiltViewModel
-class RoomCreateViewModel: ViewModel() {
+class RoomCreateViewModel @Inject constructor(): ViewModel() {
 
     private var _openRoomDeletedDialog = mutableStateOf(false)
     val openRoomDeletedDialog = _openRoomDeletedDialog
@@ -39,14 +39,14 @@ class RoomCreateViewModel: ViewModel() {
     }
 
 
-    fun checkRoomExist(navController: NavHostController) {
+    fun checkRoomExist(navController: NavHostController, harmonyShareViewModel: HarmonyShareViewModel) {
 
         val roomId = MyApplication.prefs.getHarmonyRoomId()
         val createdAtString = MyApplication.prefs.getHarmonyRoomCreatedAt()
 
         if (roomId.isNotEmpty() && createdAtString.isNotEmpty()) {
             // 방 생성 후 1시간 경과 체크
-            checkRoomCreatedAt()
+            checkRoomCreatedAt(harmonyShareViewModel)
 
             // 이미 생성하신 초대방이 있어요
             openRoomExistDialog()
@@ -57,7 +57,7 @@ class RoomCreateViewModel: ViewModel() {
         }
     }
 
-    fun checkRoomCreatedAt() {
+    fun checkRoomCreatedAt(harmonyShareViewModel: HarmonyShareViewModel) {
         val createdAt = Date(MyApplication.prefs.getHarmonyRoomCreatedAt())
         val mNow = System.currentTimeMillis()
         val diffMilliseconds = Date(mNow).time - createdAt.time

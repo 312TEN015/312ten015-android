@@ -26,20 +26,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
 import com.fourleafclover.tarot.data.TarotOutputDto
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.resultViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseTarotResult
 import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.screen.fortune.viewModel.dummyTarotOutputDto
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -62,16 +62,23 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
 fun HarmonyResultScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    resultViewModel: ResultViewModel = hiltViewModel()
 ) {
-    HarmonyResultScreenPreview(navController)
+    HarmonyResultScreenPreview(navController, harmonyShareViewModel, fortuneViewModel, resultViewModel)
 }
 
 @Preview
 @Composable
 fun HarmonyResultScreenPreview(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    resultViewModel: ResultViewModel = hiltViewModel()
 ) {
+
     LaunchedEffect(Unit) {
         harmonyShareViewModel.deleteRoom()
         MyApplication.closeSocket()
@@ -79,7 +86,7 @@ fun HarmonyResultScreenPreview(
 
     Column(modifier = getBackgroundModifier(backgroundColor_2).verticalScroll(rememberScrollState()))
     {
-        ControlDialog(navController)
+        ControlDialog(navController, resultViewModel)
 
         AppBarCloseTarotResult(
             navController,
@@ -158,7 +165,7 @@ fun HarmonyResultScreenPreview(
 
                 HarmonyCardSlider(
                     outsideHorizontalPadding = 40.dp,
-                    sliderList = getSliderList(LocalContext.current),
+                    sliderList = getSliderList(LocalContext.current, fortuneViewModel, resultViewModel),
                     firstCardResults = resultViewModel.myCardResults,
                     secondCardResults = resultViewModel.partnerCardResults,
                     isFirstTab = resultViewModel.isMyTab()
@@ -166,14 +173,14 @@ fun HarmonyResultScreenPreview(
             }
 
 
-            OverallResult(resultViewModel.tarotResult.value)
+            OverallResult(resultViewModel.tarotResult.value, resultViewModel, harmonyShareViewModel)
 
         }
 
     }
 }
 
-private fun getSliderList(context: Context) : ArrayList<Int> {
+private fun getSliderList(context: Context, fortuneViewModel: FortuneViewModel, resultViewModel: ResultViewModel) : ArrayList<Int> {
     val sliderList: ArrayList<Int> = arrayListOf(0, 0, 0)
     if (resultViewModel.isMyTab()) {
         sliderList[0] = fortuneViewModel.getCardImageId(context, resultViewModel.myCardNumbers[0].toString())
@@ -189,7 +196,8 @@ private fun getSliderList(context: Context) : ArrayList<Int> {
 }
 
 @Composable
-private fun OverallResult(tarotOutputDto: TarotOutputDto) {
+private fun OverallResult(tarotOutputDto: TarotOutputDto, resultViewModel: ResultViewModel, harmonyShareViewModel: HarmonyShareViewModel) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -292,7 +300,8 @@ private fun OverallResult(tarotOutputDto: TarotOutputDto) {
                         localContext,
                         tarotOutputDto.tarotId,
                         ShareLinkType.MY,
-                        ShareActionType.OPEN_SHEET
+                        ShareActionType.OPEN_SHEET,
+                        harmonyShareViewModel
                     )
                 },
             horizontalArrangement = Arrangement.Center

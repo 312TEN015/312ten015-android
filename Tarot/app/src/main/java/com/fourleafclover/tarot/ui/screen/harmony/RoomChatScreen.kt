@@ -43,29 +43,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.chatViewModel
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.harmonyShareViewModel
-import com.fourleafclover.tarot.loadingViewModel
-import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
-import com.fourleafclover.tarot.ui.component.AppBarCloseWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
-import com.fourleafclover.tarot.ui.navigation.OpenDialogOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.screen.fortune.CardDeck
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardDeckStatus
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.backgroundColor_2
@@ -78,7 +78,6 @@ import com.fourleafclover.tarot.ui.theme.highlightPurple
 import com.fourleafclover.tarot.ui.theme.purple50
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 private val toShowProfileList = mutableIntSetOf()
 
@@ -87,7 +86,14 @@ var initialComposition = true
 @Composable
 @Preview
 fun RoomChatScreen(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    chatViewModel: ChatViewModel = hiltViewModel(),
+    fortuneViewModel: FortuneViewModel = hiltViewModel(),
+    pickTarotViewModel: PickTarotViewModel = hiltViewModel(),
+    resultViewModel: ResultViewModel = hiltViewModel(),
+    loadingViewModel: LoadingViewModel = hiltViewModel(),
+    dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
 
     val chatState = chatViewModel.chatState.collectAsState()
@@ -95,14 +101,10 @@ fun RoomChatScreen(
 
     PreventBackPressed()
 
-
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         if (initialComposition) {
-            MyApplication.socket.on("next", onNext)
-            MyApplication.socket.on("resultPrepared", onResult)
-            Log.d("socket-test", "set onNext")
-
-            pickTarotViewModel.initCardDeck()
+            setOnNext(harmonyShareViewModel, loadingViewModel, chatViewModel, pickTarotViewModel)
+            setOnResult(harmonyShareViewModel, loadingViewModel, resultViewModel)
             initialComposition = false
         }
     }
@@ -112,7 +114,9 @@ fun RoomChatScreen(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
-            isTitleVisible = false
+            isTitleVisible = false,
+            harmonyShareViewModel = harmonyShareViewModel,
+            dialogViewModel = dialogViewModel
         )
 
         Box(contentAlignment = Alignment.BottomCenter) {
@@ -152,7 +156,10 @@ fun RoomChatScreen(
                                     }
                                     PartnerChattingBox(
                                         text = chatItem.text,
-                                        idx = it
+                                        idx = it,
+                                        chatViewModel = chatViewModel,
+                                        loadingViewModel = loadingViewModel,
+                                        fortuneViewModel = fortuneViewModel
                                     )
                                 }
 
@@ -164,7 +171,10 @@ fun RoomChatScreen(
                                         text = chatItem.text,
                                         idx = it,
                                         buttonText = "궁합결과 보러가기",
-                                        navController = navController
+                                        navController = navController,
+                                        chatViewModel = chatViewModel,
+                                        loadingViewModel = loadingViewModel,
+                                        fortuneViewModel = fortuneViewModel
                                     )
                                 }
 
@@ -175,7 +185,10 @@ fun RoomChatScreen(
                                     PartnerChattingBox(
                                         text = chatItem.text,
                                         idx = it,
-                                        drawable = chatItem.drawable
+                                        drawable = chatItem.drawable,
+                                        chatViewModel = chatViewModel,
+                                        loadingViewModel = loadingViewModel,
+                                        fortuneViewModel = fortuneViewModel
                                     )
                                 }
 
@@ -194,19 +207,9 @@ fun RoomChatScreen(
                                                     )
                                                 )
 
-                                                val jsonObject = JSONObject()
-                                                jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-                                                jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
-                                                MyApplication.socket.emit("start", jsonObject)
-                                                Log.d("socket-test", "emit start")
+                                                emitStart(harmonyShareViewModel)
 
-                                                checkEachOtherScenario(chatState.value, partnerChatState.value)
-
-                                                /* 테스트 코드 */
-//                                                Handler(Looper.getMainLooper())
-//                                                    .postDelayed({
-//                                                        onNext()
-//                                                    }, 4000)
+                                                checkEachOtherScenario(chatState.value, partnerChatState.value, chatViewModel)
                                             },
                                             buttonVisibility
                                         )
@@ -257,7 +260,7 @@ fun RoomChatScreen(
 
             if (chatState.value.cardDeckStatus == CardDeckStatus.Spread)
                 withChatAnimation(){
-                    ChatCardDeck()
+                    ChatCardDeck(harmonyShareViewModel, chatViewModel, fortuneViewModel, pickTarotViewModel)
                 }
         }
 
@@ -265,19 +268,19 @@ fun RoomChatScreen(
 
 }
 
-fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
+fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState, chatViewModel: ChatViewModel) {
 
     Log.d("socket-test", "emit my: " + chatViewModel.chatState.value.scenario.name)
     Log.d("socket-test", "emit partner: " + chatViewModel.partnerChatState.value.scenario.name)
 
     // 상대방이랑 다름 = 내가 뒤처짐
     if (chatState.scenario != partnerChatState.scenario){
-        confirmSelectedCard(chatState)
+        confirmSelectedCard(chatState, chatViewModel)
         chatViewModel.moveToNextScenario()
     }
     // 상대방이랑 같음 = 내가 먼저함
     else {
-        confirmSelectedCard(chatState)
+        confirmSelectedCard(chatState, chatViewModel)
 
         chatViewModel.updateScenario()
 
@@ -291,7 +294,8 @@ fun checkEachOtherScenario(chatState: ChatState, partnerChatState: ChatState) {
     }
 }
 
-fun confirmSelectedCard(chatState: ChatState) {
+fun confirmSelectedCard(chatState: ChatState, chatViewModel: ChatViewModel) {
+
     if (chatState.scenario != Scenario.Opening) {
         if (chatState.pickedCardNumberState.thirdCardNumber != -1){
             chatViewModel.addChatItem(
@@ -310,9 +314,14 @@ fun confirmSelectedCard(chatState: ChatState) {
 
 }
 
-@Preview
+
 @Composable
-fun ChatCardDeck() {
+fun ChatCardDeck(
+    harmonyShareViewModel: HarmonyShareViewModel,
+    chatViewModel: ChatViewModel,
+    fortuneViewModel: FortuneViewModel,
+    pickTarotViewModel: PickTarotViewModel
+) {
     val localContext = LocalContext.current
     val pickSequence = chatViewModel.pickSequence.collectAsState()
 
@@ -322,13 +331,13 @@ fun ChatCardDeck() {
         verticalArrangement = Arrangement.Bottom,
     ) {
 
-        CardDeck()
+        CardDeck(pickTarotViewModel)
 
         ButtonSelect(
             text = "선택완료",
             onClick = {
                 pickTarotViewModel.setPickedCard(pickSequence.value)
-                chatViewModel.updatePickedCardNumberState()
+                chatViewModel.updatePickedCardNumberState(pickTarotViewModel.pickedCardNumberState.value)
                 chatViewModel.addChatItem(
                     Chat(
                         type = ChatType.MyChatImage,
@@ -336,25 +345,13 @@ fun ChatCardDeck() {
                     )
                 )
 
-                val jsonObject = JSONObject()
-                jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-                jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
-                jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence.value))
-                MyApplication.socket.emit("cardSelect", jsonObject)
-                Log.d("socket-test", "emit cardSelect")
+                emitCardSelect(harmonyShareViewModel, pickTarotViewModel, pickSequence.value)
 
                 chatViewModel.updatePickSequence()
                 chatViewModel.updateCardDeckStatus(CardDeckStatus.Gathered)
 
                 pickTarotViewModel.resetNowSelectedCardIdx()
-                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value)
-
-                /* 테스트 코드 */
-//                Handler(Looper.getMainLooper())
-//                    .postDelayed({
-//                        onNext(2)
-//                    }, 4000)
-
+                checkEachOtherScenario(chatViewModel.chatState.value, chatViewModel.partnerChatState.value, chatViewModel)
             },
             isEnable = pickTarotViewModel.isCompleteButtonEnabled()
         )
@@ -420,13 +417,15 @@ fun withChatAnimation(
 }
 
 @Composable
-@Preview
 fun PartnerChattingBox(
     text: String = "",
     idx: Int = 0,
     buttonText: String = "",
     navController: NavHostController = rememberNavController(),
-    drawable: Int = 0
+    drawable: Int = 0,
+    chatViewModel: ChatViewModel,
+    loadingViewModel: LoadingViewModel,
+    fortuneViewModel: FortuneViewModel
 ) {
 
     Row(
@@ -486,6 +485,9 @@ fun PartnerChattingBox(
                                 ScreenEnum.LoadingScreen,
                                 ScreenEnum.RoomResultScreen
                             )
+
+                            initialComposition = true
+
                         }
                     )
                 }

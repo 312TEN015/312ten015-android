@@ -1,6 +1,5 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,21 +16,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.component.AppBarPlain
 import com.fourleafclover.tarot.ui.component.RoomDeletedDialog
 import com.fourleafclover.tarot.ui.component.VerticalYesNoDialog
@@ -39,6 +36,7 @@ import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.RoomCreateViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -52,12 +50,18 @@ import com.fourleafclover.tarot.ui.theme.white
 
 @Preview
 @Composable
-fun RoomCreateScreen(navController: NavHostController = rememberNavController()) {
-    val localContext = LocalContext.current
-    val roomCreateViewModel = remember { RoomCreateViewModel() }
+fun RoomCreateScreen(
+    navController: NavHostController = rememberNavController(),
+    roomCreateViewModel: RoomCreateViewModel = hiltViewModel(),
+    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+) {
 
     OpenRoomDeletedDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
-    OpenRoomExistDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
+    OpenRoomExistDialog(
+        navController = navController,
+        roomCreateViewModel = roomCreateViewModel,
+        harmonyShareViewModel = harmonyShareViewModel
+    )
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
         AppBarPlain(
@@ -89,7 +93,7 @@ fun RoomCreateScreen(navController: NavHostController = rememberNavController())
                         // 소켓 연결하기
                         MyApplication.connectSocket()
                         harmonyShareViewModel.setIsRoomOwner(true)
-                        roomCreateViewModel.checkRoomExist(navController)
+                        roomCreateViewModel.checkRoomExist(navController, harmonyShareViewModel)
                     }
             ) {
                 Row(
@@ -211,7 +215,8 @@ fun DescriptionStep(
 @Composable
 fun OpenRoomExistDialog(
     navController: NavHostController,
-    roomCreateViewModel: RoomCreateViewModel
+    roomCreateViewModel: RoomCreateViewModel,
+    harmonyShareViewModel: HarmonyShareViewModel
 ) {
 
     if (roomCreateViewModel.openRoomExistDialog.value) {
@@ -220,13 +225,13 @@ fun OpenRoomExistDialog(
                 onClickNo = {
                     if (roomCreateViewModel.isRoomExpired.value) {
                         roomCreateViewModel.openRoomDeletedDialog()
-                    }else{
+                    } else {
                         roomCreateViewModel.closeRoomExistDialog()
                         // 기존 방으로 입장하기
                         harmonyShareViewModel.enterExistingRoom()
                         navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
                     }
-                            },
+                },
                 onClickClose = { roomCreateViewModel.closeRoomExistDialog() },
                 onClickOk = {
                     roomCreateViewModel.closeRoomExistDialog()

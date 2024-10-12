@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class MyTarotViewModel: ViewModel() {
+class MyTarotViewModel @Inject constructor(): ViewModel() {
 
     var _selectedTarotResult = mutableStateOf(TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null))
     val selectedTarotResult get() = _selectedTarotResult.value      // 선택한 결과 한개

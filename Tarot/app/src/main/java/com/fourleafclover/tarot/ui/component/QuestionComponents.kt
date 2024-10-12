@@ -1,7 +1,6 @@
 package com.fourleafclover.tarot.ui.component
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -31,13 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.MyApplication
-import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.constant.questionCount
 import com.fourleafclover.tarot.data.TarotSubjectData
-import com.fourleafclover.tarot.fortuneViewModel
-import com.fourleafclover.tarot.questionInputViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextB04M12
 import com.fourleafclover.tarot.ui.theme.TextButtonM16
@@ -65,29 +63,37 @@ fun QuestionsComponent(
     pickedTopicTemplate: TarotSubjectData,
     idx: Int = 0,
     navController: NavHostController = rememberNavController(),
-    context: Context
+    context: Context,
+    fortuneViewModel: FortuneViewModel,
+    questionInputViewModel: QuestionInputViewModel
 ) {
     // header --------------------------------------------------------------------------------------
 
     if (idx == 0){
-        QuestionViewHeader(pickedTopicTemplate, context)
+        QuestionViewHeader(pickedTopicTemplate, context, fortuneViewModel, questionInputViewModel)
         return
     }
 
     // footer --------------------------------------------------------------------------------------
 
     if (idx == questionCount +1){
-        QuestionViewFooter(navController)
+        QuestionViewFooter(navController, questionInputViewModel)
         return
     }
 
     // body ----------------------------------------------------------------------------------------
 
-    QuestionViewBody(idx, pickedTopicTemplate, context)
+    QuestionViewBody(idx, pickedTopicTemplate, questionInputViewModel)
 }
 
 @Composable
-fun QuestionViewHeader(pickedTopicTemplate: TarotSubjectData, context: Context){
+fun QuestionViewHeader(
+    pickedTopicTemplate: TarotSubjectData,
+    context: Context,
+    fortuneViewModel: FortuneViewModel,
+    questionInputViewModel:QuestionInputViewModel
+){
+
     Column(modifier = Modifier.padding(bottom = 40.dp)) {
 
         val imoji = remember { fortuneViewModel.getSubjectImoji(context) }
@@ -115,7 +121,7 @@ fun QuestionViewHeader(pickedTopicTemplate: TarotSubjectData, context: Context){
                     .padding(top = 16.dp)
             )
 
-            Image(painter = painterResource(id = questionInputViewModel.getTarotIllustId()), contentDescription = null,
+            Image(painter = painterResource(id = questionInputViewModel.getTarotIllustId(fortuneViewModel.pickedTopicState.value.topicNumber)), contentDescription = null,
                 modifier = Modifier
                     .width(83.dp)
                     .fillMaxHeight(),
@@ -141,7 +147,7 @@ fun QuestionViewHeader(pickedTopicTemplate: TarotSubjectData, context: Context){
 }
 
 @Composable
-fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, context: Context){
+fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, questionInputViewModel: QuestionInputViewModel){
     val maxChar = remember { questionInputViewModel.maxChar }
 
     Column(modifier = Modifier
@@ -203,7 +209,8 @@ fun QuestionViewBody(idx: Int, pickedTopicTemplate: TarotSubjectData, context: C
 }
 
 @Composable
-fun QuestionViewFooter(navController: NavHostController){
+fun QuestionViewFooter(navController: NavHostController, questionInputViewModel: QuestionInputViewModel){
+
     Button(
         onClick = {
             navigateSaveState(navController, ScreenEnum.PickTarotScreen.name)
