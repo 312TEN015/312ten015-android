@@ -4,9 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.MyApplication
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
 
+@HiltViewModel
 class HarmonyShareViewModel: ViewModel() {
 
     private var userNickname = mutableStateOf("")   // 사용자 닉네임

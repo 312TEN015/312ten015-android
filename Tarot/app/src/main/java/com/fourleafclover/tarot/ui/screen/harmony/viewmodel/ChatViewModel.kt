@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.PickedCardNumberState
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,6 +61,7 @@ data class ChatState(
     var pickedCardNumberState: PickedCardNumberState = PickedCardNumberState()
 )
 
+@HiltViewModel
 class ChatViewModel : ViewModel() {
     private var _chatState = MutableStateFlow(ChatState())
     val chatState: StateFlow<ChatState> = _chatState.asStateFlow()

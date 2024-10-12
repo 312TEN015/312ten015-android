@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class MyTarotViewModel: ViewModel() {
 
     var _selectedTarotResult = mutableStateOf(TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null))

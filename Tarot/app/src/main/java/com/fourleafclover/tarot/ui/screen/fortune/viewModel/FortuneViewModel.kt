@@ -18,6 +18,7 @@ import com.fourleafclover.tarot.data.OverallResultData
 import com.fourleafclover.tarot.data.PickedTopicState
 import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.data.TarotSubjectData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 val dummyFullResult = "당신에게는 어려운 상황에서도 포기하지 않고 끝까지 이겨내는 힘이 있습니다. 포기하지 않고 매달 100만원씩 적금을 들고 있는 것이 그 예시겠네요. 하지만, 때로는 지나친 의욕 때문에 무리한 목표를 세우다가 실패로 이어지는 경우도 있지요. \n" +
@@ -41,6 +42,7 @@ var dummyTarotOutputDto = TarotOutputDto(
 
 
 /** 유저가 선택한 주제 관리 */
+@HiltViewModel
 class FortuneViewModel : ViewModel() {
     private var _pickedTopicState = mutableStateOf(PickedTopicState())
     val pickedTopicState get() = _pickedTopicState

@@ -4,7 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.fourleafclover.tarot.data.CardResultData
 import com.fourleafclover.tarot.data.TarotOutputDto
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class ShareViewModel: ViewModel() {
     // 공유하기로 받은 타로 데이터
     private var _sharedTarotResult = mutableStateOf(TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null))

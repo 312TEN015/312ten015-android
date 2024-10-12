@@ -9,6 +9,7 @@ import com.fourleafclover.tarot.network.TarotService
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.utils.PreferenceUtil
 import com.fourleafclover.tarot.utils.ToastUtil
+import dagger.hilt.android.HiltAndroidApp
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.engineio.client.Transport
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
+@HiltAndroidApp
 class MyApplication: Application() {
 
 

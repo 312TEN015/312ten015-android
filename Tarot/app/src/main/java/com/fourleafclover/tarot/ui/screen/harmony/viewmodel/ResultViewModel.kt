@@ -9,10 +9,12 @@ import com.fourleafclover.tarot.data.TarotOutputDto
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.pickTarotViewModel
 import com.fourleafclover.tarot.questionInputViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 /** 타로 뽑기 결과 관리 */
 /** 타로 뽑기 결과 & 궁합보기 결과 화면에서 사용 */
+@HiltViewModel
 class ResultViewModel() : ViewModel() {
 
     // 타로보기 -------------------------------------------------------------------------------------

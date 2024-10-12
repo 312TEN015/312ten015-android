@@ -14,11 +14,13 @@ import com.fourleafclover.tarot.SubjectStudy
 import com.fourleafclover.tarot.SubjectToday
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.fortuneViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /** 유저가 입력한 답변 관리 */
+@HiltViewModel
 class QuestionInputViewModel: ViewModel() {
     private var _answer1 = mutableStateOf(TextFieldValue(""))
     val answer1 get() = _answer1

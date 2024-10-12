@@ -7,8 +7,10 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.harmonyShareViewModel
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.Date
 
+@HiltViewModel
 class RoomCreateViewModel: ViewModel() {
 
     private var _openRoomDeletedDialog = mutableStateOf(false)

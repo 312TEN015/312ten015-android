@@ -6,8 +6,10 @@ import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 /** 로딩 상태를 관리 */
+@HiltViewModel
 class LoadingViewModel: ViewModel() {
     private var _isLoading = mutableStateOf(false)
     val isLoading get() = _isLoading
