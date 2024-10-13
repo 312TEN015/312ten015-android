@@ -65,23 +65,31 @@ class ChatViewModel  @Inject constructor() : ViewModel() {
     private var _chatState = MutableStateFlow(ChatState())
     val chatState: StateFlow<ChatState> = _chatState.asStateFlow()
 
-    private val _partnerChatState = MutableStateFlow(ChatState())
+    private var _partnerChatState = MutableStateFlow(ChatState())
     val partnerChatState: StateFlow<ChatState> = _partnerChatState.asStateFlow()
 
-    private val _pickSequence = MutableStateFlow(1)
+    private var _pickSequence = MutableStateFlow(1)
     val pickSequence: StateFlow<Int> = _pickSequence.asStateFlow()
 
     private var chatList = mutableStateListOf<Chat>()
 
     private lateinit var opening: List<Chat>
     private lateinit var firstCard: List<Chat>
-    private lateinit var firstCardSelected: List<Chat>
     private lateinit var secondCard: List<Chat>
-    private lateinit var secondCardSelected: List<Chat>
     private lateinit var thirdCard: List<Chat>
     private lateinit var complete: List<Chat>
 
-    fun clear() = viewModelScope.launch { onCleared() }
+    fun clear() {
+        _chatState = MutableStateFlow(ChatState())
+        _partnerChatState = MutableStateFlow(ChatState())
+        _pickSequence = MutableStateFlow(1)
+        chatList = mutableStateListOf<Chat>()
+        opening = listOf()
+        firstCard = listOf()
+        secondCard = listOf()
+        thirdCard = listOf()
+        complete = listOf()
+    }
 
     fun startChat(myNickname: String, partnerNickname: String) {
         _chatState.value = ChatState(nickname = myNickname)

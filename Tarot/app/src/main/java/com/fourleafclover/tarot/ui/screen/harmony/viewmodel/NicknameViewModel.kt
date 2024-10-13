@@ -16,6 +16,11 @@ class NicknameViewModel @Inject constructor(): ViewModel() {
     private var _isCaptionVisible = mutableStateOf(false)
     val isCaptionVisible get() = _isCaptionVisible
 
+    fun clear() {
+        _nickname = mutableStateOf("")
+        _isCaptionVisible = mutableStateOf(false)
+    }
+
 
     fun updateNickname(newText: String): Boolean{
         if (newText.length > maxChar){

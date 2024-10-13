@@ -61,7 +61,18 @@ class ResultViewModel @Inject constructor(): ViewModel() {
         )
     )
 
-    fun clear() = viewModelScope.launch { onCleared() }
+    fun clear() {
+        _tarotResult = mutableStateOf(TarotOutputDto())
+        myCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
+        myCardNumbers = arrayListOf(0, 0, 0)
+        partnerCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
+        partnerCardNumbers = arrayListOf(0, 0, 0)
+        isMyTab = mutableStateOf(true) // 나의 탭 터치했는지 여부
+        isMatchResultPrepared = mutableStateOf(false)
+        _openCloseDialog = mutableStateOf(false) // close dialog state
+        _openCompleteDialog = mutableStateOf(false)
+        _saveState = mutableStateOf(false)
+    }
 
     fun setIsMatchResultPrepared(isPrepared: Boolean) {
         isMatchResultPrepared.value = isPrepared

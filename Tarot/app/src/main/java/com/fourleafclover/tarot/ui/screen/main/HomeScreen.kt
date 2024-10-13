@@ -12,15 +12,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
@@ -30,8 +27,16 @@ import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.RoomCreateViewModel
+import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH01M26
@@ -57,14 +62,7 @@ fun HomeScreen(
     fortuneViewModel: FortuneViewModel
 ) {
 
-    dialogViewModel.closeDialog()
-
     LaunchedEffect(Unit) {
-
-        harmonyViewModel.clear()
-        fortuneViewModel.clear()
-
-
         // 공유하기 확인
         if (activity.intent != null) {
             receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyViewModel)

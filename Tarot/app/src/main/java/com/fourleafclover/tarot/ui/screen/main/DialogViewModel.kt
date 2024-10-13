@@ -10,6 +10,10 @@ class DialogViewModel @Inject constructor(): ViewModel() {
     private var _openDialog = mutableStateOf(false)
     val openDialog get() = _openDialog.value
 
+    fun clear() {
+        _openDialog = mutableStateOf(false)
+    }
+
     fun openDialog() {
         _openDialog.value = true
     }

@@ -2,8 +2,8 @@ package com.fourleafclover.tarot.ui.navigation
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -58,15 +58,18 @@ fun NavigationHost() {
     val questionInputViewModel: QuestionInputViewModel = viewModel(activity)
     val pickTarotViewModel: PickTarotViewModel = viewModel(activity)
     val resultViewModel: ResultViewModel = viewModel(activity)
+
     val dialogViewModel: DialogViewModel = viewModel(activity)
     val shareViewModel: ShareViewModel = viewModel(activity)
     val loadingViewModel: LoadingViewModel = viewModel(activity)
+
     val harmonyViewModel: HarmonyViewModel = viewModel(activity)
-    val myTarotViewModel: MyTarotViewModel = viewModel(activity)
     val roomCreateViewModel: RoomCreateViewModel = viewModel(activity)
     val genderViewModel: GenderViewModel = viewModel(activity)
     val nicknameViewModel: NicknameViewModel = viewModel(activity)
     val chatViewModel: ChatViewModel = viewModel(activity)
+
+    val myTarotViewModel: MyTarotViewModel = viewModel(activity)
 
     Scaffold(bottomBar = {
         if (currentRoute == ScreenEnum.HomeScreen.name || currentRoute == ScreenEnum.MyTarotScreen.name)

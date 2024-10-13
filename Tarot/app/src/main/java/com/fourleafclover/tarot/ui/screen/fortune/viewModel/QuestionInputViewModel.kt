@@ -26,7 +26,11 @@ class QuestionInputViewModel @Inject constructor(): ViewModel() {
     val maxChar get() = _maxChar
 
 
-    fun clear() = viewModelScope.launch { onCleared() }
+    fun clear() {
+        _answer1 = mutableStateOf(TextFieldValue(""))
+        _answer2 = mutableStateOf(TextFieldValue(""))
+        _answer3 = mutableStateOf(TextFieldValue(""))
+    }
 
     fun initAnswers(){
         // 인풋 초기화
