@@ -27,7 +27,7 @@ import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -43,7 +43,7 @@ import com.fourleafclover.tarot.ui.theme.white
 fun RoomShareScreen(
     navController: NavHostController = rememberNavController(),
     loadingViewModel: LoadingViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
 
@@ -56,7 +56,7 @@ fun RoomShareScreen(
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false,
-            harmonyShareViewModel = harmonyShareViewModel,
+            harmonyViewModel = harmonyViewModel,
             dialogViewModel = dialogViewModel
         )
 
@@ -91,7 +91,7 @@ fun RoomShareScreen(
                     textAlign = TextAlign.Center
                 )
 
-                ShareLinkOrCopy(harmonyShareViewModel)
+                ShareLinkOrCopy(harmonyViewModel)
 
                 Row(
                     modifier = Modifier

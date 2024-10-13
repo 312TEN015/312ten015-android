@@ -5,7 +5,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.utils.getCertainTarotDetail
@@ -29,7 +29,7 @@ import java.util.Arrays
 * */
 
 
-fun setOnCreateComplete(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: LoadingViewModel) {
+fun setOnCreateComplete(harmonyViewModel: HarmonyViewModel, loadingViewModel: LoadingViewModel) {
 
     // 방 생성 완료
     val onCreateComplete = Emitter.Listener { args ->
@@ -37,7 +37,7 @@ fun setOnCreateComplete(harmonyShareViewModel: HarmonyShareViewModel, loadingVie
             Log.d("socket-test", "createComplete " + args[0].toString())
 
             val roomId = JSONObject(args[0].toString()).getString("roomId")
-            harmonyShareViewModel.createNewRoom(roomId)
+            harmonyViewModel.createNewRoom(roomId)
 
             loadingViewModel.updateLoadingState(false)
         }
@@ -61,7 +61,7 @@ fun emitCreate() {
     }
 }
 
-fun setOnJoin(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: LoadingViewModel, chatViewModel: ChatViewModel) {
+fun setOnJoin(harmonyViewModel: HarmonyViewModel, loadingViewModel: LoadingViewModel, chatViewModel: ChatViewModel) {
 
     // 전원 입장 완료
     val onJoinComplete = Emitter.Listener { args ->
@@ -77,9 +77,9 @@ fun setOnJoin(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: Lo
             }
 
             val partnerNickname =
-                nicknames.find { it != harmonyShareViewModel.getUserNickname() } ?: " "
-            harmonyShareViewModel.setPartnerNickname(partnerNickname)
-            chatViewModel.startChat(harmonyShareViewModel.getUserNickname(), partnerNickname)
+                nicknames.find { it != harmonyViewModel.getUserNickname() } ?: " "
+            harmonyViewModel.setPartnerNickname(partnerNickname)
+            chatViewModel.startChat(harmonyViewModel.getUserNickname(), partnerNickname)
             loadingViewModel.updateLoadingState(false)
         }
     }
@@ -88,13 +88,13 @@ fun setOnJoin(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: Lo
 }
 
 
-fun emitJoin(harmonyShareViewModel: HarmonyShareViewModel) {
+fun emitJoin(harmonyViewModel: HarmonyViewModel) {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
             val jsonObject = JSONObject()
-            jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-            jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+            jsonObject.put("nickname", harmonyViewModel.getUserNickname())
+            jsonObject.put("roomId", harmonyViewModel.roomId.value)
             MyApplication.socket.emit("join", jsonObject)
 
             withContext(Dispatchers.Main) {
@@ -108,13 +108,13 @@ fun emitJoin(harmonyShareViewModel: HarmonyShareViewModel) {
     }
 }
 
-fun emitStart(harmonyShareViewModel: HarmonyShareViewModel) {
+fun emitStart(harmonyViewModel: HarmonyViewModel) {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
             val jsonObject = JSONObject()
-            jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-            jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+            jsonObject.put("nickname", harmonyViewModel.getUserNickname())
+            jsonObject.put("roomId", harmonyViewModel.roomId.value)
             MyApplication.socket.emit("start", jsonObject)
 
             withContext(Dispatchers.Main) {
@@ -128,13 +128,13 @@ fun emitStart(harmonyShareViewModel: HarmonyShareViewModel) {
     }
 }
 
-fun emitCardSelect(harmonyShareViewModel: HarmonyShareViewModel, pickTarotViewModel: PickTarotViewModel, pickSequence: Int) {
+fun emitCardSelect(harmonyViewModel: HarmonyViewModel, pickTarotViewModel: PickTarotViewModel, pickSequence: Int) {
 
     CoroutineScope(Dispatchers.IO).launch {
         try {
             val jsonObject = JSONObject()
-            jsonObject.put("nickname", harmonyShareViewModel.getUserNickname())
-            jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+            jsonObject.put("nickname", harmonyViewModel.getUserNickname())
+            jsonObject.put("roomId", harmonyViewModel.roomId.value)
             jsonObject.put("cardNum", pickTarotViewModel.getCardNumber(pickSequence))
             MyApplication.socket.emit("cardSelect", jsonObject)
 
@@ -151,7 +151,7 @@ fun emitCardSelect(harmonyShareViewModel: HarmonyShareViewModel, pickTarotViewMo
 
 
 fun setOnNext(
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     loadingViewModel: LoadingViewModel,
     chatViewModel: ChatViewModel,
     pickTarotViewModel: PickTarotViewModel
@@ -214,7 +214,7 @@ fun setOnNext(
         if (checkIsAllCardPicked()) {
             Log.d("socket-test", "onNext result request send")
             chatViewModel.updatePickedCardNumberState(pickTarotViewModel.pickedCardNumberState.value)
-            getMatchResult(harmonyShareViewModel, loadingViewModel, chatViewModel)
+            getMatchResult(harmonyViewModel, loadingViewModel, chatViewModel)
         }
     }
 
@@ -224,7 +224,7 @@ fun setOnNext(
     pickTarotViewModel.initCardDeck()
 }
 
-fun setOnResult(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: LoadingViewModel, resultViewModel: ResultViewModel) {
+fun setOnResult(harmonyViewModel: HarmonyViewModel, loadingViewModel: LoadingViewModel, resultViewModel: ResultViewModel) {
 
     // 응답 생성 완료
     val onResult = Emitter.Listener { args ->
@@ -248,7 +248,7 @@ fun setOnResult(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: 
                     loadingViewModel,
                     onResponse = {
                         resultViewModel.setIsMatchResultPrepared(true)
-                        resultViewModel.distinguishCardResult(it, harmonyShareViewModel.isRoomOwner.value)
+                        resultViewModel.distinguishCardResult(it, harmonyViewModel.isRoomOwner.value)
                         loadingViewModel.updateLoadingState(false)
                     }
                 )
@@ -263,11 +263,11 @@ fun setOnResult(harmonyShareViewModel: HarmonyShareViewModel, loadingViewModel: 
 
 }
 
-fun emitResultPrepared(harmonyShareViewModel: HarmonyShareViewModel, tarotId: String = "") {
+fun emitResultPrepared(harmonyViewModel: HarmonyViewModel, tarotId: String = "") {
     CoroutineScope(Dispatchers.IO).launch {
         try {
             val jsonObject = JSONObject()
-            jsonObject.put("roomId", harmonyShareViewModel.roomId.value)
+            jsonObject.put("roomId", harmonyViewModel.roomId.value)
             jsonObject.put("tarotId", tarotId)
             MyApplication.socket.emit("resultReceived", jsonObject)
 
@@ -279,7 +279,7 @@ fun emitResultPrepared(harmonyShareViewModel: HarmonyShareViewModel, tarotId: St
             withContext(Dispatchers.Main) {
                 Log.d("socket-test", "emit resultReceived failed")
                 Log.e("socket-test", "exception: ${e.message}")
-                harmonyShareViewModel.deleteRoom()
+                harmonyViewModel.deleteRoom()
                 MyApplication.closeSocket()
             }
         }

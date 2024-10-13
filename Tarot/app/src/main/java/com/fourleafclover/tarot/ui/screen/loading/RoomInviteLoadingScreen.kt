@@ -22,7 +22,7 @@ import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.screen.harmony.emitJoin
 import com.fourleafclover.tarot.ui.screen.harmony.setOnJoin
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
@@ -34,7 +34,7 @@ import com.fourleafclover.tarot.ui.theme.gray_5
 @Preview
 fun RoomInviteLoadingScreen(
     navController: NavHostController = rememberNavController(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     loadingViewModel: LoadingViewModel = hiltViewModel(),
     chatViewModel: ChatViewModel = hiltViewModel(),
     dialogViewModel: DialogViewModel = hiltViewModel()
@@ -47,8 +47,8 @@ fun RoomInviteLoadingScreen(
     PreventBackPressed()
 
     LaunchedEffect(Unit) {
-        setOnJoin(harmonyShareViewModel, loadingViewModel, chatViewModel)
-        emitJoin(harmonyShareViewModel)
+        setOnJoin(harmonyViewModel, loadingViewModel, chatViewModel)
+        emitJoin(harmonyViewModel)
     }
 
 
@@ -58,7 +58,7 @@ fun RoomInviteLoadingScreen(
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false,
-            harmonyShareViewModel = harmonyShareViewModel,
+            harmonyViewModel = harmonyViewModel,
             dialogViewModel = dialogViewModel
         )
 
@@ -88,7 +88,7 @@ fun RoomInviteLoadingScreen(
                     textAlign = TextAlign.Center
                 )
 
-                ShareLinkOrCopy(harmonyShareViewModel)
+                ShareLinkOrCopy(harmonyViewModel)
 
             }
 

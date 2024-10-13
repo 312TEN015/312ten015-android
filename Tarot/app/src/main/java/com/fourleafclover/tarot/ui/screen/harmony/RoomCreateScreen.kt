@@ -36,7 +36,7 @@ import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.component.getOutlinedRectangleModifier
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.RoomCreateViewModel
 import com.fourleafclover.tarot.ui.theme.TextB03M14
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -53,14 +53,14 @@ import com.fourleafclover.tarot.ui.theme.white
 fun RoomCreateScreen(
     navController: NavHostController = rememberNavController(),
     roomCreateViewModel: RoomCreateViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+    harmonyViewModel: HarmonyViewModel = hiltViewModel()
 ) {
 
     OpenRoomDeletedDialog(navController = navController, roomCreateViewModel = roomCreateViewModel)
     OpenRoomExistDialog(
         navController = navController,
         roomCreateViewModel = roomCreateViewModel,
-        harmonyShareViewModel = harmonyShareViewModel
+        harmonyViewModel = harmonyViewModel
     )
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
@@ -92,8 +92,8 @@ fun RoomCreateScreen(
                     .clickable {
                         // 소켓 연결하기
                         MyApplication.connectSocket()
-                        harmonyShareViewModel.setIsRoomOwner(true)
-                        roomCreateViewModel.checkRoomExist(navController, harmonyShareViewModel)
+                        harmonyViewModel.setIsRoomOwner(true)
+                        roomCreateViewModel.checkRoomExist(navController, harmonyViewModel)
                     }
             ) {
                 Row(
@@ -216,7 +216,7 @@ fun DescriptionStep(
 fun OpenRoomExistDialog(
     navController: NavHostController,
     roomCreateViewModel: RoomCreateViewModel,
-    harmonyShareViewModel: HarmonyShareViewModel
+    harmonyViewModel: HarmonyViewModel
 ) {
 
     if (roomCreateViewModel.openRoomExistDialog.value) {
@@ -228,7 +228,7 @@ fun OpenRoomExistDialog(
                     } else {
                         roomCreateViewModel.closeRoomExistDialog()
                         // 기존 방으로 입장하기
-                        harmonyShareViewModel.enterExistingRoom()
+                        harmonyViewModel.enterExistingRoom()
                         navigateInclusive(navController, ScreenEnum.RoomNicknameScreen.name)
                     }
                 },

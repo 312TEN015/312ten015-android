@@ -42,7 +42,7 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
@@ -156,7 +156,7 @@ fun AppBarCloseWithDialog(
 @Composable
 fun OpenCloseChatDialog(
     navController: NavHostController,
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
 ) {
 
@@ -165,7 +165,7 @@ fun OpenCloseChatDialog(
             CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
                     dialogViewModel.closeDialog()
-                    harmonyShareViewModel.deleteRoom()
+                    harmonyViewModel.deleteRoom()
                     MyApplication.closeSocket()
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
@@ -176,7 +176,7 @@ fun OpenCloseChatDialog(
 @Composable
 fun OpenCloseCreateChatDialog(
     navController: NavHostController,
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
 ) {
     if (dialogViewModel.openDialog) {
@@ -184,7 +184,7 @@ fun OpenCloseCreateChatDialog(
             CloseCreateChatDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
                     dialogViewModel.closeDialog()
-                    harmonyShareViewModel.deleteRoom()
+                    harmonyViewModel.deleteRoom()
                     MyApplication.closeSocket()
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
@@ -198,11 +198,11 @@ fun AppBarCloseChatWithDialog(
     pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true,
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseChatDialog(navController, harmonyShareViewModel, dialogViewModel)
+    OpenCloseChatDialog(navController, harmonyViewModel, dialogViewModel)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }
@@ -213,11 +213,11 @@ fun AppBarCloseCreateChatWithDialog(
     pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
     isTitleVisible: Boolean = true,
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseCreateChatDialog(navController, harmonyShareViewModel, dialogViewModel)
+    OpenCloseCreateChatDialog(navController, harmonyViewModel, dialogViewModel)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }

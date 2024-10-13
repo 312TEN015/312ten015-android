@@ -39,14 +39,14 @@ class RoomCreateViewModel @Inject constructor(): ViewModel() {
     }
 
 
-    fun checkRoomExist(navController: NavHostController, harmonyShareViewModel: HarmonyShareViewModel) {
+    fun checkRoomExist(navController: NavHostController, harmonyViewModel: HarmonyViewModel) {
 
         val roomId = MyApplication.prefs.getHarmonyRoomId()
         val createdAtString = MyApplication.prefs.getHarmonyRoomCreatedAt()
 
         if (roomId.isNotEmpty() && createdAtString.isNotEmpty()) {
             // 방 생성 후 1시간 경과 체크
-            checkRoomCreatedAt(harmonyShareViewModel)
+            checkRoomCreatedAt(harmonyViewModel)
 
             // 이미 생성하신 초대방이 있어요
             openRoomExistDialog()
@@ -57,7 +57,7 @@ class RoomCreateViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun checkRoomCreatedAt(harmonyShareViewModel: HarmonyShareViewModel) {
+    fun checkRoomCreatedAt(harmonyViewModel: HarmonyViewModel) {
         val createdAt = Date(MyApplication.prefs.getHarmonyRoomCreatedAt())
         val mNow = System.currentTimeMillis()
         val diffMilliseconds = Date(mNow).time - createdAt.time
@@ -65,7 +65,7 @@ class RoomCreateViewModel @Inject constructor(): ViewModel() {
         if (diffHours >= 1) {
             // 1시간 지나서 사라짐
             _isRoomExpired.value = true
-            harmonyShareViewModel.deleteRoom()
+            harmonyViewModel.deleteRoom()
             MyApplication.closeSocket()
         }
     }

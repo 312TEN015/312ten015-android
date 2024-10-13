@@ -61,7 +61,7 @@ import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Scenario
@@ -87,7 +87,7 @@ var initialComposition = true
 @Preview
 fun RoomChatScreen(
     navController: NavHostController = rememberNavController(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     chatViewModel: ChatViewModel = hiltViewModel(),
     fortuneViewModel: FortuneViewModel = hiltViewModel(),
     pickTarotViewModel: PickTarotViewModel = hiltViewModel(),
@@ -103,8 +103,8 @@ fun RoomChatScreen(
 
     LaunchedEffect(Unit) {
         if (initialComposition) {
-            setOnNext(harmonyShareViewModel, loadingViewModel, chatViewModel, pickTarotViewModel)
-            setOnResult(harmonyShareViewModel, loadingViewModel, resultViewModel)
+            setOnNext(harmonyViewModel, loadingViewModel, chatViewModel, pickTarotViewModel)
+            setOnResult(harmonyViewModel, loadingViewModel, resultViewModel)
             initialComposition = false
         }
     }
@@ -115,7 +115,7 @@ fun RoomChatScreen(
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false,
-            harmonyShareViewModel = harmonyShareViewModel,
+            harmonyViewModel = harmonyViewModel,
             dialogViewModel = dialogViewModel
         )
 
@@ -207,7 +207,7 @@ fun RoomChatScreen(
                                                     )
                                                 )
 
-                                                emitStart(harmonyShareViewModel)
+                                                emitStart(harmonyViewModel)
 
                                                 checkEachOtherScenario(chatState.value, partnerChatState.value, chatViewModel)
                                             },
@@ -260,7 +260,7 @@ fun RoomChatScreen(
 
             if (chatState.value.cardDeckStatus == CardDeckStatus.Spread)
                 withChatAnimation(){
-                    ChatCardDeck(harmonyShareViewModel, chatViewModel, fortuneViewModel, pickTarotViewModel)
+                    ChatCardDeck(harmonyViewModel, chatViewModel, fortuneViewModel, pickTarotViewModel)
                 }
         }
 
@@ -317,7 +317,7 @@ fun confirmSelectedCard(chatState: ChatState, chatViewModel: ChatViewModel) {
 
 @Composable
 fun ChatCardDeck(
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     chatViewModel: ChatViewModel,
     fortuneViewModel: FortuneViewModel,
     pickTarotViewModel: PickTarotViewModel
@@ -345,7 +345,7 @@ fun ChatCardDeck(
                     )
                 )
 
-                emitCardSelect(harmonyShareViewModel, pickTarotViewModel, pickSequence.value)
+                emitCardSelect(harmonyViewModel, pickTarotViewModel, pickSequence.value)
 
                 chatViewModel.updatePickSequence()
                 chatViewModel.updateCardDeckStatus(CardDeckStatus.Gathered)

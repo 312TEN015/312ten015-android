@@ -8,7 +8,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class HarmonyShareViewModel @Inject constructor(): ViewModel() {
+class HarmonyViewModel @Inject constructor(): ViewModel() {
 
     private var userNickname = mutableStateOf("")   // 사용자 닉네임
     private var partnerNickname = mutableStateOf("")    // 상대방 닉네임

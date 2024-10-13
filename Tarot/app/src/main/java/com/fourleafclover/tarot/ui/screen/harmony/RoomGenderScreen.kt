@@ -30,7 +30,7 @@ import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.TextH02M22
@@ -52,7 +52,7 @@ const val MAN = 1
 fun RoomGenderScreen(
     navController: NavHostController = rememberNavController(),
     genderViewModel: GenderViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
     PreventBackPressed()
@@ -63,7 +63,7 @@ fun RoomGenderScreen(
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false,
-            harmonyShareViewModel = harmonyShareViewModel,
+            harmonyViewModel = harmonyViewModel,
             dialogViewModel = dialogViewModel
         )
 

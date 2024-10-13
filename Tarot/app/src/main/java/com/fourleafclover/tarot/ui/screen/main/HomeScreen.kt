@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +30,7 @@ import com.fourleafclover.tarot.ui.navigation.FinishOnBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateSaveState
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -47,8 +48,9 @@ fun Context.findActivity(): Activity? = when (this) {
 
 @Composable
 fun HomeScreen(
+    activity: Activity,
     navController: NavHostController = rememberNavController(),
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     shareViewModel: ShareViewModel,
     dialogViewModel: DialogViewModel,
     loadingViewModel: LoadingViewModel,
@@ -57,26 +59,16 @@ fun HomeScreen(
 
     dialogViewModel.closeDialog()
 
-    var initialize by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
 
-    /* 한번만 실행 */
-    if (!initialize){
+        harmonyViewModel.clear()
+        fortuneViewModel.clear()
 
-//        fortuneViewModel.clear()
-//        pickTarotViewModel.clear()
-//        questionInputViewModel.clear()
-//        resultViewModel.clear()
-//        chatViewModel.clear()
-//        harmonyShareViewModel.clear()
-//        mainViewModel.clear()
 
         // 공유하기 확인
-        val activity = LocalContext.current.findActivity()
-        if (activity != null && activity.intent != null) {
-            receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyShareViewModel)
+        if (activity.intent != null) {
+            receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyViewModel)
         }
-
-        initialize = true
     }
 
     // 상태바 초기화

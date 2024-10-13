@@ -38,7 +38,7 @@ import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.HarmonyCardSlider
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -63,24 +63,24 @@ import com.fourleafclover.tarot.utils.setDynamicLink
 @Composable
 fun HarmonyResultScreen(
     navController: NavHostController,
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     fortuneViewModel: FortuneViewModel = hiltViewModel(),
     resultViewModel: ResultViewModel = hiltViewModel()
 ) {
-    HarmonyResultScreenPreview(navController, harmonyShareViewModel, fortuneViewModel, resultViewModel)
+    HarmonyResultScreenPreview(navController, harmonyViewModel, fortuneViewModel, resultViewModel)
 }
 
 @Preview
 @Composable
 fun HarmonyResultScreenPreview(
     navController: NavHostController = rememberNavController(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     fortuneViewModel: FortuneViewModel = hiltViewModel(),
     resultViewModel: ResultViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(Unit) {
-        harmonyShareViewModel.deleteRoom()
+        harmonyViewModel.deleteRoom()
         MyApplication.closeSocket()
     }
 
@@ -101,7 +101,7 @@ fun HarmonyResultScreenPreview(
         ) {
 
             TextH02M22(
-                text = "${if (resultViewModel.isMyTab()) harmonyShareViewModel.getUserNickname() else harmonyShareViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
+                text = "${if (resultViewModel.isMyTab()) harmonyViewModel.getUserNickname() else harmonyViewModel.getPartnerNickname() }님이\n선택하신 카드는\n이런 의미를 담고 있어요.",
                 color = white,
                 modifier = Modifier
                     .background(color = backgroundColor_2)
@@ -173,7 +173,7 @@ fun HarmonyResultScreenPreview(
             }
 
 
-            OverallResult(resultViewModel.tarotResult.value, resultViewModel, harmonyShareViewModel)
+            OverallResult(resultViewModel.tarotResult.value, resultViewModel, harmonyViewModel)
 
         }
 
@@ -196,7 +196,7 @@ private fun getSliderList(context: Context, fortuneViewModel: FortuneViewModel, 
 }
 
 @Composable
-private fun OverallResult(tarotOutputDto: TarotOutputDto, resultViewModel: ResultViewModel, harmonyShareViewModel: HarmonyShareViewModel) {
+private fun OverallResult(tarotOutputDto: TarotOutputDto, resultViewModel: ResultViewModel, harmonyViewModel: HarmonyViewModel) {
 
     Column(
         modifier = Modifier
@@ -301,7 +301,7 @@ private fun OverallResult(tarotOutputDto: TarotOutputDto, resultViewModel: Resul
                         tarotOutputDto.tarotId,
                         ShareLinkType.MY,
                         ShareActionType.OPEN_SHEET,
-                        harmonyShareViewModel
+                        harmonyViewModel
                     )
                 },
             horizontalArrangement = Arrangement.Center

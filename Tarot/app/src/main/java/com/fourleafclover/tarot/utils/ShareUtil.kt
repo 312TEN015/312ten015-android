@@ -13,7 +13,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
 import com.google.firebase.Firebase
@@ -46,21 +46,21 @@ fun setDynamicLink(
     value: String,
     linkType: ShareLinkType,
     actionType: ShareActionType,
-    harmonyShareViewModel: HarmonyShareViewModel
+    harmonyViewModel: HarmonyViewModel
 ){
     if (linkType == ShareLinkType.HARMONY) {
-        if (harmonyShareViewModel.roomId.value.isNotEmpty()){
-            if (harmonyShareViewModel.shortLink.isNotEmpty())
-                doShare(context, actionType, harmonyShareViewModel.shortLink.toUri(), linkType)
-            else if (harmonyShareViewModel.dynamicLink.isNotEmpty())
-                doShare(context, actionType, harmonyShareViewModel.dynamicLink.toUri(), linkType)
-            else if (harmonyShareViewModel.dynamicLink.isEmpty() && harmonyShareViewModel.shortLink.isEmpty())
-                getDynamicLink(context, value, linkType, actionType, harmonyShareViewModel)
+        if (harmonyViewModel.roomId.value.isNotEmpty()){
+            if (harmonyViewModel.shortLink.isNotEmpty())
+                doShare(context, actionType, harmonyViewModel.shortLink.toUri(), linkType)
+            else if (harmonyViewModel.dynamicLink.isNotEmpty())
+                doShare(context, actionType, harmonyViewModel.dynamicLink.toUri(), linkType)
+            else if (harmonyViewModel.dynamicLink.isEmpty() && harmonyViewModel.shortLink.isEmpty())
+                getDynamicLink(context, value, linkType, actionType, harmonyViewModel)
             return
         }
     }
 
-    getDynamicLink(context, value, linkType, actionType, harmonyShareViewModel)
+    getDynamicLink(context, value, linkType, actionType, harmonyViewModel)
 }
 
 // 2) 다이나믹 링크 초기화
@@ -69,7 +69,7 @@ fun getDynamicLink(
     value: String,
     linkType: ShareLinkType,
     actionType: ShareActionType,
-    harmonyShareViewModel: HarmonyShareViewModel
+    harmonyViewModel: HarmonyViewModel
 ){
     val url = initLink(value, linkType)
 
@@ -81,7 +81,7 @@ fun getDynamicLink(
     }
 
     if (linkType == ShareLinkType.HARMONY)
-        harmonyShareViewModel.shortLink = dynamicLink.uri.toString()
+        harmonyViewModel.shortLink = dynamicLink.uri.toString()
 
    val shortLinkTask = Firebase.dynamicLinks.shortLinkAsync(ShortDynamicLink.Suffix.SHORT) {
         longLink = dynamicLink.uri
@@ -95,7 +95,7 @@ fun getDynamicLink(
             doShare(context, actionType, shortLink.shortLink, linkType)
 
             if (linkType == ShareLinkType.HARMONY)
-                harmonyShareViewModel.shortLink = shortLink.shortLink.toString()
+                harmonyViewModel.shortLink = shortLink.shortLink.toString()
 
        }
        .addOnFailureListener {
@@ -161,7 +161,7 @@ fun receiveShareRequest(
     navController: NavHostController,
     shareViewModel: ShareViewModel,
     loadingViewModel: LoadingViewModel,
-    harmonyShareViewModel: HarmonyShareViewModel
+    harmonyViewModel: HarmonyViewModel
 ){
     Firebase.dynamicLinks
         .getDynamicLink(activity.intent)
@@ -184,8 +184,8 @@ fun receiveShareRequest(
             if (deepLinkUri.getBooleanQueryParameter("roomId", false)){
 
                 MyApplication.connectSocket()
-                harmonyShareViewModel.setIsRoomOwner(false)
-                harmonyShareViewModel.enterInvitedRoom(deepLinkUri.getQueryParameter("roomId")!!)
+                harmonyViewModel.setIsRoomOwner(false)
+                harmonyViewModel.enterInvitedRoom(deepLinkUri.getQueryParameter("roomId")!!)
                 navigateInclusive(navController, ScreenEnum.RoomGenderScreen.name)
 
             }

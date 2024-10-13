@@ -25,7 +25,7 @@ import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
@@ -49,7 +49,7 @@ import com.fourleafclover.tarot.ui.theme.white
 fun RoomNicknameScreen(
     navController: NavHostController = rememberNavController(),
     nicknameViewModel: NicknameViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     loadingViewModel: LoadingViewModel = hiltViewModel(),
     dialogViewModel: DialogViewModel = hiltViewModel()
 ) {
@@ -62,7 +62,7 @@ fun RoomNicknameScreen(
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
             isTitleVisible = false,
-            harmonyShareViewModel = harmonyShareViewModel,
+            harmonyViewModel = harmonyViewModel,
             dialogViewModel = dialogViewModel
         )
 
@@ -145,10 +145,10 @@ fun RoomNicknameScreen(
 
             ButtonNext(
                 onClick = {
-                    harmonyShareViewModel.setUserNickname(nicknameViewModel.nickname.value)
+                    harmonyViewModel.setUserNickname(nicknameViewModel.nickname.value)
 
                     // 새로 방을 생성
-                    if (harmonyShareViewModel.roomId.value.isEmpty()) {
+                    if (harmonyViewModel.roomId.value.isEmpty()) {
                         loadingViewModel.startLoading(
                             navController,
                             ScreenEnum.RoomCreateLoadingScreen,

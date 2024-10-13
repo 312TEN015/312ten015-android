@@ -28,7 +28,7 @@ import com.fourleafclover.tarot.ui.screen.harmony.RoomNicknameScreen
 import com.fourleafclover.tarot.ui.screen.harmony.RoomShareScreen
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.GenderViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.NicknameViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
@@ -61,7 +61,7 @@ fun NavigationHost() {
     val dialogViewModel: DialogViewModel = viewModel(activity)
     val shareViewModel: ShareViewModel = viewModel(activity)
     val loadingViewModel: LoadingViewModel = viewModel(activity)
-    val harmonyShareViewModel: HarmonyShareViewModel = viewModel(activity)
+    val harmonyViewModel: HarmonyViewModel = viewModel(activity)
     val myTarotViewModel: MyTarotViewModel = viewModel(activity)
     val roomCreateViewModel: RoomCreateViewModel = viewModel(activity)
     val genderViewModel: GenderViewModel = viewModel(activity)
@@ -70,15 +70,16 @@ fun NavigationHost() {
 
     Scaffold(bottomBar = {
         if (currentRoute == ScreenEnum.HomeScreen.name || currentRoute == ScreenEnum.MyTarotScreen.name)
-            BottomNavigationBar(navController = navController, hiltViewModel())
+            BottomNavigationBar(navController = navController, myTarotViewModel)
     }
     ) { innerPadding -> innerPadding
 
         NavHost(navController = navController, startDestination = ScreenEnum.OnBoardingScreen.name) {
             composable(ScreenEnum.HomeScreen.name) {
                 HomeScreen(
+                    activity,
                     navController,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     shareViewModel,
                     dialogViewModel,
                     loadingViewModel,
@@ -114,7 +115,7 @@ fun NavigationHost() {
                     navController,
                     fortuneViewModel,
                     resultViewModel,
-                    harmonyShareViewModel
+                    harmonyViewModel
                     )
             }
             composable(ScreenEnum.OnBoardingScreen.name) {
@@ -139,7 +140,7 @@ fun NavigationHost() {
                     navController,
                     fortuneViewModel,
                     myTarotViewModel,
-                    harmonyShareViewModel
+                    harmonyViewModel
                     )
             }
             composable(ScreenEnum.ShareDetailScreen.name) {
@@ -160,14 +161,14 @@ fun NavigationHost() {
                 RoomCreateScreen(
                     navController,
                     roomCreateViewModel,
-                    harmonyShareViewModel
+                    harmonyViewModel
                 )
             }
             composable(ScreenEnum.RoomGenderScreen.name) {
                 RoomGenderScreen(
                     navController,
                     genderViewModel,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     dialogViewModel
                     )
             }
@@ -175,7 +176,7 @@ fun NavigationHost() {
                 RoomNicknameScreen(
                     navController,
                     nicknameViewModel,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     loadingViewModel,
                     dialogViewModel
                 )
@@ -183,7 +184,7 @@ fun NavigationHost() {
             composable(ScreenEnum.RoomCreateLoadingScreen.name) {
                 RoomCreateLoadingScreen(
                     navController,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     loadingViewModel
                     )
             }
@@ -191,14 +192,14 @@ fun NavigationHost() {
                 RoomShareScreen(
                     navController,
                     loadingViewModel,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     dialogViewModel
                 )
             }
             composable(ScreenEnum.RoomInviteLoadingScreen.name) {
                 RoomInviteLoadingScreen(
                     navController,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     loadingViewModel,
                     chatViewModel,
                     dialogViewModel
@@ -210,7 +211,7 @@ fun NavigationHost() {
             composable(ScreenEnum.RoomChatScreen.name) {
                 RoomChatScreen(
                     navController,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     chatViewModel,
                     fortuneViewModel,
                     pickTarotViewModel,
@@ -222,7 +223,7 @@ fun NavigationHost() {
             composable(ScreenEnum.RoomResultScreen.name) {
                 HarmonyResultScreen(
                     navController,
-                    harmonyShareViewModel,
+                    harmonyViewModel,
                     fortuneViewModel,
                     resultViewModel
                 )

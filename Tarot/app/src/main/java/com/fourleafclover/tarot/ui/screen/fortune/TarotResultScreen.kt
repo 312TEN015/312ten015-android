@@ -36,7 +36,7 @@ import com.fourleafclover.tarot.ui.component.ControlDialog
 import com.fourleafclover.tarot.ui.component.appBarModifier
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -64,7 +64,7 @@ fun TarotResultScreen(
     navController: NavHostController = rememberNavController(),
     fortuneViewModel: FortuneViewModel = hiltViewModel(),
     resultViewModel: ResultViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+    harmonyViewModel: HarmonyViewModel = hiltViewModel()
 ){
 
     Column(modifier = backgroundModifier.verticalScroll(rememberScrollState()))
@@ -117,7 +117,7 @@ fun TarotResultScreen(
             }
 
 
-            OverallResult(resultViewModel, harmonyShareViewModel)
+            OverallResult(resultViewModel, harmonyViewModel)
 
         }
 
@@ -126,7 +126,7 @@ fun TarotResultScreen(
 
 
 @Composable
-private fun OverallResult(resultViewModel: ResultViewModel, harmonyShareViewModel: HarmonyShareViewModel){
+private fun OverallResult(resultViewModel: ResultViewModel, harmonyViewModel: HarmonyViewModel){
 
     Column(
         modifier = Modifier
@@ -228,7 +228,7 @@ private fun OverallResult(resultViewModel: ResultViewModel, harmonyShareViewMode
                     resultViewModel.tarotResult.value.tarotId,
                     ShareLinkType.MY,
                     ShareActionType.OPEN_SHEET,
-                    harmonyShareViewModel
+                    harmonyViewModel
                 )
             },
             horizontalArrangement = Arrangement.Center)

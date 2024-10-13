@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.fourleafclover.tarot.R
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.theme.TextB02M16
 import com.fourleafclover.tarot.ui.theme.gray_2
 import com.fourleafclover.tarot.ui.theme.gray_7
@@ -25,7 +25,7 @@ import com.fourleafclover.tarot.utils.ShareLinkType
 import com.fourleafclover.tarot.utils.setDynamicLink
 
 @Composable
-fun ShareLinkOrCopy(harmonyShareViewModel: HarmonyShareViewModel) {
+fun ShareLinkOrCopy(harmonyViewModel: HarmonyViewModel) {
     val localContext = LocalContext.current
 
     Row(
@@ -41,10 +41,10 @@ fun ShareLinkOrCopy(harmonyShareViewModel: HarmonyShareViewModel) {
             onClick = {
                 setDynamicLink(
                     localContext,
-                    harmonyShareViewModel.roomId.value,
+                    harmonyViewModel.roomId.value,
                     ShareLinkType.HARMONY,
                     ShareActionType.OPEN_SHEET,
-                    harmonyShareViewModel
+                    harmonyViewModel
                 )
             })
         HowToShareButton(
@@ -54,10 +54,10 @@ fun ShareLinkOrCopy(harmonyShareViewModel: HarmonyShareViewModel) {
             onClick = {
                 setDynamicLink(
                     localContext,
-                    harmonyShareViewModel.roomId.value,
+                    harmonyViewModel.roomId.value,
                     ShareLinkType.HARMONY,
                     ShareActionType.COPY_LINK,
-                    harmonyShareViewModel
+                    harmonyViewModel
                 )
             })
     }

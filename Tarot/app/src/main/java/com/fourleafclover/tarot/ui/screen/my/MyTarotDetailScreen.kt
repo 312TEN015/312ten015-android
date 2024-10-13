@@ -31,7 +31,7 @@ import com.fourleafclover.tarot.ui.component.CardSlider
 import com.fourleafclover.tarot.ui.component.backgroundModifier
 import com.fourleafclover.tarot.ui.component.setStatusbarColor
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.theme.TextB01M18
 import com.fourleafclover.tarot.ui.theme.TextB02M16
@@ -57,7 +57,7 @@ fun MyTarotDetailScreen(
     navController: NavHostController = rememberNavController(),
     fortuneViewModel: FortuneViewModel = hiltViewModel(),
     myTarotViewModel: MyTarotViewModel = hiltViewModel(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel()
+    harmonyViewModel: HarmonyViewModel = hiltViewModel()
 ) {
     val localContext = LocalContext.current
     val tarotSubjectData = fortuneViewModel.getPickedTopic(myTarotViewModel.selectedTarotResult.tarotType)
@@ -166,7 +166,7 @@ fun MyTarotDetailScreen(
                                 myTarotViewModel.selectedTarotResult.tarotId,
                                 ShareLinkType.MY,
                                 ShareActionType.OPEN_SHEET,
-                                harmonyShareViewModel
+                                harmonyViewModel
                             )
                         },
                     horizontalArrangement = Arrangement.Center

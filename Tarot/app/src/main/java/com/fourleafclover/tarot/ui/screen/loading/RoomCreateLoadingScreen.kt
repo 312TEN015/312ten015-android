@@ -14,7 +14,7 @@ import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.screen.harmony.emitCreate
 import com.fourleafclover.tarot.ui.screen.harmony.setOnCreateComplete
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.theme.gray_9
 
@@ -23,7 +23,7 @@ import com.fourleafclover.tarot.ui.theme.gray_9
 @Preview
 fun RoomCreateLoadingScreen(
     navController: NavHostController = rememberNavController(),
-    harmonyShareViewModel: HarmonyShareViewModel = hiltViewModel(),
+    harmonyViewModel: HarmonyViewModel = hiltViewModel(),
     loadingViewModel: LoadingViewModel = hiltViewModel()
 ){
 
@@ -35,7 +35,7 @@ fun RoomCreateLoadingScreen(
 
     LaunchedEffect(Unit){
         // 새로운 방 생성
-        setOnCreateComplete(harmonyShareViewModel, loadingViewModel)
+        setOnCreateComplete(harmonyViewModel, loadingViewModel)
         emitCreate()
     }
 
@@ -44,7 +44,7 @@ fun RoomCreateLoadingScreen(
         verticalArrangement = Arrangement.Center
     ) {
         LoadingCircle(
-            loadingTitle = "${harmonyShareViewModel.getUserNickname()}님, 이제 궁합을\n확인하러 가볼까요?",
+            loadingTitle = "${harmonyViewModel.getUserNickname()}님, 이제 궁합을\n확인하러 가볼까요?",
             loadingSubTitle = "상대방을 초대하고 함께\n실시간으로 궁합을 볼 수 있어요."
         )
     }

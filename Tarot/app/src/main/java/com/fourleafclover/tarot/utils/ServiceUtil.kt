@@ -13,7 +13,7 @@ import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.QuestionInputViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.emitResultPrepared
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
-import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyShareViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
@@ -181,7 +181,7 @@ fun getTarotResult(
 
 /** 궁합 결과 요청 POST */
 fun getMatchResult(
-    harmonyShareViewModel: HarmonyShareViewModel,
+    harmonyViewModel: HarmonyViewModel,
     loadingViewModel: LoadingViewModel,
     chatViewModel: ChatViewModel
 ) {
@@ -189,10 +189,10 @@ fun getMatchResult(
     CoroutineScope(Dispatchers.IO).launch {
         MyApplication.tarotService.getMatchResult(
             MatchTarotInputDto(
-                harmonyShareViewModel.getOwnerNickname(),
-                harmonyShareViewModel.getInviteeNickname(),
-                harmonyShareViewModel.roomId.value,
-                setCardArray(harmonyShareViewModel.isRoomOwner.value, chatViewModel)
+                harmonyViewModel.getOwnerNickname(),
+                harmonyViewModel.getInviteeNickname(),
+                harmonyViewModel.roomId.value,
+                setCardArray(harmonyViewModel.isRoomOwner.value, chatViewModel)
             )
         )
             .enqueue(object : Callback<TarotOutputDto> {
@@ -205,7 +205,7 @@ fun getMatchResult(
                         Log.d("api", "onResponse null")
                     }
 
-                    emitResultPrepared(harmonyShareViewModel, response.body()!!.tarotId)
+                    emitResultPrepared(harmonyViewModel, response.body()!!.tarotId)
 
                 }
 
@@ -216,14 +216,14 @@ fun getMatchResult(
                     if (reconnectCount == maxReconnectCount) {
                         reconnectCount = 0
 
-                        emitResultPrepared(harmonyShareViewModel)
+                        emitResultPrepared(harmonyViewModel)
 
                         loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                         loadingViewModel.updateLoadingState(false)
-                        harmonyShareViewModel.deleteRoom()
+                        harmonyViewModel.deleteRoom()
                         MyApplication.toastUtil.makeShortToast("네트워크 상태를 확인 후 다시 시도해 주세요.")
                     } else {
-                        getMatchResult(harmonyShareViewModel, loadingViewModel, chatViewModel)
+                        getMatchResult(harmonyViewModel, loadingViewModel, chatViewModel)
                     }
 
                 }
