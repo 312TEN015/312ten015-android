@@ -20,7 +20,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseOnRoomInviteWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
@@ -51,7 +51,7 @@ fun RoomShareScreen(
 
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarCloseChatWithDialog(
+        AppBarCloseOnRoomInviteWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

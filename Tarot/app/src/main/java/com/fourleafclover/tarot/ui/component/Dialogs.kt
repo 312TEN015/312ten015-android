@@ -39,13 +39,19 @@ fun CloseDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
 
 @Composable
 @Preview
-fun CloseChatDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+fun CloseOnChatDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+    YesNoDialog("궁합 보기를 중단하고 나가시겠습니까?\n나간 초대방은 다시 들어올 수 없습니다.", onClickNo, onClickOk)
+}
+
+@Composable
+@Preview
+fun CloseOnRoomInviteDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
     YesNoDialog("궁합 보기를 중단하고 나가시겠습니까?\n생성된 초대방이 삭제됩니다.", onClickNo, onClickOk)
 }
 
 @Composable
 @Preview
-fun CloseCreateChatDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
+fun CloseOnRoomCreateDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}) {
     YesNoDialog("궁합 보기를 중단하고 나가시겠습니까?", onClickNo, onClickOk)
 }
 

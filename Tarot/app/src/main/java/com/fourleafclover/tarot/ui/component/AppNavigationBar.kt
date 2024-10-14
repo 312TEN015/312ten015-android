@@ -42,6 +42,8 @@ import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.data.TarotSubjectData
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
+import com.fourleafclover.tarot.ui.screen.harmony.emitExit
+import com.fourleafclover.tarot.ui.screen.harmony.setOnExit
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
 import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
@@ -154,7 +156,7 @@ fun AppBarCloseWithDialog(
 }
 
 @Composable
-fun OpenCloseChatDialog(
+fun SetCloseOnChatDialog(
     navController: NavHostController,
     harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
@@ -162,7 +164,28 @@ fun OpenCloseChatDialog(
 
     if (dialogViewModel.openDialog) {
         Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
-            CloseChatDialog(onClickNo = { dialogViewModel.closeDialog() },
+            CloseOnChatDialog(onClickNo = { dialogViewModel.closeDialog() },
+                onClickOk = {
+                    emitExit(harmonyViewModel)
+                    dialogViewModel.closeDialog()
+                    harmonyViewModel.deleteRoom()
+                    MyApplication.closeSocket()
+                    navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                })
+        }
+    }
+}
+
+@Composable
+fun SetCloseOnRoomInviteDialog(
+    navController: NavHostController,
+    harmonyViewModel: HarmonyViewModel,
+    dialogViewModel: DialogViewModel
+) {
+
+    if (dialogViewModel.openDialog) {
+        Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
+            CloseOnRoomInviteDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
                     dialogViewModel.closeDialog()
                     harmonyViewModel.deleteRoom()
@@ -174,14 +197,14 @@ fun OpenCloseChatDialog(
 }
 
 @Composable
-fun OpenCloseCreateChatDialog(
+fun SetCloseOnRoomCreateDialog(
     navController: NavHostController,
     harmonyViewModel: HarmonyViewModel,
     dialogViewModel: DialogViewModel
 ) {
     if (dialogViewModel.openDialog) {
         Dialog(onDismissRequest = { dialogViewModel.closeDialog() }) {
-            CloseCreateChatDialog(onClickNo = { dialogViewModel.closeDialog() },
+            CloseOnRoomCreateDialog(onClickNo = { dialogViewModel.closeDialog() },
                 onClickOk = {
                     dialogViewModel.closeDialog()
                     harmonyViewModel.deleteRoom()
@@ -193,7 +216,7 @@ fun OpenCloseCreateChatDialog(
 }
 
 @Composable
-fun AppBarCloseChatWithDialog(
+fun AppBarCloseOnChatWithDialog(
     navController: NavHostController = rememberNavController(),
     pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
@@ -202,13 +225,13 @@ fun AppBarCloseChatWithDialog(
     dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseChatDialog(navController, harmonyViewModel, dialogViewModel)
+    SetCloseOnChatDialog(navController, harmonyViewModel, dialogViewModel)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }
 
 @Composable
-fun AppBarCloseCreateChatWithDialog(
+fun AppBarCloseOnRoomInviteWithDialog(
     navController: NavHostController = rememberNavController(),
     pickedTopicTemplate: TarotSubjectData,
     backgroundColor: Color = backgroundColor_1,
@@ -217,7 +240,22 @@ fun AppBarCloseCreateChatWithDialog(
     dialogViewModel: DialogViewModel
 ) {
 
-    OpenCloseCreateChatDialog(navController, harmonyViewModel, dialogViewModel)
+    SetCloseOnRoomInviteDialog(navController, harmonyViewModel, dialogViewModel)
+
+    AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
+}
+
+@Composable
+fun AppBarCloseOnRoomCreateWithDialog(
+    navController: NavHostController = rememberNavController(),
+    pickedTopicTemplate: TarotSubjectData,
+    backgroundColor: Color = backgroundColor_1,
+    isTitleVisible: Boolean = true,
+    harmonyViewModel: HarmonyViewModel,
+    dialogViewModel: DialogViewModel
+) {
+
+    SetCloseOnRoomCreateDialog(navController, harmonyViewModel, dialogViewModel)
 
     AppBarClose(navController, pickedTopicTemplate, backgroundColor, isTitleVisible, dialogViewModel)
 }

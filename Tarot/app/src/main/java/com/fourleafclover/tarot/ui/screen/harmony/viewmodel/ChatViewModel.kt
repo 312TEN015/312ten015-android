@@ -1,6 +1,7 @@
 package com.fourleafclover.tarot.ui.screen.harmony.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fourleafclover.tarot.data.PickedCardNumberState
@@ -79,7 +80,11 @@ class ChatViewModel  @Inject constructor() : ViewModel() {
     private lateinit var thirdCard: List<Chat>
     private lateinit var complete: List<Chat>
 
+    private var _isExiting = mutableStateOf(false)
+    val isExiting get() = _isExiting
+
     fun clear() {
+        _isExiting = mutableStateOf(false)
         _chatState = MutableStateFlow(ChatState())
         _partnerChatState = MutableStateFlow(ChatState())
         _pickSequence = MutableStateFlow(1)
@@ -89,6 +94,10 @@ class ChatViewModel  @Inject constructor() : ViewModel() {
         secondCard = listOf()
         thirdCard = listOf()
         complete = listOf()
+    }
+
+    fun setExit(isExiting: Boolean) {
+        _isExiting.value = isExiting
     }
 
     fun startChat(myNickname: String, partnerNickname: String) {

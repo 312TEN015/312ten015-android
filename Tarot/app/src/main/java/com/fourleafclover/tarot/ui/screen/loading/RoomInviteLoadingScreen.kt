@@ -14,7 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseOnRoomInviteWithDialog
 import com.fourleafclover.tarot.ui.component.LoadingCircle
 import com.fourleafclover.tarot.ui.component.ShareLinkOrCopy
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -53,7 +53,7 @@ fun RoomInviteLoadingScreen(
 
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarCloseChatWithDialog(
+        AppBarCloseOnRoomInviteWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

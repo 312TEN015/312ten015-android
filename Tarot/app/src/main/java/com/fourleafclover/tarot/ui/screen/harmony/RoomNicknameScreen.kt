@@ -19,7 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.ui.component.AppBarCloseCreateChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseOnRoomCreateWithDialog
 import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
@@ -57,7 +57,7 @@ fun RoomNicknameScreen(
     PreventBackPressed()
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarCloseCreateChatWithDialog(
+        AppBarCloseOnRoomCreateWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,

@@ -1,13 +1,18 @@
 package com.fourleafclover.tarot.ui.screen.harmony
 
 import android.util.Log
+import androidx.navigation.NavHostController
 import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.HarmonyViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.LoadingViewModel
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ResultViewModel
+import com.fourleafclover.tarot.ui.screen.main.DialogViewModel
 import com.fourleafclover.tarot.utils.getCertainTarotDetail
 import com.fourleafclover.tarot.utils.getMatchResult
 import io.socket.emitter.Emitter
@@ -286,6 +291,42 @@ fun emitResultPrepared(harmonyViewModel: HarmonyViewModel, tarotId: String = "")
     }
 
 
+}
+
+fun setOnExit(chatViewModel: ChatViewModel) {
+    val onExit = Emitter.Listener { args ->
+        Log.d("socket-test", "onExit " + args[0].toString())
+
+        chatViewModel.addChatItem(Chat(ChatType.PartnerChatText, "상대방이 초대방에서 나가셔서 궁합 보기가 중단되었어요. 아쉽지만 다음 기회에 다시 봐요\uD83D\uDE22"))
+        chatViewModel.addChatItem(Chat(ChatType.GuidText, "궁합 보기가 종료되었습니다⚡"))
+
+        chatViewModel.setExit(true)
+
+        MyApplication.closeSocket()
+    }
+
+    MyApplication.socket.on("onExit", onExit)
+}
+
+
+fun emitExit(harmonyViewModel: HarmonyViewModel) {
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            MyApplication.socket.emit("exit")
+
+            withContext(Dispatchers.Main) {
+                Log.d("socket-test", "emit exit success")
+            }
+        } catch (e: Exception) {
+
+            withContext(Dispatchers.Main) {
+                Log.d("socket-test", "emit exit failed")
+                Log.e("socket-test", "exception: ${e.message}")
+                harmonyViewModel.deleteRoom()
+                MyApplication.closeSocket()
+            }
+        }
+    }
 }
 
 

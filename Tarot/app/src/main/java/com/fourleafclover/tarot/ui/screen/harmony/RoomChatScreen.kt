@@ -46,13 +46,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.R
 import com.fourleafclover.tarot.SubjectHarmony
-import com.fourleafclover.tarot.ui.component.AppBarCloseChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseOnChatWithDialog
+import com.fourleafclover.tarot.ui.component.AppBarCloseOnRoomInviteWithDialog
+import com.fourleafclover.tarot.ui.component.ButtonNext
 import com.fourleafclover.tarot.ui.component.ButtonText
 import com.fourleafclover.tarot.ui.component.getBackgroundModifier
 import com.fourleafclover.tarot.ui.navigation.PreventBackPressed
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
+import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.fortune.CardDeck
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.FortuneViewModel
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
@@ -105,12 +109,13 @@ fun RoomChatScreen(
         if (initialComposition) {
             setOnNext(harmonyViewModel, loadingViewModel, chatViewModel, pickTarotViewModel)
             setOnResult(harmonyViewModel, loadingViewModel, resultViewModel)
+            setOnExit(chatViewModel)
             initialComposition = false
         }
     }
 
     Column(modifier = getBackgroundModifier(backgroundColor_2)) {
-        AppBarCloseChatWithDialog(
+        AppBarCloseOnChatWithDialog(
             navController = navController,
             pickedTopicTemplate = SubjectHarmony,
             backgroundColor = backgroundColor_2,
@@ -262,6 +267,20 @@ fun RoomChatScreen(
                 withChatAnimation(){
                     ChatCardDeck(harmonyViewModel, chatViewModel, fortuneViewModel, pickTarotViewModel)
                 }
+
+            if (chatViewModel.isExiting.value) {
+                ButtonNext(
+                    onClick = {
+                        dialogViewModel.closeDialog()
+                        harmonyViewModel.deleteRoom()
+                        MyApplication.closeSocket()
+                        navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                        chatViewModel.setExit(false)
+                    },
+                    enabled = { true },
+                    content = { ButtonText(true, "메인으로 이동") }
+                )
+            }
         }
 
     }
