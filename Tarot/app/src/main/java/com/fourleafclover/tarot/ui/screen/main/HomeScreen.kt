@@ -62,12 +62,7 @@ fun HomeScreen(
     fortuneViewModel: FortuneViewModel
 ) {
 
-    LaunchedEffect(Unit) {
-        // 공유하기 확인
-        if (activity.intent != null) {
-            receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyViewModel)
-        }
-    }
+
 
     // 상태바 초기화
     setStatusbarColor(LocalView.current, backgroundColor_2)

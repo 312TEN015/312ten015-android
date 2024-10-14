@@ -11,7 +11,7 @@ class GenderViewModel @Inject constructor(): ViewModel() {
     private var pickedGender = mutableStateOf(-1)
 
     fun clear() {
-        pickedGender = mutableStateOf(-1)
+        pickedGender.value = -1
     }
 
     fun updatePickedGender(newPick: Int){

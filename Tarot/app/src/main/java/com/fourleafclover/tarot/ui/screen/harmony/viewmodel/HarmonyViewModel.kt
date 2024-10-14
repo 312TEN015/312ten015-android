@@ -30,12 +30,12 @@ class HarmonyViewModel @Inject constructor(): ViewModel() {
     var shortLink = ""
 
     fun clear() {
-        userNickname = mutableStateOf("")
-        partnerNickname = mutableStateOf("")
-        _roomId = mutableStateOf("")
-        _createdRoomId = mutableStateOf("")
-        _invitedRoomId = mutableStateOf("")
-        _isRoomOwner = mutableStateOf(false)
+        userNickname.value = ""
+        partnerNickname.value = ""
+        _roomId.value = ""
+        _createdRoomId.value = ""
+        _invitedRoomId.value = ""
+        _isRoomOwner.value = false
         dynamicLink = ""
         shortLink = ""
     }

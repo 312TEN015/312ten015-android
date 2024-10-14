@@ -31,10 +31,11 @@ class PickTarotViewModel @Inject constructor(): ViewModel() {
     // ---------------------------------------------------------------------------------------------
 
     fun clear() {
-        _pickedCardNumberState = mutableStateOf(PickedCardNumberState())
-        _nowSelectedCardIdx = mutableStateOf(-1)
-        _cards = mutableStateListOf<Int>().apply { addAll(getRandomCards()) }
-        _pickSequence = mutableStateOf(1)
+        _pickedCardNumberState.value = PickedCardNumberState()
+        _nowSelectedCardIdx.value = -1
+        _cards.clear()
+        _cards.addAll(getRandomCards())
+        _pickSequence.value = 1
     }
 
     fun initCardDeck(){

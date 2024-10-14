@@ -62,16 +62,11 @@ class ResultViewModel @Inject constructor(): ViewModel() {
     )
 
     fun clear() {
-        _tarotResult = mutableStateOf(TarotOutputDto())
-        myCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
-        myCardNumbers = arrayListOf(0, 0, 0)
-        partnerCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
-        partnerCardNumbers = arrayListOf(0, 0, 0)
-        isMyTab = mutableStateOf(true) // 나의 탭 터치했는지 여부
-        isMatchResultPrepared = mutableStateOf(false)
-        _openCloseDialog = mutableStateOf(false) // close dialog state
-        _openCompleteDialog = mutableStateOf(false)
-        _saveState = mutableStateOf(false)
+        isMyTab.value = true
+        isMatchResultPrepared.value = false
+        _openCloseDialog.value = false
+        _openCompleteDialog.value = false
+        _saveState.value = false
     }
 
     fun setIsMatchResultPrepared(isPrepared: Boolean) {
@@ -79,14 +74,14 @@ class ResultViewModel @Inject constructor(): ViewModel() {
     }
 
     fun initResult(){
-        _tarotResult = mutableStateOf(TarotOutputDto())
+        _tarotResult.value = TarotOutputDto()
 
         myCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
         myCardNumbers = arrayListOf(0, 0, 0)
         partnerCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
         partnerCardNumbers = arrayListOf(0, 0, 0)
 
-        isMyTab = mutableStateOf(true)
+        isMyTab.value = true
 
         _openCloseDialog.value = false
         _openCompleteDialog.value = false

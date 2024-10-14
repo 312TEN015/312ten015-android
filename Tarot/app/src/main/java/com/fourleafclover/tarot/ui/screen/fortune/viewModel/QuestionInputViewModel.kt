@@ -27,9 +27,9 @@ class QuestionInputViewModel @Inject constructor(): ViewModel() {
 
 
     fun clear() {
-        _answer1 = mutableStateOf(TextFieldValue(""))
-        _answer2 = mutableStateOf(TextFieldValue(""))
-        _answer3 = mutableStateOf(TextFieldValue(""))
+        _answer1.value = TextFieldValue("")
+        _answer2.value = TextFieldValue("")
+        _answer3.value = TextFieldValue("")
     }
 
     fun initAnswers(){

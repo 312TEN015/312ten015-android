@@ -17,8 +17,8 @@ class NicknameViewModel @Inject constructor(): ViewModel() {
     val isCaptionVisible get() = _isCaptionVisible
 
     fun clear() {
-        _nickname = mutableStateOf("")
-        _isCaptionVisible = mutableStateOf(false)
+        _nickname.value = ""
+        _isCaptionVisible.value = false
     }
 
 

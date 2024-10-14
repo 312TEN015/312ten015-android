@@ -23,9 +23,9 @@ class RoomCreateViewModel @Inject constructor(): ViewModel() {
     val isRoomExpired = _isRoomExpired
 
     fun clear() {
-        _openRoomDeletedDialog = mutableStateOf(false)
-        _openRoomExistDialog = mutableStateOf(false)
-        _isRoomExpired = mutableStateOf(false)
+        _openRoomDeletedDialog.value = false
+        _openRoomExistDialog.value = false
+        _isRoomExpired.value = false
     }
 
     fun openRoomDeletedDialog() {

@@ -28,13 +28,7 @@ class MyTarotViewModel @Inject constructor(): ViewModel() {
     var inviteeCardNumbers : List<Int> = arrayListOf(0, 0, 0)
 
     fun clear() {
-        _selectedTarotResult = mutableStateOf(TarotOutputDto("0", 0, arrayListOf(), "", arrayListOf(), null))
-        _myTarotResults = mutableStateListOf<TarotOutputDto>()
-        isRoomOwnerTab = mutableStateOf(true)
-        roomOwnerCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
-        roomOwnerCardNumbers = arrayListOf(0, 0, 0)
-        inviteeCardResults = arrayListOf(CardResultData(), CardResultData(), CardResultData())
-        inviteeCardNumbers = arrayListOf(0, 0, 0)
+        isRoomOwnerTab.value = true
     }
 
 

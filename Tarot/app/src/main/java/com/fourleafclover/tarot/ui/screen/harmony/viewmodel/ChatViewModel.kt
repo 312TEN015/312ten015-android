@@ -84,11 +84,11 @@ class ChatViewModel  @Inject constructor() : ViewModel() {
     val isExiting get() = _isExiting
 
     fun clear() {
-        _isExiting = mutableStateOf(false)
-        _chatState = MutableStateFlow(ChatState())
-        _partnerChatState = MutableStateFlow(ChatState())
-        _pickSequence = MutableStateFlow(1)
-        chatList = mutableStateListOf<Chat>()
+        _isExiting.value = false
+        _chatState.value = ChatState()
+        _partnerChatState.value = ChatState()
+        _pickSequence.value = 1
+        chatList.clear()
         opening = listOf()
         firstCard = listOf()
         secondCard = listOf()

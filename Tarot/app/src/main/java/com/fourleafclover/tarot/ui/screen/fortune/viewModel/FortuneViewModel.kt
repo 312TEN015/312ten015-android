@@ -58,10 +58,6 @@ class FortuneViewModel @Inject constructor() : ViewModel() {
 
     // ---------------------------------------------------------------------------------------------
 
-    fun clear() {
-        _pickedTopicState = mutableStateOf(PickedTopicState())
-    }
-
     fun getPickedTopic(topicNumber: Int) : TarotSubjectData {
         return when (topicNumber) {
             0 -> SubjectLove

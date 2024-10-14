@@ -11,7 +11,7 @@ class DialogViewModel @Inject constructor(): ViewModel() {
     val openDialog get() = _openDialog.value
 
     fun clear() {
-        _openDialog = mutableStateOf(false)
+        _openDialog.value = false
     }
 
     fun openDialog() {

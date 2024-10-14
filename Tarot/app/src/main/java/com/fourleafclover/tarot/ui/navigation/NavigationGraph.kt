@@ -46,6 +46,7 @@ import com.fourleafclover.tarot.ui.screen.my.ShareDetailScreen
 import com.fourleafclover.tarot.ui.screen.my.ShareHarmonyDetailScreen
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.MyTarotViewModel
 import com.fourleafclover.tarot.ui.screen.my.viewmodel.ShareViewModel
+import com.fourleafclover.tarot.utils.receiveShareRequest
 
 @Composable
 fun NavigationHost() {
@@ -79,6 +80,27 @@ fun NavigationHost() {
 
         NavHost(navController = navController, startDestination = ScreenEnum.OnBoardingScreen.name) {
             composable(ScreenEnum.HomeScreen.name) {
+
+                LaunchedEffect(Unit) {
+                    questionInputViewModel.clear()
+                    pickTarotViewModel.clear()
+                    resultViewModel.clear()
+                    dialogViewModel.clear()
+                    shareViewModel.clear()
+                    loadingViewModel.clear()
+                    harmonyViewModel.clear()
+                    roomCreateViewModel.clear()
+                    genderViewModel.clear()
+                    nicknameViewModel.clear()
+                    chatViewModel.clear()
+                    myTarotViewModel.clear()
+
+                    // 공유하기 확인
+                    if (activity.intent != null) {
+                        receiveShareRequest(activity, navController, shareViewModel, loadingViewModel, harmonyViewModel)
+                    }
+                }
+
                 HomeScreen(
                     activity,
                     navController,

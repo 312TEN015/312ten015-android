@@ -19,7 +19,7 @@ class LoadingViewModel @Inject constructor(): ViewModel() {
     val destination get() = _destination
 
     fun clear() {
-        _isLoading = mutableStateOf(false)
+        _isLoading.value = false
         _destination = ScreenEnum.HomeScreen
     }
 
