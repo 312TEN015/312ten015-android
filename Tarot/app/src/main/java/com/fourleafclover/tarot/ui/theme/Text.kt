@@ -4,6 +4,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -14,7 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.fourleafclover.tarot.R
 
 val Pretendard = FontFamily(
@@ -40,6 +43,19 @@ fun getTextStyle(fontSize: Int, fontWeight: FontWeight, color: Color = white): T
 }
 
 @Composable
+fun getLineHeight(lineHeight: Int) : TextUnit {
+    return with(LocalDensity.current) {
+        // 밀도별로 dp 값을 조정
+        val adjustedSpacing = when {
+            density <= 1.0 -> lineHeight / 3 * 2          // ldpi (저밀도)
+            else -> lineHeight
+        }
+
+        (adjustedSpacing.toFloat().dp).toSp()
+    }
+}
+
+@Composable
 fun TextH01M26(text: String,
                modifier: Modifier = Modifier,
                color: Color = gray_9,
@@ -47,7 +63,7 @@ fun TextH01M26(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 34.dp),
+        lineHeight = getLineHeight(lineHeight = 34),
         style = getTextStyle(fontSize = 26, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -61,7 +77,7 @@ fun TextH02M22(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 34.dp),
+        lineHeight = getLineHeight(lineHeight = 34),
         style = getTextStyle(fontSize = 22, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -75,7 +91,7 @@ fun TextH03SB18(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 24.dp),
+        lineHeight = getLineHeight(lineHeight = 24),
         style = getTextStyle(fontSize = 18, fontWeight = FontWeight.SemiBold, color = color),
         textAlign = textAlign
     )
@@ -89,7 +105,7 @@ fun TextB01M18(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 28.dp),
+        lineHeight = getLineHeight(lineHeight = 28),
         style = getTextStyle(fontSize = 18, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -104,7 +120,7 @@ fun TextB02M16(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 28.dp),
+        lineHeight = getLineHeight(lineHeight = 28),
         style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign,
         overflow = overflow
@@ -119,7 +135,7 @@ fun TextB03M14(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 20.dp),
+        lineHeight = getLineHeight(lineHeight = 20),
         style = getTextStyle(fontSize = 14, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign,
         letterSpacing = toSp(dp = (-0.2).dp)
@@ -134,7 +150,7 @@ fun TextB04M12(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 16.dp),
+        lineHeight = getLineHeight(lineHeight = 16),
         style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -148,7 +164,7 @@ fun TextCaptionM12(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 20.dp),
+        lineHeight = getLineHeight(lineHeight = 20),
         style = getTextStyle(fontSize = 12, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -162,7 +178,7 @@ fun TextButtonM16(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 26.dp),
+        lineHeight = getLineHeight(lineHeight = 26),
         style = getTextStyle(fontSize = 16, fontWeight = FontWeight.Medium, color = color),
         textAlign = textAlign
     )
@@ -176,7 +192,7 @@ fun TextButtonSB16(text: String,
     return Text(
         text = text,
         modifier = modifier,
-        lineHeight = toSp(dp = 26.dp),
+        lineHeight = getLineHeight(lineHeight = 26),
         style = getTextStyle(fontSize = 16, fontWeight = FontWeight.SemiBold, color = color),
         textAlign = textAlign
     )
