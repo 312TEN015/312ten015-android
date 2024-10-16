@@ -646,7 +646,6 @@ fun ButtonSelectInChat(
             .clickable {
                 onClick()
             }
-            .padding(horizontal = 50.dp)
             .wrapContentHeight(),
         contentAlignment = Alignment.Center
     ) {
