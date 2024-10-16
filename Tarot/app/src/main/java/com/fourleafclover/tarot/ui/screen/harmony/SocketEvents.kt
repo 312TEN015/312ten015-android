@@ -305,7 +305,7 @@ fun setOnExit(chatViewModel: ChatViewModel) {
         MyApplication.closeSocket()
     }
 
-    MyApplication.socket.on("onExit", onExit)
+    MyApplication.socket.on("exit", onExit)
 }
 
 

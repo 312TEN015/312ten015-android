@@ -149,8 +149,10 @@ fun showShareSheet(context: Context, link: Uri?, linkType: ShareLinkType){
 
 fun copyLink(context: Context, linkToCopy: String){
     val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val clip = ClipData.newPlainText("타로결과 공유하기", linkToCopy)
+    val clip = ClipData.newPlainText("타로결과 공유하기", "${context.resources.getString(R.string.share_harmony_content)}\n\n$linkToCopy")
     clipboardManager.setPrimaryClip(clip)
+
+    MyApplication.toastUtil.makeShortToast("초대 링크가 복사되었어요!")
 }
 
 

@@ -182,6 +182,7 @@ fun MyTarotItemComponent(
                 2 -> R.drawable.icon_dream
                 3 -> R.drawable.icon_job
                 4 -> R.drawable.icon_today
+                5 -> R.drawable.icon_match
                 else -> R.drawable.icon_love
             }),
                 contentDescription = null,

@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -455,6 +456,7 @@ fun PartnerChattingBox(
     ) {
         Image(
             modifier = Modifier
+                .size(40.dp)
                 .padding(end = 14.dp)
                 .alpha(if (idx in toShowProfileList) 1f else 0f),
             painter = painterResource(id = R.drawable.default_profile),
