@@ -215,9 +215,7 @@ fun getMatchResult(
 
                     if (reconnectCount == maxReconnectCount) {
                         reconnectCount = 0
-
-                        emitResultPrepared(harmonyViewModel)
-
+                        Log.d("api", "getMatchResult failed --------!")
                         loadingViewModel.changeDestination(ScreenEnum.HomeScreen)
                         loadingViewModel.updateLoadingState(false)
                         harmonyViewModel.deleteRoom()

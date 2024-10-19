@@ -270,17 +270,20 @@ fun RoomChatScreen(
                 }
 
             if (chatViewModel.isExiting.value) {
-                ButtonNext(
-                    onClick = {
-                        dialogViewModel.closeDialog()
-                        harmonyViewModel.deleteRoom()
-                        MyApplication.closeSocket()
-                        navigateInclusive(navController, ScreenEnum.HomeScreen.name)
-                        chatViewModel.setExit(false)
-                    },
-                    enabled = { true },
-                    content = { ButtonText(true, "메인으로 이동") }
-                )
+                Box(modifier = Modifier.padding(horizontal = 20.dp)) {
+                    ButtonNext(
+                        onClick = {
+                            dialogViewModel.closeDialog()
+                            harmonyViewModel.deleteRoom()
+                            MyApplication.closeSocket()
+                            navigateInclusive(navController, ScreenEnum.HomeScreen.name)
+                            chatViewModel.setExit(false)
+                        },
+                        enabled = { true },
+                        content = { ButtonText(true, "메인으로 이동") }
+                    )
+                }
+
             }
         }
 
@@ -482,7 +485,7 @@ fun PartnerChattingBox(
 
             ) {
 
-                if (drawable != 0 && drawable != -1) {
+                if (drawable != -1) {
                     Image(
                         modifier = Modifier.width(60.dp),
                         painter = painterResource(id = fortuneViewModel.getCardImageId(LocalContext.current, drawable.toString())),
@@ -506,8 +509,6 @@ fun PartnerChattingBox(
                                 ScreenEnum.LoadingScreen,
                                 ScreenEnum.RoomResultScreen
                             )
-
-                            initialComposition = true
 
                         }
                     )

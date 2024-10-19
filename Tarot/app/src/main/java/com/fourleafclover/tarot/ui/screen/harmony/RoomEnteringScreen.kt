@@ -39,6 +39,7 @@ fun RoomEnteringScreen(navController: NavHostController = rememberNavController(
     /* 한번만 실행 */
     if (!initialize) {
         initialize = true
+        initialComposition = true
 
         Handler(Looper.getMainLooper())
             .postDelayed({

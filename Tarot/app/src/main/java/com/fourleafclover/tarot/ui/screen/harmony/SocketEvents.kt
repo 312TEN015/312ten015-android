@@ -6,6 +6,7 @@ import com.fourleafclover.tarot.MyApplication
 import com.fourleafclover.tarot.ui.navigation.ScreenEnum
 import com.fourleafclover.tarot.ui.navigation.navigateInclusive
 import com.fourleafclover.tarot.ui.screen.fortune.viewModel.PickTarotViewModel
+import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.CardDeckStatus
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.Chat
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatType
 import com.fourleafclover.tarot.ui.screen.harmony.viewmodel.ChatViewModel
@@ -123,6 +124,7 @@ fun emitStart(harmonyViewModel: HarmonyViewModel) {
             MyApplication.socket.emit("start", jsonObject)
 
             withContext(Dispatchers.Main) {
+                Log.d("socket-test", "roomId - ${harmonyViewModel.roomId.value}")
                 Log.d("socket-test", "emit start")
             }
         } catch (e: Exception) {
@@ -295,7 +297,9 @@ fun emitResultPrepared(harmonyViewModel: HarmonyViewModel, tarotId: String = "")
 
 fun setOnExit(chatViewModel: ChatViewModel) {
     val onExit = Emitter.Listener { args ->
-        Log.d("socket-test", "onExit " + args[0].toString())
+        Log.d("socket-test", "onExit")
+
+        chatViewModel.updateCardDeckStatus(CardDeckStatus.Gathered)
 
         chatViewModel.addChatItem(Chat(ChatType.PartnerChatText, "상대방이 초대방에서 나가셔서 궁합 보기가 중단되었어요. 아쉽지만 다음 기회에 다시 봐요\uD83D\uDE22"))
         chatViewModel.addChatItem(Chat(ChatType.GuidText, "궁합 보기가 종료되었습니다⚡"))
@@ -312,7 +316,9 @@ fun setOnExit(chatViewModel: ChatViewModel) {
 fun emitExit(harmonyViewModel: HarmonyViewModel) {
     CoroutineScope(Dispatchers.IO).launch {
         try {
-            MyApplication.socket.emit("exit")
+            val jsonObject = JSONObject()
+            jsonObject.put("roomId", harmonyViewModel.roomId.value)
+            MyApplication.socket.emit("exit", jsonObject)
 
             withContext(Dispatchers.Main) {
                 Log.d("socket-test", "emit exit success")

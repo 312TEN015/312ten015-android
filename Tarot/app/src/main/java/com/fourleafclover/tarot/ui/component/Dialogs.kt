@@ -103,7 +103,7 @@ fun SaveCompletedDialog(onClickOk: () -> Unit = {}) {
                     .padding(bottom = 24.dp))
 
             Button(onClick = onClickOk,
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(6.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
@@ -150,7 +150,7 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
 
             Row {
                 Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(6.dp),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 4.dp),
@@ -168,7 +168,7 @@ fun YesNoDialog(content: String = "운세 보기를 중단하고\n나가시겠�
                 }
 
                 Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(6.dp),
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 4.dp),
@@ -236,7 +236,7 @@ fun VerticalYesNoDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}, 
             Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)){
 
                 Button(onClick = onClickOk,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -255,7 +255,7 @@ fun VerticalYesNoDialog(onClickNo: () -> Unit = {}, onClickOk: () -> Unit = {}, 
                 }
 
                 Button(onClick = onClickNo,
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
@@ -322,7 +322,7 @@ fun RoomDeletedDialog(onClickOk: () -> Unit = {}, onClickClose: () -> Unit = {})
                     .padding(bottom = 24.dp))
 
             Button(onClick = onClickOk,
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(6.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
