@@ -295,7 +295,7 @@ fun emitResultPrepared(harmonyViewModel: HarmonyViewModel, tarotId: String = "")
 
 }
 
-fun setOnExit(chatViewModel: ChatViewModel) {
+fun setOnExit(chatViewModel: ChatViewModel, harmonyViewModel: HarmonyViewModel) {
     val onExit = Emitter.Listener { args ->
         Log.d("socket-test", "onExit")
 
@@ -307,6 +307,7 @@ fun setOnExit(chatViewModel: ChatViewModel) {
         chatViewModel.setExit(true)
 
         MyApplication.closeSocket()
+        harmonyViewModel.deleteRoom()
     }
 
     MyApplication.socket.on("exit", onExit)
@@ -318,6 +319,7 @@ fun emitExit(harmonyViewModel: HarmonyViewModel) {
         try {
             val jsonObject = JSONObject()
             jsonObject.put("roomId", harmonyViewModel.roomId.value)
+            Log.d("socket-test", "exit roomId - ${harmonyViewModel.roomId.value}")
             MyApplication.socket.emit("exit", jsonObject)
 
             withContext(Dispatchers.Main) {

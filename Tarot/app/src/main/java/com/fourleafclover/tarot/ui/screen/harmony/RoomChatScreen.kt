@@ -110,7 +110,7 @@ fun RoomChatScreen(
         if (initialComposition) {
             setOnNext(harmonyViewModel, loadingViewModel, chatViewModel, pickTarotViewModel)
             setOnResult(harmonyViewModel, loadingViewModel, resultViewModel)
-            setOnExit(chatViewModel)
+            setOnExit(chatViewModel, harmonyViewModel)
             initialComposition = false
         }
     }

@@ -168,8 +168,6 @@ fun SetCloseOnChatDialog(
                 onClickOk = {
                     emitExit(harmonyViewModel)
                     dialogViewModel.closeDialog()
-                    harmonyViewModel.deleteRoom()
-                    MyApplication.closeSocket()
                     navigateInclusive(navController, ScreenEnum.HomeScreen.name)
                 })
         }
