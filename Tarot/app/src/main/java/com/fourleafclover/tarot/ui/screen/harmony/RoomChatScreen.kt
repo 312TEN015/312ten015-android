@@ -231,6 +231,9 @@ fun RoomChatScreen(
                                 }
 
                                 ChatType.PickCard -> {
+
+                                    if (chatViewModel.isExiting.value) return@withChatAnimation
+
                                     if (chatState.value.scenario != Scenario.Complete) {
                                         LaunchedEffect(Unit) {
                                             chatViewModel.updateCardDeckStatus(CardDeckStatus.Spread)
@@ -445,7 +448,7 @@ fun PartnerChattingBox(
     idx: Int = 0,
     buttonText: String = "",
     navController: NavHostController = rememberNavController(),
-    drawable: Int = 0,
+    drawable: Int = -1,
     chatViewModel: ChatViewModel,
     loadingViewModel: LoadingViewModel,
     fortuneViewModel: FortuneViewModel

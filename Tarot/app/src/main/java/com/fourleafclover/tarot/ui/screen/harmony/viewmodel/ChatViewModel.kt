@@ -24,7 +24,7 @@ val scenarioSequence = arrayListOf(
 data class Chat(
     val type: ChatType,
     var text: String = "",
-    val drawable: Int = 0,
+    val drawable: Int = -1,
     val code: String = "",
     var isShown: Boolean = false    // 애니메이션 재생 여부 판단을 위해
 )
