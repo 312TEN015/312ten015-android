@@ -14,7 +14,7 @@ android {
         applicationId = "com.fourleafclover.tarot"
         minSdk = 24
         targetSdk = 34
-        versionCode = 17
+        versionCode = 18
         versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
