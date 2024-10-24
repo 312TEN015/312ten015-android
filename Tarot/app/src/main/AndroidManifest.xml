@@ -25,24 +25,10 @@
             android:theme="@style/Theme.SplashScreen.MySplash"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
-
-            <tools:validation testUrl="http://tarot-for-u.shop/share" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="http" />
-                <data android:host="tarot-for-u.shop" />
-                <data android:pathPattern="/share" />
             </intent-filter>
         </activity>
     </application>
